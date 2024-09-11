@@ -1,2 +1,2 @@
 # ITPE3200
-Prosjektoppgave(DOT.NET + React)
+Prosjektoppgave(.NET + React)
