@@ -1,6 +1,5 @@
 # RAYS - A Social Media Application
 ### ITPE3200 Project Assignment
-![TEST](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0Wwu8dhih_kNp_td27Mg-z1m_JlCdp9mnMw&s)
 ---
 ## Table of Contents
 - [Project Overview](#project-overview)
@@ -22,12 +21,11 @@ Although the initial version of RAYS is scoped to handle basic post functionalit
 
 ## Technologies Used
 
-- **Frontend**: React (JavaScript)
-- **Backend**: .NET (C#)
-- **Styling**: TailwindCSS
-- **Database**: SQL Server
-- **API Integration**: RESTful APIs
-
+- **Frontend**: React (JavaScript) ![REACT-icon](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngwing.com%2Fen%2Fsearch%3Fq%3Dreact&psig=AOvVaw0xga0yKnv7U3CCPHavh5KO&ust=1726134800240000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCPiT5q_PuogDFQAAAAAdAAAAABAE)
+- **Backend**: .NET (C#) ![.NET-icon](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngegg.com%2Fen%2Fsearch%3Fq%3Dnet%2BFramework&psig=AOvVaw1b_rnVE4ReLVK_laZbb67G&ust=1726134895700000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJD6ru3PuogDFQAAAAAdAAAAABAE)
+- **Styling**: TailwindCSS ![TailwindCSS-icon](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngwing.com%2Fen%2Ffree-png-aygwc&psig=AOvVaw2kImhnmxScQM5MeZlKQm6r&ust=1726135020937000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKj2_JjQuogDFQAAAAAdAAAAABAE)
+- **Database**: SQLite Server ![SQL-icon](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngegg.com%2Fen%2Fsearch%3Fq%3Dsqlite&psig=AOvVaw3iyKPJNIrdP9qaYXz-OXmz&ust=1726135084253000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKiP5bnQuogDFQAAAAAdAAAAABAE)
+- **API Integration**: RESTful APIs ![RESTful-icon](https://www.google.com/url?sa=i&url=https%3A%2F%2Fkeenethics.com%2Ftech-api-integration-rest&psig=AOvVaw0JOqUnmpC0pWweSu4MGsjw&ust=1726135118125000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLjRs8vQuogDFQAAAAAdAAAAABAE)
 ---
 
 ## Features
