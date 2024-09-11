@@ -71,14 +71,14 @@ To run the project locally, you will need to have the following installed:
 ## Future Enhancements
 Although the current scope of the project is focused on basic social media functionalities, future improvements could include:
 
-- [Commenting & Reposting Posts]: Users will be able to comment and repost posts.
-- [Friend Requests]: Users will be able to send and accept friend requests.
-- [Direct Messaging]: Real-time messaging between users.
-- [User Notifications]: Notify users of new posts, messages, and friend requests.
-- [Post Reactions]: Add emojis and other forms of interaction on posts.
+- **Commenting & Reposting Posts**: Users will be able to comment and repost posts.
+- **Friend Requests**: Users will be able to send and accept friend requests.
+- **Direct Messaging**: Real-time messaging between users.
+- **User Notifications**: Notify users of new posts, messages, and friend requests.
+- **Post Reactions**: Add emojis and other forms of interaction on posts.
 
 ---
-## Contributors
+## Contributor
 
 - **Project Lead**: Younes Benhaida
 - **Full-Stack Dev**: Rafey Ul-Islam Afzal
