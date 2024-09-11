@@ -1,5 +1,6 @@
 # RAYS - A Social Media Application
 ### ITPE3200 Project Assignment
+![TEST](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0Wwu8dhih_kNp_td27Mg-z1m_JlCdp9mnMw&s)
 ---
 ## Table of Contents
 - [Project Overview](#project-overview)
