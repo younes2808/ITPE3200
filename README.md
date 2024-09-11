@@ -1,9 +1,9 @@
 # RAYS - A Social Media Application
 ### ITPE3200 Project Assignment
 ---
-![.NET Logo](https://upload.wikimedia.org/wikipedia/commons/e/ee/.NET_Core_Logo.svg)
-![React Logo](https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg)
-![TailwindCSS Logo](https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg)
+- <img src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Microsoft_.NET_logo.svg" alt=".NET Logo" width="40" height="40"/> **.NET (C#)**
+- <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" alt="React Logo" width="40" height="40"/> **React (JavaScript)**
+- <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Tailwindcss-logo.svg" alt="TailwindCSS Logo" width="40" height="40"/> **TailwindCSS**
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Technologies Used](#technologies-used)
