@@ -1,5 +1,6 @@
 # RAYS - A Social Media Application
-### ITPE3200 Project Assignment
+### ITPE3200 EXAM
+**UNDER DEVELOPMENT**
 ---
 ## Table of Contents
 - [Project Overview](#project-overview)
