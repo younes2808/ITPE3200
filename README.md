@@ -8,8 +8,6 @@
 - [Technologies Used](#technologies-used)
 - [Features](#features)
 - [Setup and Installation](#setup-and-installation)
-- [Folder Structure](#folder-structure)
-- [API Documentation](#api-documentation)
 - [Future Enhancements](#future-enhancements)
 - [Contributors](#contributors)
 
@@ -44,14 +42,17 @@ Although the initial version of RAYS is scoped to handle basic post functionalit
    - Browse through a feed of posts created by other users.
    - Posts can include a combination of text, images, and videos.
 
-3. **User Profile (Basic)**:
+3. **Liking Posts**:
+   - Users should be able to like posts.
+
+4. **User Profile (Basic)**:
    - View and manage user profiles.
    - See personal and shared posts.
 
-4. **Authentication**:
+5. **Authentication**:
    - Basic user authentication with login and sign-up functionality.
 
-5. **Responsive Design**:
+6. **Responsive Design**:
    - The app is responsive and optimized for both desktop and mobile views using TailwindCSS.
 
 ---
@@ -66,10 +67,23 @@ To run the project locally, you will need to have the following installed:
 - [.NET Core SDK](https://dotnet.microsoft.com/download)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
-### Backend Setup
+---
+## Future Enhancements
+Although the current scope of the project is focused on basic social media functionalities, future improvements could include:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/RAYS.git
-   cd RAYS/backend
+Commenting & Reposting Posts: Users will be able to comment and repost posts.
+Friend Requests: Users will be able to send and accept friend requests.
+Direct Messaging: Real-time messaging between users.
+User Notifications: Notify users of new posts, messages, and friend requests.
+Post Reactions: Add emojis and other forms of interaction on posts.
+
+---
+## Contributors
+
+- **Project Lead**: Younes Benhaida
+- **Full-Stack Dev**: Rafey Ul-Islam Afzal
+- **Full-Stack Dev**: Shoeb Mohammadi
+- **Full-Stack Dev**: Ali Ahmad Shafiq
+
+---
 
