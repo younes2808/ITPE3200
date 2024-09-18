@@ -25,7 +25,7 @@ Although the initial version of RAYS is scoped to handle basic post functionalit
 - **Backend**: .NET (C#) 
 - **Styling**: TailwindCSS 
 - **Database**: SQLite Server 
-- **API Integration**: RESTful APIs 
+- **API Integration**: Axios
 
 ## Features
 
