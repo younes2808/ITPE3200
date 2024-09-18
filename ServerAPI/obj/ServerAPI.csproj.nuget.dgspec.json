@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\ServerAPI\\ServerAPI.csproj": {}
+    "C:\\Users\\47401\\Documents\\Reacttesting\\ITPE3200-1\\ServerAPI\\ServerAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\ServerAPI\\ServerAPI.csproj": {
+    "C:\\Users\\47401\\Documents\\Reacttesting\\ITPE3200-1\\ServerAPI\\ServerAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\ServerAPI\\ServerAPI.csproj",
+        "projectUniqueName": "C:\\Users\\47401\\Documents\\Reacttesting\\ITPE3200-1\\ServerAPI\\ServerAPI.csproj",
         "projectName": "ServerAPI",
-        "projectPath": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\ServerAPI\\ServerAPI.csproj",
+        "projectPath": "C:\\Users\\47401\\Documents\\Reacttesting\\ITPE3200-1\\ServerAPI\\ServerAPI.csproj",
         "packagesPath": "C:\\Users\\47401\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\ServerAPI\\obj\\",
+        "outputPath": "C:\\Users\\47401\\Documents\\Reacttesting\\ITPE3200-1\\ServerAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\47401\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -45,7 +45,7 @@
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[8.0.8, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "target": "Package",
@@ -57,7 +57,7 @@
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[8.0.8, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
