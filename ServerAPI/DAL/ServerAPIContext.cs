@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ServerAPI.Models;  // Ensure this matches the namespace where your models are defined
 
-namespace YourApp.DAL  // Ensure this is the correct namespace for your project
+namespace ServerAPI.DAL  // Ensure this is the correct namespace for your project
 {
     public class ServerAPIContext : DbContext
     {
