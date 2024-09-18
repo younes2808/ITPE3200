@@ -8,9 +8,9 @@ using YourApp.DAL;
 
 #nullable disable
 
-namespace RAYS.Migrations
+namespace ServerAPI.Migrations
 {
-    [DbContext(typeof(RAYSContext))]
+    [DbContext(typeof(ServerAPIContext))]
     [Migration("20240918085038_InitialCreate")]
     partial class InitialCreate
     {

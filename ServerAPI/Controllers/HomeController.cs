@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using RAYS.Models;
+using ServerAPI.Models;
 
-namespace RAYS.Controllers;
+namespace ServerAPI.Controllers;
 
 public class HomeController : Controller
 {

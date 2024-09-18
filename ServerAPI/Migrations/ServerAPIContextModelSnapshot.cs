@@ -7,10 +7,10 @@ using YourApp.DAL;
 
 #nullable disable
 
-namespace RAYS.Migrations
+namespace ServerAPI.Migrations
 {
-    [DbContext(typeof(RAYSContext))]
-    partial class RAYSContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ServerAPIContext))]
+    partial class ServerAPIContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

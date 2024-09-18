@@ -1,4 +1,4 @@
-namespace RAYS.Models;
+namespace ServerAPI.Models;
 
 public class ErrorViewModel
 {
