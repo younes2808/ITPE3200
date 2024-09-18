@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RAYS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+56042c3f0dfcb56ac664324125b7918681dfa2e4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b02b519e58d914053bec1494b18654505d750d9d")]
 [assembly: System.Reflection.AssemblyProductAttribute("RAYS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RAYS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
