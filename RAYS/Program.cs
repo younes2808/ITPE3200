@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using YourApp.DAL;
+using YourApp.DAL; // Change this to the actual namespace of your DAL
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Add services to the container.
+// Use SQLite instead of SQL Server for local development
 builder.Services.AddDbContext<RAYSContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 
 var app = builder.Build();
 
