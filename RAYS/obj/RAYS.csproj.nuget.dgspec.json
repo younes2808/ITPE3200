@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200\\RAYS\\RAYS.csproj": {}
+    "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\RAYS\\RAYS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200\\RAYS\\RAYS.csproj": {
+    "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\RAYS\\RAYS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200\\RAYS\\RAYS.csproj",
+        "projectUniqueName": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\RAYS\\RAYS.csproj",
         "projectName": "RAYS",
-        "projectPath": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200\\RAYS\\RAYS.csproj",
+        "projectPath": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\RAYS\\RAYS.csproj",
         "packagesPath": "C:\\Users\\47401\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200\\RAYS\\obj\\",
+        "outputPath": "C:\\Users\\47401\\Documents\\RAYS\\ITPE3200-1\\RAYS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\47401\\AppData\\Roaming\\NuGet\\NuGet.Config"
