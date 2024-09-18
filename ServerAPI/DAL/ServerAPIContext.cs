@@ -1,35 +1,36 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using YourApp.DAL;  // Ensure this matches your actual namespace
-using ServerAPI.Models;
+using ServerAPI.Models;  // Ensure this matches the namespace where your models are defined
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Configure the database context
-builder.Services.AddDbContext<ServerAPIContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen(c =>
+namespace YourApp.DAL  // Ensure this is the correct namespace for your project
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ServerAPI", Version = "v1" });
-});
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
+    public class ServerAPIContext : DbContext
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ServerAPI v1");
-    });
+        public ServerAPIContext(DbContextOptions<ServerAPIContext> options) : base(options)
+        {
+        }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configure the many-to-many relationship between User and Post through Like
+            modelBuilder.Entity<Like>()
+                .HasKey(l => new { l.UserId, l.PostId });
+
+            modelBuilder.Entity<Like>()
+                .HasOne(l => l.User)
+                .WithMany(u => u.Likes)
+                .HasForeignKey(l => l.UserId);
+
+            modelBuilder.Entity<Like>()
+                .HasOne(l => l.Post)
+                .WithMany(p => p.Likes)
+                .HasForeignKey(l => l.PostId);
+        }
+    }
 }
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

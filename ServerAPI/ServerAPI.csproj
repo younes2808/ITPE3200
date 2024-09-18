@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
-  <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
+  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
 </ItemGroup>
 
 
