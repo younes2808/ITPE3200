@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.Login-Bakgrunn{
+ @apply bg-orange-200;
+}
+.Landing-page-box{
+@apply flex items-center justify-center min-h-screen
+}
+
