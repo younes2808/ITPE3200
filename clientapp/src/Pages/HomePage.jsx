@@ -16,13 +16,13 @@ const HomePage = () => {
           </span>
 
           <div className="py-3">
-            <span className="mb-2 text-md">Email</span>
+            <span className="mb-2 text-md">Username</span>
             <input
               type="text"
               className="w-full p-2 border border-gray-200 rounded-md
             placeholder:font-light placeholder:text-gray-500"
-              name="email"
-              id="email"
+              name="username"
+              id="username"
             ></input>
           </div>
           <div className="py-4">
@@ -42,7 +42,7 @@ const HomePage = () => {
           </button>
           <div className="text-center text-gray-500">
             Don't have an account?
-            <span className="font-bold text-black"> Sign up for free</span>
+            <span className="font-bold text-black hover:text-gray-300"> Sign up for free</span>
           </div>
         </div>
         <div className="relative">
