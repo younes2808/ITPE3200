@@ -1,5 +1,6 @@
 import Navbar from '';
-import './App.css';
+import './App.css'; // Import the CSS file that includes Tailwind directives
+
 
 function App() {
   return (
