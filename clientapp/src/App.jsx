@@ -1,11 +1,14 @@
-import Navbar from '';
-import './App.css';
+import './App.css'; // Import the CSS file that includes Tailwind directives
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './Pages/HomePage';
 
 function App() {
   return (
-    <main className="bg-black">
-      <Navbar />
-    </main>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    </Router>
   );
 }
 
