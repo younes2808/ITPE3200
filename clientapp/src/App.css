@@ -40,3 +40,220 @@
     transform: rotate(360deg);
   }
 }
+
+/* Container som holder postboksen sentrert */
+.post-box-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #2e344e; /* Bakgrunnsfarge lik den mørke bakgrunnen */
+}
+
+/* Post box styling */
+.post-box {
+  width: 600px;
+  background-color: #4e546a; /* Bakgrunnsfarge på selve boksen */
+  border-radius: 15px; /* Runde kanter */
+  padding: 20px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Litt skygge for dybde */
+}
+
+/* Profilbildet og inputfeltet plassert side om side */
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Styling for profilbildet */
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Runde kanter for profilbildet */
+  margin-right: 15px;
+}
+
+/* Media preview container */
+.media-preview {
+  display: flex; /* Bruk flexbox for enkel sentrering */
+  justify-content: center; /* Sentrer horisontalt */
+  align-items: center; /* Sentrer vertikalt */
+  margin: 15px 0; /* Litt margin for spacing */
+  position: relative; /* For å posisjonere fjerne-knappen */
+}
+
+.media-preview img, 
+.media-preview video {
+  max-width: 100%; /* Sett maksimal bredde til 100% av containeren */
+  max-height: 200px; /* Sett maksimal høyde */
+  object-fit: cover; /* Sørg for at bildet/videoen fyller plassen uten forvrengning */
+}
+
+/* Styling for textarea (flere linjer med tekst) */
+.post-textarea {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px; /* Runde kanter */
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background-color: #3b3f52; /* Gråfarget bakgrunn for inputfeltet */
+  color: white;
+  padding-left: 20px;
+  padding-top: 10px;
+  height: 100px; /* Øker høyden på tekstområdet */
+  resize: none; /* Deaktiverer resizing i bunn og på siden */
+}
+
+/* Scrollbar styles for WebKit browsers */
+.post-textarea::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+.post-textarea::-webkit-scrollbar-track {
+  background: #3b3f52; /* Background color of the track */
+  border-radius: 10px; /* Round the track corners */
+}
+
+.post-textarea::-webkit-scrollbar-thumb {
+  background-color: #1DA1F2; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Round the thumb corners */
+}
+
+/* Optional: Change thumb color on hover */
+.post-textarea::-webkit-scrollbar-thumb:hover {
+  background-color: #0d8ddb; /* Darker blue on hover */
+}
+
+/* Styling for handlingsknappene */
+.action-buttons {
+  display: flex;
+  justify-content: flex-start; /* Juster knappene mot venstre */
+  margin-top: 15px;
+}
+
+/* Handlingsknapper styling */
+.action-button {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px; /* Redusert padding for mindre knapper */
+  border-radius: 20px; /* Mindre radius for en strammere form */
+  border: none;
+  background-color: #3b3f52;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 12px; /* Endret fontstørrelse for mindre knapper */
+  margin-right: 5px; /* Litt mellomrom mellom knappene */
+  position: relative; /* For tooltip plassering */
+}
+
+.action-button img {
+  margin-right: 4px; /* Redusert mellomrom mellom ikon og tekst */
+}
+
+/* Knapp-farger */
+.action-button.media:hover {
+  background-color: #4CAF50; /* Grønn hover for Medier */
+}
+
+.action-button.hyperlink:hover {
+  background-color: #3f51b5; /* Blå hover for Hyperlink */
+}
+
+.action-button.location:hover {
+  background-color: #ff9800; /* Oransje hover for Location */
+}
+
+/* Styling for Post-knappen */
+.post-button {
+  background-color: #1DA1F2; /* Blå farge for Post-knappen */
+  color: white;
+  padding: 10px 20px; /* Litt mer padding for Post-knappen */
+  border-radius: 30px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: auto;
+}
+
+.post-button span {
+  margin-left: 12px; /* Mer mellomrom til ikonet */
+}
+
+.post-button:hover {
+  background-color: #0d8ddb; /* Mørkere blå når knappen hovres */
+}
+
+/* Tooltip styling */
+.tooltip {
+  visibility: hidden;
+  width: 120px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Plassering over knappen */
+  left: 50%;
+  margin-left: -60px; /* Sentrerer tooltipen */
+  opacity: 0; /* Usynlig som standard */
+  transition: opacity 0.3s; /* Fade-in effekt */
+}
+
+/* Vise tooltipen ved hover */
+.action-button:hover .tooltip {
+  visibility: visible; /* Gjør tooltip synlig */
+  opacity: 1; /* Gjør tooltip synlig */
+}
+
+/* Styling for ikonene */
+.material-icons {
+  vertical-align: middle; /* Justerer ikonet vertikalt i forhold til teksten */
+  margin-right: 4px; /* Litt mellomrom mellom ikonet og teksten */
+  font-size: 20px; /* Størrelsen på ikonet */
+}
+
+.link-input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.link-input {
+  padding: 10px;
+  border-radius: 20px; /* Runde kanter */
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background-color: #3b3f52; /* Bakgrunnsfarge */
+  color: white;
+  margin-top: 10px; /* Margin mellom textarea og link input */
+}
+
+/* Styling for fjerne-knappen */
+.remove-button {
+  background-color: white; /* Hvit bakgrunn */
+  color: #2e344e; /* Mørk tekstfarge for kontrast */
+  border: none; /* Ingen ramme */
+  border-radius: 50%; /* Runde kanter for en sirkel */
+  width: 30px; /* Bredde */
+  height: 30px; /* Høyde */
+  display: flex; /* Flex for å sentrere innholdet */
+  align-items: center; /* Vertikal justering */
+  justify-content: center; /* Horisontal justering */
+  position: absolute; /* Absolutt posisjonering */
+  top: 10px; /* Plassering fra toppen */
+  right: 10px; /* Plassering fra høyre */
+  cursor: pointer; /* Endre musepekeren til hånd */
+  transition: background-color 0.3s, transform 0.3s; /* Animasjon ved hover */
+}
+
+.remove-button:hover {
+  background-color: #e0e0e0; /* Lys grå bakgrunn ved hover */
+  transform: scale(1.1); /* Litt større ved hover */
+}
+
