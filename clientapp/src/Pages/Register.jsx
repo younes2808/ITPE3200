@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import Link
-import { LoginImg } from "./../Utils/utils.js";
+import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
+import { LoginImg } from "./../Utils/utils.js"; // Assuming you have a relevant image
 
-
-
-const HomePage = () => {
-  // State variables to hold username, password, and any error messages
+const Register = () => {
+  // State variables to hold email, username, password, and error messages
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  
   const navigate = useNavigate(); // For navigation after registration
 
   // Handle form submission
@@ -17,27 +16,27 @@ const HomePage = () => {
     e.preventDefault(); // Prevent default form submission
 
     try {
-      const response = await fetch("http://localhost:5249/api/User/login", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }), // Send username and password
+      const response = await fetch("http://localhost:5249/api/User/register", { // backend URL
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, username, password }), // Send email, username, and password
       });
 
       if (response.ok) {
-          const data = await response.json();
-          console.log("Login successful!", data);
-          navigate("/success"); // Redirect to HomePage or another page after successful login
+        const data = await response.json();
+        // Handle successful registration (redirect, show message, etc.)
+        console.log("Registration successful!", data);
+        navigate("/"); // Redirect to HomePage or another page after successful registration
       } else {
-          const errorData = await response.json();
-          console.error("Login failed:", errorData);
-          setError("Invalid username or password");
+        // Handle error
+        setError("Registration failed. Please check your details.");
       }
-  } catch (err) {
+    } catch (err) {
       console.error("Error:", err);
       setError("An error occurred. Please try again.");
-  }
+    }
   };
 
   return (
@@ -49,12 +48,24 @@ const HomePage = () => {
           <div className="flex flex-col justify-center p-8 md:p-14">
             <span className="mb-3 text-4xl font-mono">RAYS</span>
             <span className="font-light text-zinc-500 mb-8 border-b-black border-b-2">
-              Welcome Back! Please enter your details:
+              Create Your Account:
             </span>
 
             {error && <div className="text-red-500 mb-4">{error}</div>}
 
             <form onSubmit={handleSubmit}>
+              <div className="py-3">
+                <span className="mb-2 text-md">Email</span>
+                <input
+                  type="email"
+                  className="w-full p-2 border border-gray-200 rounded-md placeholder:font-light placeholder:text-gray-500"
+                  name="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} // Set state
+                  required
+                />
+              </div>
               <div className="py-3">
                 <span className="mb-2 text-md">Username</span>
                 <input
@@ -79,20 +90,19 @@ const HomePage = () => {
                   required
                 />
               </div>
-              <button type="submit" className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-400">
-                Sign in
+              <button className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-400">
+                Sign up
               </button>
             </form>
-
-            <Link to="/register" className="font-bold text-gray-600 hover:text-gray-300">
-                Sign up for free
-            </Link>
+              <Link to="/" className="font-bold text-black hover:text-gray-300">
+                Sign in here
+              </Link>
           </div>
           <div className="relative">
-            <img src={LoginImg} alt="Login-page bilde" className="w-[550px] h-full hidden rounded-r-2xl md:block object-cover" />
+            <img src={LoginImg} alt="Register-page bilde" className="w-[550px] h-full hidden rounded-r-2xl md:block object-cover" />
             {/* Tekst over bilde */}
             <div className="absolute hidden bottom-10 right-6 p-6 bg-white bg-opacity-25 backdrop-blur-sm rounded drop-shadow-lg md:block">
-              <span className="text-white text-xl">Very Cool</span>
+              <span className="text-white text-xl">Welcome to RAYS!</span>
             </div>
           </div>
         </div>
@@ -101,4 +111,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Register;
