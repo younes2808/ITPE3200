@@ -53,7 +53,7 @@ const HomePage = () => {
           p-6 bg-white bg-opacity-25 backdrop-blur-sm rounded
           drop-shadow-lg md:block">
             <span className="text-white text-xl">
-              Tanta til 60
+              Velkommen
             </span>
           </div>
         </div>
