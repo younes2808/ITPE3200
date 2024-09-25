@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import { LoginImg } from "./../Utils/utils.js"; // Assuming you have a relevant image
 
 const Register = () => {
@@ -8,15 +8,41 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  
+  const [validationError, setValidationError] = useState(""); // For client-side validation errors
+
   const navigate = useNavigate(); // For navigation after registration
+  ///// INPUT-VALIDATION //////
+  // Email format validation
+  const isValidEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
 
+    // Reset errors
+    setValidationError("");
+    setError("");
+
+    // Client-side validation
+    if (!email || !isValidEmail(email)) {
+      setValidationError("Invalid email format.");
+      return;
+    }
+    if (!username || username.length < 3) {
+      setValidationError("Username must be at least 3 characters long.");
+      return;
+    }
+    if (!password ||password.length < 6) {
+      setValidationError("Password must be at least 6 characters long.");
+      return;
+    }
+
+    // Proceed with API call after client-side validation passes
     try {
-      const response = await fetch("http://localhost:5249/api/User/register", { // backend URL
+      const response = await fetch("http://localhost:5249/api/User/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,8 +55,14 @@ const Register = () => {
         // Handle successful registration (redirect, show message, etc.)
         console.log("Registration successful!", data);
         navigate("/"); // Redirect to HomePage or another page after successful registration
+      } else if (response.status === 409) {
+        // Handle conflict (e.g., username or email already exists)
+        setError("Username or email already exists.");
+      } else if (response.status >= 500) {
+        // Handle server errors
+        setError("Server error. Please try again later.");
       } else {
-        // Handle error
+        // Handle other types of errors
         setError("Registration failed. Please check your details.");
       }
     } catch (err) {
@@ -51,6 +83,10 @@ const Register = () => {
               Create Your Account:
             </span>
 
+            {/* Display client-side validation errors */}
+            {validationError && <div className="text-red-500 mb-4">{validationError}</div>}
+
+            {/* Display server-side error */}
             {error && <div className="text-red-500 mb-4">{error}</div>}
 
             <form onSubmit={handleSubmit}>
