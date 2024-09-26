@@ -1,3 +1,5 @@
+//må fikses senere
+
 public class FeedViewModel
 {
     public List<PostItemViewModel> Posts { get; set; } = new List<PostItemViewModel>();

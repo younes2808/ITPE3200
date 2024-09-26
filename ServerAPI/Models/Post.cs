@@ -1,24 +1,28 @@
-public class Post
+namespace ServerAPI.Models
 {
-    public int Id { get; set; }
-    
-    // Text content of the post
-    public required string Content { get; set; }
+    public class Post
+    {
+        public int Id { get; set; }
 
-    // Path to the uploaded image (if applicable)
-    public string? ImagePath { get; set; }  // Make optional to allow text or video posts
-    
-    // URL for embedded video link (e.g., YouTube)
-    public string? VideoUrl { get; set; }  // Optional for video content
+        // Text content of the post
+        public required string Content { get; set; }
 
-    // Location data (could be a string, or you could create a separate class for coordinates)
-    public string? Location { get; set; }  // Optional for location data
+        // Path to the uploaded image (if applicable)
+        public string? ImagePath { get; set; }  // Make optional to allow text or video posts
+        
+        // URL for embedded video link (e.g., YouTube)
+        public string? VideoUrl { get; set; }  // Optional for video content
 
-    // Timestamp for when the post was created
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;  // Default to current time
+        // Location data
+        public string? Location { get; set; }  // Optional for location data
 
-    // Relationships
-    public required User Author { get; set; }  // The user who created the post
-    public ICollection<Comment> Comments { get; set; } = new List<Comment>();  // Comments on the post
-    public ICollection<Like> Likes { get; set; } = new List<Like>();  // Likes associated with the post
+        // Timestamp for when the post was created
+        public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;  // Default to current time
+
+        // Relationships
+        public required User Author { get; set; }  // The user who created the post
+
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();  // Comments on the post
+        public ICollection<Like> Likes { get; set; } = new List<Like>();  // Likes associated with the post
+    }
 }
