@@ -1,3 +1,4 @@
+//må fikses senere
 public class UserProfileViewModel
 {
     public int UserId { get; set; }

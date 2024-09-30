@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerAPI.DAL;
 
@@ -10,9 +11,11 @@ using ServerAPI.DAL;
 namespace ServerAPI.Migrations
 {
     [DbContext(typeof(ServerAPIContext))]
-    partial class ServerAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20240926142444_UpdatePostModel")]
+    partial class UpdatePostModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -69,6 +72,9 @@ namespace ServerAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -82,15 +88,12 @@ namespace ServerAPI.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("VideoUrl")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Posts");
                 });
@@ -158,11 +161,13 @@ namespace ServerAPI.Migrations
 
             modelBuilder.Entity("ServerAPI.Models.Post", b =>
                 {
-                    b.HasOne("ServerAPI.Models.User", null)
+                    b.HasOne("ServerAPI.Models.User", "Author")
                         .WithMany("Posts")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("ServerAPI.Models.Post", b =>

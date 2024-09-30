@@ -1,3 +1,5 @@
+namespace ServerAPI.Models
+{
 public class Like
 {
     public required int UserId { get; set; }
@@ -12,4 +14,5 @@ public class Like
     {
         // Initialization logic if needed
     }
+}
 }

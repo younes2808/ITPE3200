@@ -27,6 +27,8 @@ const HomePage = () => {
 
       if (response.ok) {
           const data = await response.json();
+          // Store the user data in sessionStorage
+          sessionStorage.setItem("user", JSON.stringify(data)); 
           console.log("Login successful!", data);
           navigate("/success"); // Redirect to HomePage or another page after successful login
       } else {
@@ -41,7 +43,7 @@ const HomePage = () => {
   };
 
   return (
-    <body className="Login-Bakgrunn">
+    <div className="Login-Bakgrunn">
       <div className="Landing-page-box">
         <div
           className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
@@ -97,7 +99,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-    </body>
+    </div>
   );
 };
 
