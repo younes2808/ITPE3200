@@ -125,5 +125,97 @@ namespace ServerAPI.Controllers
 
             return Ok(posts);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePostById(int id)
+        {
+            // Find the post by its ID
+            var post = await _context.Posts.FindAsync(id);
+
+            if (post == null)
+            {
+                _logger.LogWarning($"DeletePostById: No post found with ID {id}.");
+                return NotFound("Post not found.");
+            }
+
+            // If the post has an associated image, delete it from the file system
+            if (!string.IsNullOrEmpty(post.ImagePath))
+            {
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), post.ImagePath);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+            }
+
+            // Remove the post from the database
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"DeletePostById: Post with ID {id} has been deleted.");
+            return NoContent(); // Return 204 No Content on success
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePostById(int id, [FromForm] PostRequestModel model)
+        {
+            // Find the post by its ID
+            var post = await _context.Posts.FindAsync(id);
+
+            if (post == null)
+            {
+                _logger.LogWarning($"UpdatePostById: No post found with ID {id}.");
+                return NotFound("Post not found.");
+            }
+
+            // Validate the new content
+            if (string.IsNullOrEmpty(model.Content))
+            {
+                _logger.LogWarning("UpdatePostById: Content cannot be empty.");
+                return BadRequest("Post content cannot be empty.");
+            }
+
+            // Handle image update
+            if (model.Image != null && model.Image.Length > 0)
+            {
+                // Delete the old image if it exists
+                if (!string.IsNullOrEmpty(post.ImagePath))
+                {
+                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), post.ImagePath);
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+
+                // Save the new image
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "PostImages");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                var fileName = Path.GetFileName(model.Image.FileName);
+                var filePath = Path.Combine(directoryPath, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.Image.CopyToAsync(stream);
+                }
+
+                post.ImagePath = Path.Combine("PostImages", fileName); // Update image path
+            }
+
+            // Update content and location
+            post.Content = model.Content;
+            post.Location = string.IsNullOrEmpty(model.Location) ? null : model.Location; // Update location, set to null if empty
+
+            // Save the changes to the database
+            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation($"UpdatePostById: Post with ID {id} has been updated.");
+            return Ok(post); // Return updated post
+        }
+
     }
 }
