@@ -8,3 +8,22 @@
 @apply flex items-center justify-center min-h-screen
 }
 
+/* Scrollbar styles for WebKit browsers */
+.post-textarea::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+}
+
+.post-textarea::-webkit-scrollbar-track {
+    background: #3b3f52; /* Background color of the track */
+    border-radius: 10px; /* Round the track corners */
+}
+
+.post-textarea::-webkit-scrollbar-thumb {
+    background-color: #1DA1F2; /* Color of the scrollbar thumb */
+    border-radius: 10px; /* Round the thumb corners */
+}
+
+/* Optional: Change thumb color on hover */
+.post-textarea::-webkit-scrollbar-thumb:hover {
+    background-color: #0d8ddb; /* Darker blue on hover */
+}
