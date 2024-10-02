@@ -6,6 +6,7 @@ const PostFeed = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   // Fetch posts when the component mounts
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,6 +16,7 @@ const PostFeed = () => {
           throw new Error('Failed to fetch posts');
         }
         const data = await response.json();
+        console.log(data)
         setPosts(data);
       } catch (err) {
         setError(err.message);
@@ -65,13 +67,14 @@ const PostFeed = () => {
   }
 
   return (
-    <div className="pt-72 mt-auto flex-grow-0 space-y-6 items-start">
-      {posts.map((post) => (
-        <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
-          {/* Display username based on post.userId */}
-          <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} />
-          <h2 className='font-medium text-slate-900'> 
-            {new Date(post.createdAt).toLocaleString('en-US', {
+  <div className="pt-72 mt-auto flex-grow-0 space-y-6 items-start">
+    {posts.map((post) => (
+      <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
+        {/* Display username based on post.userId */}
+        <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} />
+
+        <h2 className='font-medium font-mono text-slate-900'> 
+          {new Date(post.createdAt).toLocaleString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -79,23 +82,40 @@ const PostFeed = () => {
             minute: '2-digit',
             second: '2-digit',
             hour12: false,
-            })}
-          </h2>
-          <h2 className="text-white">{post.content}</h2>
-          {post.imagePath && (
-            <img
-              src={`http://localhost:5249/${post.imagePath}`}
-              alt="Post"
-              className="mt-2 rounded-lg"
-            />
-          )}
-          <div className="flex justify-between mt-2">
-            <button className="text-blue-500 hover:underline">Like</button>
-            <button className="text-blue-500 hover:underline">Comment</button>
-          </div>
+          })}
+        </h2>
+        
+        <h2 className="text-white font-serif">{post.content}</h2>
+
+        {/* Conditionally render videoUrl if it exists */}
+        {post.videoUrl && (
+          <a href={post.videoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+            {post.videoUrl}
+          </a>
+        )}
+        
+        {/* Conditionally render location if it exists */}
+        {post.location && (
+          <p className="text-green-500">
+            {post.location}
+          </p>
+        )}
+
+        {post.imagePath && (
+          <img
+            src={`http://localhost:5249/${post.imagePath}`}
+            alt="Post"
+            className="mt-2 rounded-lg"
+          />
+        )}
+        
+        <div className="flex justify-between mt-2">
+          <button className="text-blue-500 hover:underline">Like</button>
+          <button className="text-blue-500 hover:underline">Comment</button>
         </div>
-      ))}
-    </div>
+      </div>
+    ))}
+  </div>
   );
 };
 
@@ -111,7 +131,7 @@ const UsernameDisplay = ({ userId, fetchUsername }) => {
     getUsername();
   }, [userId, fetchUsername]);
 
-  return <h1 className='text-lg font-extrabold font-serif text-slate-50 text-'>{username}</h1>;
+  return <h1 className='text-lg font-extrabold font-mono text-slate-50 text-'>{username}</h1>;
 };
 
 export default PostFeed;

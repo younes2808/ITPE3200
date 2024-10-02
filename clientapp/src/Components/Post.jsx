@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/Rays.css'; // Adjust the path if necessary
+import '../Styles/Rays.css'; // Adjust the path if necessary'
+import { useNavigate } from "react-router-dom";
 
 const TestPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -11,6 +12,7 @@ const TestPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null); // Store the userId from sessionStorage
+
 
   // Fetch user from sessionStorage when the component mounts
   useEffect(() => {
@@ -51,6 +53,7 @@ const TestPage = () => {
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
+  const navigate = useNavigate(); 
 
   const postHandler = async () => {
     if (!userId) {
@@ -71,7 +74,7 @@ const TestPage = () => {
     }
 
         // Assuming 'link' is the state variable holding the hyperlin
-      
+       
 
     try {
       const response = await fetch('http://localhost:5249/api/Post', {
@@ -88,6 +91,7 @@ const TestPage = () => {
       setLocation('');
       removeSelectedFile();
       alert('Post created successfully!');
+      navigate(0);
     } catch (err) {
       setError('Failed to create post.');
       console.error(err);
