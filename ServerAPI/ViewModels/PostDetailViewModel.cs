@@ -1,3 +1,4 @@
+//må fikses senere
 public class PostDetailViewModel
 {
     public int PostId { get; set; }

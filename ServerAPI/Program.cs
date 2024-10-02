@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ServerAPI.DAL;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure the database context
@@ -8,7 +9,11 @@ builder.Services.AddDbContext<ServerAPIContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -34,7 +39,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ServerAPI v1");
-         c.RoutePrefix = string.Empty; // Set Swagger UI at app's root
+        c.RoutePrefix = string.Empty; // Set Swagger UI at app's root
     });
 }
 
