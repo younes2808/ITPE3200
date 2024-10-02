@@ -75,5 +75,54 @@ namespace ServerAPI.Controllers
             return Ok(new { user.Id, user.Username, user.Email });
         }
 
+                // Get user info by userId
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUserById(int id)
+        {
+            // Find user by ID
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
             }
+
+            // Return user data excluding password hash
+            return Ok(new { user.Id, user.Username, user.Email });
+        }
+
+        // Change password based on username and email
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            // Validate incoming request
+            if (request == null || string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.OldPassword) || string.IsNullOrWhiteSpace(request.NewPassword))
+            {
+                return BadRequest("Invalid password change request.");
+            }
+
+            // Find user by username and email
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == request.Username && u.Email == request.Email);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Verify old password
+            if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, user.PasswordHash))
+            {
+                return Unauthorized("Incorrect old password.");
+            }
+
+            // Update user's password
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+            _context.Entry(user).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Password changed successfully.");
+        }
+    }
 }
