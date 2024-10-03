@@ -2,6 +2,7 @@ import React from 'react'
 import RightNavbar from '../Components/Rightnavbar';
 import LeftNavbar from '../Components/Leftnavbar';
 import PostFunction from './../Components/Post'
+import PostFeed from './../Components/PostFeed';
 
 const Feed = () => {
   return (
@@ -10,6 +11,8 @@ const Feed = () => {
     <LeftNavbar />
     {/* Post */}
     <PostFunction />
+    <PostFeed />
+    </div>
     {/* Right Navbar */}
     <RightNavbar />
     </div>

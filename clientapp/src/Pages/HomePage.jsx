@@ -30,7 +30,7 @@ const HomePage = () => {
           // Store the user data in sessionStorage
           sessionStorage.setItem("user", JSON.stringify(data)); 
           console.log("Login successful!", data);
-          navigate("/success"); // Redirect to HomePage or another page after successful login
+          navigate("/feed"); // Redirect to HomePage or another page after successful login
       } else {
           const errorData = await response.json();
           console.error("Login failed:", errorData);

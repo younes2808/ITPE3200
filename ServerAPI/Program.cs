@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ServerAPI.DAL;
+using Microsoft.Extensions.FileProviders; // Add this line
+using System.IO; // Make sure to include this if not already present
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,8 +48,18 @@ if (app.Environment.IsDevelopment())
 // Use CORS
 app.UseCors("AllowReactApp");
 
+// Enable serving static files from the PostImages directory
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "PostImages")),
+    RequestPath = "/PostImages" // The URL path to access images
+});
+
+// Add authorization middleware
 app.UseAuthorization();
 
+// Map controllers
 app.MapControllers();
 
 app.Run();

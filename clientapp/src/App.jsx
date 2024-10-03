@@ -4,7 +4,7 @@ import HomePage from './Pages/HomePage';
 import Feed from './Pages/Feed';
 import TestPage from './Pages/TestPage';
 import Register from './Pages/Register';
-import Success from './Pages/Success';
+import Profile from './Pages/Profile';
 import './Styles/Rays.css';
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
         <Route path='/feed' element={<Feed />} />
         <Route path="/test" element={<TestPage/>}/>
         <Route path="/register" element={<Register />} />
-        <Route path="/success" element={<Success />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

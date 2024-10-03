@@ -33,7 +33,7 @@ namespace ServerAPI.Controllers
         }
 
         // Log the model properties for debugging
-        _logger.LogInformation($"Received post with Content: {model.Content}, UserId: {model.UserId}, Location: {model.Location}");
+        _logger.LogInformation($"Received post with Content: {model.Content}, VideoUrl: {model.VideoUrl}, UserId: {model.UserId}, Location: {model.Location}");
 
         // Fetch the author user from the database
         var author = await _context.Users.FindAsync(model.UserId);
@@ -69,6 +69,9 @@ namespace ServerAPI.Controllers
         // Explicitly set Location to null if it's an empty string
         string? location = string.IsNullOrEmpty(model.Location) ? null : model.Location;
 
+        // Set VideoUrl to null if it's not provided
+        string? videoUrl = string.IsNullOrEmpty(model.VideoUrl) ? null : model.VideoUrl;
+
         // Create new post with the correct user ID
         var post = new Post
         {
@@ -76,7 +79,8 @@ namespace ServerAPI.Controllers
             ImagePath = imagePath,
             Location = location,  // This will be null if not provided in the request
             CreatedAt = DateTime.UtcNow, // Set timestamp
-            UserId = model.UserId // Set the UserId
+            UserId = model.UserId, // Set the UserId
+            VideoUrl = videoUrl // Set VideoUrl from the request, or null if not provided
         };
 
         // Add the post to the context and save changes
@@ -85,6 +89,7 @@ namespace ServerAPI.Controllers
 
         return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
     }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPostById(int id)
