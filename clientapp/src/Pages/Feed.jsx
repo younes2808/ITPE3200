@@ -12,7 +12,6 @@ const Feed = () => {
     {/* Post */}
     <PostFunction />
     <PostFeed />
-    </div>
     {/* Right Navbar */}
     <RightNavbar />
     </div>
