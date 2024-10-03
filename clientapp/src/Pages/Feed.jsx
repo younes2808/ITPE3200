@@ -1,6 +1,6 @@
 import React from 'react'
-import RightNavbar from '../Components/RightNavbar';
-import LeftNavbar from '../Components/LeftNavbar';
+import RightNavbar from '../Components/Rightnavbar';
+import LeftNavbar from '../Components/Leftnavbar';
 import PostFunction from './../Components/Post'
 import PostFeed from './../Components/PostFeed';
 
