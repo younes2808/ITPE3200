@@ -8,7 +8,7 @@ const LeftNavbar = () => {
   };
 
   return (
-    <div className="relative w-full 500px:w-32 870px:w-36 lg:w-52 bg-gray-900 text-white h-screen flex flex-col">
+    <div className="fixed w-full 500px:w-32 870px:w-36 lg:w-52 bg-gray-900 text-white h-screen flex flex-col">
       <h1 className="absolute top-4 left-0 right-0 text-4xl 870px:text-3xl font-light text-center px-4">RAYS</h1>
 
       {/* Klikkbar profilseksjon */}

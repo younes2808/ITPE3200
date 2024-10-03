@@ -2,7 +2,7 @@ import React from 'react';
 
 const RightNavbar = () => {
   return (
-    <div className="relative right-0 top-0 w-full 970px:w-36 lg:w-1/6 h-screen bg-gray-900 text-white p-6 flex-col hidden 970px:flex"> {/* Endret her */}
+    <div className="fixed right-0 top-0 w-full 970px:w-36 lg:w-1/6 h-screen bg-gray-900 text-white p-6 flex-col hidden 970px:flex"> {/* Endret her */}
       <h2 className="text-2xl font-bold mb-4 text-center lg:text-left">Friends</h2>
       <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
         <div className="grid grid-cols-1 gap-3 w-full">

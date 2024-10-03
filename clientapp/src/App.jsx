@@ -5,6 +5,7 @@ import Feed from './Pages/Feed';
 import TestPage from './Pages/TestPage';
 import Register from './Pages/Register';
 import Profile from './Pages/Profile';
+import CommentsPage from './Pages/CommentsPage'; 
 import './Styles/Rays.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/feed' element={<Feed />} />
         <Route path="/test" element={<TestPage/>}/>
+        <Route path="/comments/:postId" element={<CommentsPage />} /> {/* Route to CommentsPage */}
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>

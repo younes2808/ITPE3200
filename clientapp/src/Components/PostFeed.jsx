@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PostFeed = () => {
+  const navigate = useNavigate();
+
   const [posts, setPosts] = useState([]);
   const [usernames, setUsernames] = useState({});
   const [loading, setLoading] = useState(true);
@@ -181,7 +184,13 @@ const PostFeed = () => {
 
 
 
-            <button className="text-blue-500 hover:underline">Comment</button>
+                        {/* Navigate to CommentsPage with postId */}
+            <button 
+              onClick={() => navigate(`/comments/${post.id}`)} // Change to your comments route
+              className="text-blue-500 hover:underline"
+            >
+              Comment
+            </button>
           </div>
         </div>
       ))}

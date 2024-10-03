@@ -91,7 +91,7 @@ const TestPage = () => {
       setLocation('');
       removeSelectedFile();
       alert('Post created successfully!');
-      navigate(0);
+      navigate("/feed");
     } catch (err) {
       setError('Failed to create post.');
       console.error(err);
