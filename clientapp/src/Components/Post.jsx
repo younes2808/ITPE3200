@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/Rays.css'; // Adjust the path if necessary'
+import '../Styles/Rays.css'; // Adjust the path if necessary
 import { useNavigate } from "react-router-dom";
 
 const TestPage = () => {
@@ -12,7 +12,7 @@ const TestPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null); // Store the userId from sessionStorage
-
+  const [showLocationInput, setShowLocationInput] = useState(false); // New state for location input visibility
 
   // Fetch user from sessionStorage when the component mounts
   useEffect(() => {
@@ -42,6 +42,10 @@ const TestPage = () => {
     setShowLinkInput(!showLinkInput);
   };
 
+  const toggleLocationInput = () => {
+    setShowLocationInput(!showLocationInput); // Toggle the location input visibility
+  };
+
   const handleLinkChange = (event) => {
     setLink(event.target.value);
   };
@@ -53,6 +57,7 @@ const TestPage = () => {
   const handleLocationChange = (event) => {
     setLocation(event.target.value);
   };
+
   const navigate = useNavigate(); 
 
   const postHandler = async () => {
@@ -72,9 +77,6 @@ const TestPage = () => {
     if (selectedFile) {
       formData.append('Image', selectedFile); // Upload the selected file as 'Image'
     }
-
-        // Assuming 'link' is the state variable holding the hyperlin
-       
 
     try {
       const response = await fetch('http://localhost:5249/api/Post', {
@@ -149,16 +151,18 @@ const TestPage = () => {
           </div>
         )}
 
-        {/* Location input */}
-        <div className="my-4">
-          <input
-            type="text"
-            value={location}
-            onChange={handleLocationChange}
-            placeholder="Enter location..."
-            className="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
-          />
-        </div>
+        {/* Location input - only show when toggled */}
+        {showLocationInput && (
+          <div className="my-4">
+            <input
+              type="text"
+              value={location}
+              onChange={handleLocationChange}
+              placeholder="Enter location..."
+              className="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
+            />
+          </div>
+        )}
 
         {/* Action buttons */}
         <div className="flex items-center justify-between space-x-4 md:space-x-9 lg:space-x-14">
@@ -184,7 +188,10 @@ const TestPage = () => {
               <span className="material-icons mr-1">link</span>
               Hyperlink
             </button>
-            <button className="flex items-center justify-center px-2 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors duration-300 text-sm">
+            <button
+              className="flex items-center justify-center px-2 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors duration-300 text-sm"
+              onClick={toggleLocationInput} // Add toggle for location input
+            >
               <span className="material-icons mr-1">location_on</span>
               Location
             </button>

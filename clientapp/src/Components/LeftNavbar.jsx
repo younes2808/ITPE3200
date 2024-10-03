@@ -1,10 +1,34 @@
 import React, { useState } from 'react'; 
+import { useNavigate } from "react-router-dom";
 
 const LeftNavbar = () => {
+  const navigate = useNavigate(); // Flytt inn i komponenten
   const [activeButton, setActiveButton] = useState(null);
 
   const handleNavClick = (button) => {
     setActiveButton(button);
+
+    // Naviger til riktig rute basert på knappen som klikkes
+    switch (button) {
+      case 'home':
+        navigate("/feed");
+        break;
+      case 'messages':
+        navigate("/messages"); // Bytt ut med riktig rute
+        break;
+      case 'people':
+        navigate("/people"); // Bytt ut med riktig rute
+        break;
+      case 'saved':
+        navigate("/saved"); // Bytt ut med riktig rute
+        break;
+      case 'logout':
+        sessionStorage.removeItem("user")
+        navigate("/")
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -32,9 +56,9 @@ const LeftNavbar = () => {
         <div className="flex flex-col space-y-4 mb-2">
           {/* Home button */}
           <a 
-            href="#" 
+            href='#/'
             className={`px-2 transition-colors duration-200 w-full ${activeButton === 'home' ? 'bg-gray-700' : ''}`} 
-            onClick={() => handleNavClick('home')}
+            onClick={() => handleNavClick('home')} // Endret her
           >
             <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'home' ? '' : 'hover:bg-gray-600'}`}>
               <span className="material-icons text-lg 870px:text-xl pl-2">home</span>
@@ -44,7 +68,7 @@ const LeftNavbar = () => {
 
           {/* Messages button */}
           <a 
-            href="#" 
+            href="#/" 
             className={`px-2 transition-colors duration-200 w-full ${activeButton === 'messages' ? 'bg-gray-700' : ''}`} 
             onClick={() => handleNavClick('messages')}
           >
@@ -56,7 +80,7 @@ const LeftNavbar = () => {
 
           {/* People button */}
           <a 
-            href="#" 
+            href="#/" 
             className={`px-2 transition-colors duration-200 w-full ${activeButton === 'people' ? 'bg-gray-700' : ''}`} 
             onClick={() => handleNavClick('people')}
           >
@@ -68,7 +92,7 @@ const LeftNavbar = () => {
 
           {/* Saved button */}
           <a 
-            href="#" 
+            href="#/" 
             className={`px-2 transition-colors duration-200 w-full ${activeButton === 'saved' ? 'bg-gray-700' : ''}`} 
             onClick={() => handleNavClick('saved')}
           >
@@ -83,7 +107,7 @@ const LeftNavbar = () => {
       <div className="flex flex-col space-y-4 mb-6">        
         {/* Logout button */}
         <a 
-          href="#" 
+          href="#/" 
           className={`px-2 transition-colors duration-200 w-full ${activeButton === 'logout' ? 'bg-gray-700' : ''}`} 
           onClick={() => handleNavClick('logout')}
         >

@@ -21,7 +21,7 @@ const Profile = ({ loggedInUserId }) => {
       <LeftNavbar />
 
       {/* Main Content Area */}
-      <div className="w-4/6 bg-gray-600 p-6 overflow-y-auto"> {/* Scrollable content area */}
+      <div className="w-full bg-gray-600 p-6 overflow-y-auto"> {/* Scrollable content area */}
         <div className="w-full max-w-5xl bg-gray-700 p-6 mx-auto rounded-lg">
           {/* Cover Photo */}
           <div 

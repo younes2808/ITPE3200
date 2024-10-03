@@ -135,12 +135,6 @@ namespace ServerAPI.Controllers
                 .Where(p => p.UserId == userId) // Filter by User ID
                 .ToListAsync();
 
-            if (posts == null || !posts.Any())
-            {
-                _logger.LogWarning($"GetPostsByUserId: No posts found for user ID {userId}.");
-                return NotFound("No posts found for the specified user ID.");
-            }
-
             return Ok(posts);
         }
 
