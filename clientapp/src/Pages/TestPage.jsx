@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
-import UserPost from '../Components/UserPost'; // Importer UserPost
+import UserPost from '../Components/UserPost'; // Import UserPost component
+import LeftNavbar from '../Components/LeftNavbar'; // Import LeftNavbar
+import RightNavbar from '../Components/RightNavbar'; // Import RightNavbar
 
 const Profile = ({ loggedInUserId }) => {
-  const [username] = useState('exampleUser'); // Eksempelbrukernavn
-  const [location] = useState('Oslo, Norway'); // Eksempelplassering
-  const [link] = useState('https://example.com'); // Eksempelwebside
-  const [bio] = useState('This is an example bio'); // Eksempelbio
-  const [activeTab, setActiveTab] = useState('posts'); // For å spore hvilken fane som er aktiv
+  const [username] = useState('exampleUser'); // Example username
+  const [location] = useState('Oslo, Norway'); // Example location
+  const [link] = useState('https://example.com'); // Example website
+  const [bio] = useState('This is an example bio'); // Example bio
+  const [activeTab, setActiveTab] = useState('posts'); // Active tab state
 
-  // Funksjon for å håndtere faneklikk
+  // Handle tab switching
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen">
-      {/* Venstre svart sidebar */}
-      <div className="hidden lg:block w-2/12 bg-gray-400"></div> 
+    <div className="flex h-screen overflow-hidden"> {/* Outer container with fixed screen height */}
+      {/* Left Navbar */}
+      <LeftNavbar />
 
-      {/* Hovedprofilseksjon */}
-      <div className="flex-grow bg-gray-600 p-4 sm:p-6 flex justify-center items-start">
-        <div className="w-full max-w-4xl bg-gray-700 p-4 sm:p-6 mx-auto">
-          {/* Cover photo */}
-          <div className="w-full h-40 sm:h-48 bg-cover bg-center" style={{ backgroundImage: 'url(https://via.placeholder.com/1200x300)' }}></div>
+      {/* Main Content Area */}
+      <div className="w-4/6 bg-gray-500 p-6 overflow-y-auto"> {/* Scrollable content area */}
+        <div className="w-full max-w-4xl bg-gray-700 p-6 mx-auto rounded-lg">
+          {/* Cover Photo */}
+          <div 
+            className="w-full h-40 sm:h-48 bg-cover bg-center rounded-md"
+            style={{ backgroundImage: 'url(https://via.placeholder.com/1200x300)' }}
+          ></div>
 
-          {/* Profilinformasjon */}
+          {/* Profile Information */}
           <div className="text-center mt-6">
             <img
               src="https://via.placeholder.com/150"
@@ -37,7 +42,7 @@ const Profile = ({ loggedInUserId }) => {
             <p className="mt-4 text-gray-300">{bio}</p>
           </div>
 
-          {/* Navigasjonsknapper for Posts, Followers og Following */}
+          {/* Navigation Tabs */}
           <div className="mt-6 flex justify-center space-x-4">
             <button 
               className={`${activeTab === 'posts' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'}`} 
@@ -59,34 +64,35 @@ const Profile = ({ loggedInUserId }) => {
             </button>
           </div>
 
-          {/* Vise innhold basert på den aktive fanen */}
+          {/* Active Tab Content */}
           <div className="mt-8">
             {activeTab === 'posts' && (
-              <>
-                <h2 className="text-2xl text-white">Posts</h2>
-                <UserPost /> {/* Sender brukerens ID som prop til UserPost */}
-              </>
+              <div className="text-white">
+                <h2 className="text-2xl">Posts</h2>
+                <UserPost /> {/* User posts appear here */}
+              </div>
             )}
             {activeTab === 'followers' && (
               <div className="text-white">
                 <h2 className="text-2xl">Followers</h2>
-                {/* Her kan du implementere logikken for å vise følgere */}
+                {/* Followers logic */}
               </div>
             )}
             {activeTab === 'following' && (
               <div className="text-white">
                 <h2 className="text-2xl">Following</h2>
-                {/* Her kan du implementere logikken for å vise følgere */}
+                {/* Following logic */}
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Høyre svart sidebar */}
-      <div className="hidden lg:block w-2/12 bg-gray-700"></div> 
+      {/* Right Navbar */}
+      <RightNavbar />
     </div>
   );
 };
 
 export default Profile;
+

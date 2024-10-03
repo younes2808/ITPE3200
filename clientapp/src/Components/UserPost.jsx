@@ -82,11 +82,11 @@ const UserPost = () => {
     <div className="mt-auto flex-grow-0 space-y-6 items-start">
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
+          <div key={post.id} className="bg-gray-600 p-3.5 rounded-lg shadow-md">
             {/* Vis brukernavn basert på post.userId */}
             <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} />
 
-            <h2 className='font-medium font-mono text-slate-900'> 
+            <h2 className='font-medium font-mono text-slate-400'> 
               {new Date(post.createdAt).toLocaleString('en-US', {
                 year: 'numeric',
                 month: 'long',
