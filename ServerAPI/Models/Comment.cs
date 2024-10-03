@@ -8,9 +8,7 @@ namespace ServerAPI.Models
 
         // Navigation properties
         public required int UserId { get; set; }  // Foreign key for User
-        public required User Author { get; set; }  // The user who made the comment
 
         public required int PostId { get; set; }  // Foreign key for Post
-        public required Post Post { get; set; }  // The post that the comment is related to
     }
 }

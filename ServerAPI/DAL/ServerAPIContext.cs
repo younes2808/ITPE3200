@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using ServerAPI.Models;  // Ensure this matches the namespace where your models are defined
+using ServerAPI.Models;
 
-namespace ServerAPI.DAL  // Ensure this is the correct namespace for your project
+namespace ServerAPI.DAL
 {
     public class ServerAPIContext : DbContext
     {
@@ -18,19 +18,44 @@ namespace ServerAPI.DAL  // Ensure this is the correct namespace for your projec
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure the many-to-many relationship between User and Post through Like
+            // Composite key for Like (UserId + PostId)
             modelBuilder.Entity<Like>()
                 .HasKey(l => new { l.UserId, l.PostId });
 
+            // Define relationship between Like and User
             modelBuilder.Entity<Like>()
-                .HasOne(l => l.User)
-                .WithMany(u => u.Likes)
-                .HasForeignKey(l => l.UserId);
+                .HasOne<User>()  // Use User entity directly
+                .WithMany()  // No navigation property to Likes in User
+                .HasForeignKey(l => l.UserId)  // UserId is the foreign key
+                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete if user is removed
 
+            // Define relationship between Like and Post
             modelBuilder.Entity<Like>()
-                .HasOne(l => l.Post)
-                .WithMany(p => p.Likes)
-                .HasForeignKey(l => l.PostId);
+                .HasOne<Post>()  // Use Post entity directly
+                .WithMany()  // No navigation property to Likes in Post
+                .HasForeignKey(l => l.PostId)  // PostId is the foreign key
+                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete if post is removed
+
+            // Define relationship between Post and User
+            modelBuilder.Entity<Post>()
+                .HasOne<User>()  // Use User entity directly
+                .WithMany()  // No navigation property to Posts in User
+                .HasForeignKey(p => p.UserId)  // UserId is the foreign key
+                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete if user is removed
+
+            // Define relationship between Comment and User
+            modelBuilder.Entity<Comment>()
+                .HasOne<User>()  // Use User entity directly
+                .WithMany()  // No navigation property to Comments in User
+                .HasForeignKey(c => c.UserId)  // UserId is the foreign key
+                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete if user is removed
+
+            // Define relationship between Comment and Post
+            modelBuilder.Entity<Comment>()
+                .HasOne<Post>()  // Use Post entity directly
+                .WithMany()  // No navigation property to Comments in Post
+                .HasForeignKey(c => c.PostId)  // PostId is the foreign key
+                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete if post is removed
         }
     }
 }

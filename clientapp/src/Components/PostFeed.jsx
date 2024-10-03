@@ -5,7 +5,17 @@ const PostFeed = () => {
   const [usernames, setUsernames] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [likes, setLikes] = useState({});
+  const [userId, setUserId] = useState(null);
 
+  // Fetch user from sessionStorage when the component mounts
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUserId(parsedUser.id); // Assuming 'id' is the UserId field
+    }
+  }, []);
 
   // Fetch posts when the component mounts
   useEffect(() => {
@@ -16,8 +26,17 @@ const PostFeed = () => {
           throw new Error('Failed to fetch posts');
         }
         const data = await response.json();
-        console.log(data)
         setPosts(data);
+
+        // Fetch likes for each post
+        const likesData = {};
+        for (const post of data) {
+          const likesResponse = await fetch(`http://localhost:5249/api/Like/${post.id}`);
+          const likesInfo = await likesResponse.json();
+          likesData[post.id] = likesInfo;
+        }
+        setLikes(likesData);
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -26,6 +45,47 @@ const PostFeed = () => {
     };
     fetchPosts();
   }, []);
+
+  // Toggle like/unlike
+  const toggleLike = async (postId) => {
+    const alreadyLiked = likes[postId]?.find(like => like.userId === userId);
+
+    try {
+      if (alreadyLiked) {
+        // Unlike the post
+        await fetch('http://localhost:5249/api/Like', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId, postId }),
+        });
+
+        // Update state to remove like
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [postId]: prevLikes[postId].filter(like => like.userId !== userId),
+        }));
+      } else {
+        // Like the post
+        await fetch('http://localhost:5249/api/Like', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId, postId }),
+        });
+
+        // Update state to add like
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [postId]: [...prevLikes[postId], { userId, likedAt: new Date() }],
+        }));
+      }
+    } catch (error) {
+      console.error('Error liking/unliking post:', error);
+    }
+  };
 
   // Fetch username for a specific userId (on demand)
   const fetchUsername = async (userId) => {
@@ -67,55 +127,65 @@ const PostFeed = () => {
   }
 
   return (
-  <div className="pt-72 mt-auto flex-grow-0 space-y-6 items-start">
-    {posts.map((post) => (
-      <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
-        {/* Display username based on post.userId */}
-        <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} />
+    <div className="pt-72 mt-auto flex-grow-0 space-y-6 items-start">
+      {posts.map((post) => (
+        <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
+          {/* Display username based on post.userId */}
+          <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} />
 
-        <h2 className='font-medium font-mono text-slate-900'> 
-          {new Date(post.createdAt).toLocaleString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          })}
-        </h2>
-        
-        <h2 className="text-white font-serif">{post.content}</h2>
+          <h2 className='font-medium font-mono text-slate-100'>
+            {new Date(post.createdAt).toLocaleString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            })}
+          </h2>
 
-        {/* Conditionally render videoUrl if it exists */}
-        {post.videoUrl && (
-          <a href={post.videoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-            {post.videoUrl}
-          </a>
-        )}
-        
-        {/* Conditionally render location if it exists */}
-        {post.location && (
-          <p className="text-green-500">
-            {post.location}
-          </p>
-        )}
+          <h2 className="text-white font-serif">{post.content}</h2>
 
-        {post.imagePath && (
-          <img
-            src={`http://localhost:5249/${post.imagePath}`}
-            alt="Post"
-            className="mt-2 rounded-lg"
-          />
-        )}
-        
-        <div className="flex justify-between mt-2">
-          <button className="text-blue-500 hover:underline">Like</button>
-          <button className="text-blue-500 hover:underline">Comment</button>
+          {post.videoUrl && (
+            <a href={post.videoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+              {post.videoUrl}
+            </a>
+          )}
+
+          {post.location && (
+            <p className="text-green-500">
+              {post.location}
+            </p>
+          )}
+
+          {post.imagePath && (
+            <img
+              src={`http://localhost:5249/${post.imagePath}`}
+              alt="Post"
+              className="mt-2 rounded-lg"
+            />
+          )}
+            <span className="text-red-500 font-light pt-20">
+              {likes[post.id]?.length || 0} ♡
+            </span>
+          <div className="flex justify-between mt-2">
+                        {/* Display number of likes */}
+         
+            <button
+              onClick={() => toggleLike(post.id)}
+              className="text-blue-500 hover:underline"
+            >
+              {likes[post.id]?.find(like => like.userId === userId) ? 'Liked' : 'Like'}
+            </button>
+
+
+
+            <button className="text-blue-500 hover:underline">Comment</button>
+          </div>
         </div>
-      </div>
-    ))}
-  </div>
+      ))}
+    </div>
   );
 };
 
@@ -131,7 +201,7 @@ const UsernameDisplay = ({ userId, fetchUsername }) => {
     getUsername();
   }, [userId, fetchUsername]);
 
-  return <h1 className='text-lg font-extrabold font-mono text-slate-50 text-'>{username}</h1>;
+  return <h1 className='text-lg font-extrabold font-mono text-slate-50'>{username}</h1>;
 };
 
 export default PostFeed;
