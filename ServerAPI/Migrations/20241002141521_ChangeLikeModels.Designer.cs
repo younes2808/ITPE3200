@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerAPI.DAL;
 
@@ -10,9 +11,11 @@ using ServerAPI.DAL;
 namespace ServerAPI.Migrations
 {
     [DbContext(typeof(ServerAPIContext))]
-    partial class ServerAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20241002141521_ChangeLikeModels")]
+    partial class ChangeLikeModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -56,9 +59,19 @@ namespace ServerAPI.Migrations
                     b.Property<DateTime>("LikedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("PostId1")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("UserId", "PostId");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("PostId1");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Likes");
                 });
@@ -120,17 +133,21 @@ namespace ServerAPI.Migrations
 
             modelBuilder.Entity("ServerAPI.Models.Comment", b =>
                 {
-                    b.HasOne("ServerAPI.Models.Post", null)
-                        .WithMany()
+                    b.HasOne("ServerAPI.Models.Post", "Post")
+                        .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ServerAPI.Models.User", null)
-                        .WithMany()
+                    b.HasOne("ServerAPI.Models.User", "Author")
+                        .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("ServerAPI.Models.Like", b =>
@@ -141,8 +158,25 @@ namespace ServerAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ServerAPI.Models.Post", null)
+                        .WithMany("Likes")
+                        .HasForeignKey("PostId1");
+
                     b.HasOne("ServerAPI.Models.User", null)
                         .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ServerAPI.Models.User", null)
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId1");
+                });
+
+            modelBuilder.Entity("ServerAPI.Models.Post", b =>
+                {
+                    b.HasOne("ServerAPI.Models.User", null)
+                        .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -150,11 +184,18 @@ namespace ServerAPI.Migrations
 
             modelBuilder.Entity("ServerAPI.Models.Post", b =>
                 {
-                    b.HasOne("ServerAPI.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("ServerAPI.Models.User", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }
