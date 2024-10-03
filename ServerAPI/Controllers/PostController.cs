@@ -110,7 +110,20 @@ namespace ServerAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllPosts()
         {
-            var posts = await _context.Posts.ToListAsync(); // Removed Author include
+            var posts = await _context.Posts
+                .Select(p => new 
+                {
+                    p.Id,
+                    p.Content,
+                    p.ImagePath,
+                    p.VideoUrl,
+                    p.Location,
+                    p.CreatedAt,
+                    p.UserId,
+                    LikeCount = _context.Likes.Count(l => l.PostId == p.Id) // Add like count
+                })
+                .ToListAsync();
+
             return Ok(posts);
         }
 

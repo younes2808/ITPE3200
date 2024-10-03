@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;  // For the JsonIgnore attribute
 
 namespace ServerAPI.Models
 {
@@ -21,12 +22,6 @@ namespace ServerAPI.Models
         public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;  // Default to current time
 
         // Foreign key for the user who created the post
-        public required int UserId { get; set; }  // Marked as required
-
-        // Collection for comments on the post
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();  // Comments on the post
-
-        // Collection for likes associated with the post
-        public ICollection<Like> Likes { get; set; } = new List<Like>();  // Likes associated with the post
+        public required int UserId { get; set; }  // Marked as require
     }
 }
