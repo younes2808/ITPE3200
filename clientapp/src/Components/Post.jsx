@@ -101,9 +101,8 @@ const TestPage = () => {
   };
 
   return (
-
     <div className="flex-grow-0 items-center bg-gray-800">
-      <div className="bg-gray-700 rounded-lg px-18 min-px-6 min-w-80 shadow-lg p-6 fixed z-50 top-3 
+      <div className="bg-gray-700 rounded-lg px-18 min-px-6 min-w-80 shadow-lg p-6 fixed z-50 top-3 ">
         
         {/* Profile image and post textarea */}
         <div className="flex items-center mb-4">
