@@ -1,106 +1,90 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import UserPost from '../Components/UserPost'; // Importer UserPost
 
-const Profile = () => {
-  const { id } = useParams(); // Hent bruker-ID fra URL-parametere
-  const [userId, setUserId] = useState(null);
-  const [username, setUsername] = useState(''); // Legg til state for brukernavn
-  const [activeTab, setActiveTab] = useState('about'); // Legg til state for aktiv tab
-  const [profileData, setProfileData] = useState(null); // State for profil data
+const Profile = ({ loggedInUserId }) => {
+  const [username] = useState('exampleUser'); // Eksempelbrukernavn
+  const [location] = useState('Oslo, Norway'); // Eksempelplassering
+  const [link] = useState('https://example.com'); // Eksempelwebside
+  const [bio] = useState('This is an example bio'); // Eksempelbio
+  const [activeTab, setActiveTab] = useState('posts'); // For å spore hvilken fane som er aktiv
 
-  // Hent bruker-ID fra sessionStorage eller URL
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem('user');
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUserId(parsedUser.id);
-      setUsername(parsedUser.username || ''); // Hent brukernavn fra sessionStorage
-    }
-
-    if (id) {
-      setUserId(id);
-    }
-
-    // Hent data for standard tab (about) ved lasting av komponenten
-    fetchData('about'); // Hent 'about' data ved lasting
-  }, [id]);
-
-  // Funksjon for å oppdatere aktiv tab og hente data
+  // Funksjon for å håndtere faneklikk
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-    fetchData(tab); // Hent data basert på tab
-  };
-
-  // Funksjon for å hente data fra API
-  const fetchData = async (tab) => {
-    try {
-      const response = await fetch("http://localhost:5249/api/User/login") // Erstatt med riktig API-endepunkt
-      const data = await response.json();
-      setProfileData(data); // Sett de hentede dataene i state
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
   };
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      {/* Left black sidebar */}
-      <div className="hidden lg:block w-2/12 bg-black"></div> {/* Svart venstre sidebar */}
+      {/* Venstre svart sidebar */}
+      <div className="hidden lg:block w-2/12 bg-gray-400"></div> 
 
-      {/* Main profile section */}
-      <div className="flex-grow bg-gray-100 p-4 sm:p-6 flex justify-center items-start">
-        <div className="w-full max-w-4xl bg-white p-4 sm:p-6 mx-auto">
+      {/* Hovedprofilseksjon */}
+      <div className="flex-grow bg-gray-600 p-4 sm:p-6 flex justify-center items-start">
+        <div className="w-full max-w-4xl bg-gray-700 p-4 sm:p-6 mx-auto">
           {/* Cover photo */}
-          <div className="w-full h-40 sm:h-48 bg-cover bg-center" style={{ backgroundImage: 'url(https://via.placeholder.com/1200x300)' }}>
-          </div>
+          <div className="w-full h-40 sm:h-48 bg-cover bg-center" style={{ backgroundImage: 'url(https://via.placeholder.com/1200x300)' }}></div>
 
-          {/* Profile Info */}
+          {/* Profilinformasjon */}
           <div className="text-center mt-6">
             <img
               src="https://via.placeholder.com/150"
               alt="Profile"
               className="w-24 h-24 sm:w-32 sm:h-32 rounded-full mx-auto border-4 border-white -mt-12"
             />
-            <h1 className="text-lg sm:text-2xl font-semibold mt-2 ">@{username}</h1>
-            <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Edit Profile</button>
+            <h1 className="text-lg sm:text-2xl font-semibold mt-2 text-white">@{username}</h1>
+            <p className="text-gray-300">{location}</p>
+            <a href={link} className="text-blue-400 hover:text-white">{link}</a>
+            <p className="mt-4 text-gray-300">{bio}</p>
           </div>
 
-          {/* Navigation Tabs */}
-          <div className="mt-8 border-t pt-4">
-            <ul className="flex justify-center space-x-4 sm:space-x-8">
-              <li onClick={() => handleTabClick('about')} className={`cursor-pointer ${activeTab === 'about' ? 'text-blue-500' : 'text-gray-600 hover:text-white hover:bg-gray-700 transition duration-300 p-2 rounded'}`}>
-                About
-              </li>
-              <li onClick={() => handleTabClick('posts')} className={`cursor-pointer ${activeTab === 'posts' ? 'text-blue-500' : 'text-gray-600 hover:text-white hover:bg-gray-700 transition duration-300 p-2 rounded'}`}>
-                Posts
-              </li>
-              <li onClick={() => handleTabClick('followers')} className={`cursor-pointer ${activeTab === 'followers' ? 'text-blue-500' : 'text-gray-600 hover:text-white hover:bg-gray-700 transition duration-300 p-2 rounded'}`}>
-                Followers
-              </li>
-              <li onClick={() => handleTabClick('following')} className={`cursor-pointer ${activeTab === 'following' ? 'text-blue-500' : 'text-gray-600 hover:text-white hover:bg-gray-700 transition duration-300 p-2 rounded'}`}>
-                Following
-              </li>
-            </ul>
+          {/* Navigasjonsknapper for Posts, Followers og Following */}
+          <div className="mt-6 flex justify-center space-x-4">
+            <button 
+              className={`${activeTab === 'posts' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'}`} 
+              onClick={() => handleTabClick('posts')}
+            >
+              Posts
+            </button>
+            <button 
+              className={`${activeTab === 'followers' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'}`} 
+              onClick={() => handleTabClick('followers')}
+            >
+              Followers
+            </button>
+            <button 
+              className={`${activeTab === 'following' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'}`} 
+              onClick={() => handleTabClick('following')}
+            >
+              Following
+            </button>
           </div>
 
-          {/* Vise innhold basert på aktiv tab */}
-          <div className="mt-6">
-            {activeTab === 'about' && <div>{profileData ? profileData.about : 'Loading...'}</div>}
-            {activeTab === 'posts' && <div>{profileData ? profileData.posts.join(', ') : 'Loading...'}</div>}
-            {activeTab === 'followers' && <div>{profileData ? profileData.followers.join(', ') : 'Loading...'}</div>}
-            {activeTab === 'following' && <div>{profileData ? profileData.following.join(', ') : 'Loading...'}</div>}
-          </div>
-
-          {/* Profile Details */}
-          <div className="mt-6">
-            <h2 className="text-lg sm:text-xl font-bold">Profile Information</h2>
-            <p className="mt-2 text-gray-700">Update your account's profile information and email address.</p>
+          {/* Vise innhold basert på den aktive fanen */}
+          <div className="mt-8">
+            {activeTab === 'posts' && (
+              <>
+                <h2 className="text-2xl text-white">Posts</h2>
+                <UserPost /> {/* Sender brukerens ID som prop til UserPost */}
+              </>
+            )}
+            {activeTab === 'followers' && (
+              <div className="text-white">
+                <h2 className="text-2xl">Followers</h2>
+                {/* Her kan du implementere logikken for å vise følgere */}
+              </div>
+            )}
+            {activeTab === 'following' && (
+              <div className="text-white">
+                <h2 className="text-2xl">Following</h2>
+                {/* Her kan du implementere logikken for å vise følgere */}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Right black sidebar */}
-      <div className="hidden lg:block w-2/12 bg-black"></div> {/* Svart høyre sidebar */}
+      {/* Høyre svart sidebar */}
+      <div className="hidden lg:block w-2/12 bg-gray-700"></div> 
     </div>
   );
 };
