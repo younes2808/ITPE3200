@@ -5,7 +5,13 @@ module.exports = {
     "./public/index.html"
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        '970px': '970px',
+        '870px': '870px',
+        '500px': '500px', // Egendefinert breakpoint for 970px
+      },
+    },
   },
   plugins: [require('tailwind-scrollbar')],
 }

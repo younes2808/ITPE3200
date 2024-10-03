@@ -29,8 +29,9 @@ const TestPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="bg-gray-700 rounded-lg shadow-lg p-6 w-full max-w-xl fixed z-50 top-3"> {/* Oppdatert til fixed og z-index */}
+    <div className="flex justify-center items-center min-h-screen bg-gray-800 mx-auto">
+    {/*<div className="flex justify-center items-center min-h-screen bg-gray-800">*/}
+      <div className="bg-gray-700 rounded-lg shadow-lg p-6 w-full max-w-xl fixed top-3"> {/* Oppdatert til fixed og z-index */}
         
         {/* Profil og tekstområdet */}
         <div className="flex items-center mb-4">
