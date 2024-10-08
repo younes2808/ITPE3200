@@ -1,11 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.Login-Bakgrunn{
- @apply bg-orange-200;
+
+.Login-Bakgrunn {
+    @apply bg-orange-200;
 }
-.Landing-page-box{
-@apply flex items-center justify-center min-h-screen
+
+.Landing-page-box {
+    @apply flex items-center justify-center min-h-screen;
+}
+
+/* Map container styles */
+.map-container {
+    @apply h-60 w-full rounded-lg shadow-md overflow-hidden; /* Ensure it has a height, width, and rounded corners */
 }
 
 /* Scrollbar styles for WebKit browsers */

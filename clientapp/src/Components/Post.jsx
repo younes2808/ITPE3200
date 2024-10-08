@@ -1,25 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../Styles/Rays.css'; // Adjust the path if necessary
-import { useNavigate } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
+import L from 'leaflet';
 
+// Initialize the default icon for Leaflet markers
+delete L.Icon.Default.prototype._getIconUrl; 
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+
+// Main map component for TestPage
 const TestPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isVideo, setIsVideo] = useState(false);
   const [link, setLink] = useState('');
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [postText, setPostText] = useState('');
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState(''); // Holds the location string
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [userId, setUserId] = useState(null); // Store the userId from sessionStorage
-  const [showLocationInput, setShowLocationInput] = useState(false); // New state for location input visibility
+  const [userId, setUserId] = useState(null);
+  const [showMap, setShowMap] = useState(false);
 
-  // Fetch user from sessionStorage when the component mounts
+  // Fetch user from sessionStorage
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      setUserId(parsedUser.id); // Assuming 'id' is the UserId field
+      setUserId(parsedUser.id);
     } else {
       console.error("No user found in sessionStorage.");
     }
@@ -28,7 +38,7 @@ const TestPage = () => {
   const fileSelectedHandler = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedFile(file); // Store the actual file for upload
+      setSelectedFile(file);
       setIsVideo(file.type.includes('video'));
     }
   };
@@ -42,10 +52,6 @@ const TestPage = () => {
     setShowLinkInput(!showLinkInput);
   };
 
-  const toggleLocationInput = () => {
-    setShowLocationInput(!showLocationInput); // Toggle the location input visibility
-  };
-
   const handleLinkChange = (event) => {
     setLink(event.target.value);
   };
@@ -54,28 +60,25 @@ const TestPage = () => {
     setPostText(event.target.value);
   };
 
-  const handleLocationChange = (event) => {
-    setLocation(event.target.value);
-  };
-
-  const navigate = useNavigate(); 
 
   const postHandler = async () => {
     if (!userId) {
-      setError("User not found.");
+      console.log("user not found");
       return;
     }
 
     setLoading(true);
-    setError(null);
 
     const formData = new FormData();
     formData.append('Content', postText);
-    formData.append('Location', location);
-    formData.append('UserId', userId); // Add the userId from sessionStorage
-    formData.append('VideoUrl', link); // Append the hyperlink to the FormData
+    
+    // Ensure location is a string
+    formData.append('Location', typeof location === 'string' ? location : String(location)); 
+    formData.append('UserId', userId);
+    formData.append('VideoUrl', link);
+    
     if (selectedFile) {
-      formData.append('Image', selectedFile); // Upload the selected file as 'Image'
+      formData.append('Image', selectedFile);
     }
 
     try {
@@ -90,12 +93,10 @@ const TestPage = () => {
       // Reset form after successful submission
       setPostText('');
       setLink('');
-      setLocation('');
+      setLocation(''); // Reset location
       removeSelectedFile();
-      alert('Post created successfully!');
-      navigate("/feed");
+      window.location.reload()
     } catch (err) {
-      setError('Failed to create post.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -105,7 +106,6 @@ const TestPage = () => {
   return (
     <div className="flex-grow-0 items-center bg-gray-800">
       <div className="bg-gray-700 rounded-lg px-18 min-px-6 min-w-80 shadow-lg p-6 fixed z-50 top-3 ">
-        
         {/* Profile image and post textarea */}
         <div className="flex items-center mb-4">
           <img
@@ -151,19 +151,6 @@ const TestPage = () => {
           </div>
         )}
 
-        {/* Location input - only show when toggled */}
-        {showLocationInput && (
-          <div className="my-4">
-            <input
-              type="text"
-              value={location}
-              onChange={handleLocationChange}
-              placeholder="Enter location..."
-              className="w-full p-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 focus:outline-none"
-            />
-          </div>
-        )}
-
         {/* Action buttons */}
         <div className="flex items-center justify-between space-x-4 md:space-x-9 lg:space-x-14">
           <div className="flex space-x-2 md:space-x-3.5 lg:space-x-12">
@@ -188,12 +175,16 @@ const TestPage = () => {
               <span className="material-icons mr-1">link</span>
               Hyperlink
             </button>
+
+            {/* Show Map button */}
             <button
               className="flex items-center justify-center px-2 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors duration-300 text-sm"
-              onClick={toggleLocationInput} // Add toggle for location input
+              onClick={() => {
+                setShowMap(prevState => !prevState); // Toggle the visibility of the map
+              }}
             >
               <span className="material-icons mr-1">location_on</span>
-              Location
+              {showMap ? 'Hide Map' : 'Show Map'}
             </button>
           </div>
 
@@ -208,9 +199,57 @@ const TestPage = () => {
           </button>
         </div>
 
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {/* Interactive Map for Location */}
+        {showMap && (
+          <div className="my-4 bg-gray-600 rounded-lg p-4">
+            <MapContainer
+              center={[20, 0]} // Center the map on load
+              zoom={2} // Initial zoom level
+              style={{ height: '400px', width: '100%' }} // Ensure the map takes full space
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <MapContent setLocation={setLocation} /> {/* Pass setLocation to MapContent */}
+            </MapContainer>
+            <p className="text-white mt-2">Location: {location}</p> {/* Display selected location */}
+          </div>
+        )}
       </div>
     </div>
+  );
+};
+
+// Separate component for map interactions
+const MapContent = ({ setLocation }) => {
+  const [position, setPosition] = useState(null); // Position state for marker
+  const map = useMap(); // Access the map instance
+
+  const handleMapClick = useCallback((event) => {
+    const { lat, lng } = event.latlng; // Get the lat and lng from the click event
+    console.log('Map clicked at:', { lat, lng }); // Debug log
+    setPosition([lat, lng]); // Update position state with lat and lng
+    setLocation(`Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`); // Update location state with formatted string
+  }, [setLocation]); // Dependencies are now stable
+
+  // Attach the click event handler to the map when the component mounts
+  useEffect(() => {
+    map.on('click', handleMapClick); // Attach the click event to the map
+
+    return () => {
+      map.off('click', handleMapClick); // Clean up the event listener on component unmount
+    };
+  }, [map, handleMapClick]); // Now all dependencies are included and stable
+
+  return (
+    <>
+      {position && ( // Render marker only if position is set
+        <Marker position={position}>
+          <Popup>{`Marker at: ${position[0].toFixed(5)}, ${position[1].toFixed(5)}`}</Popup> {/* Optional: Show coordinates in popup */}
+        </Marker>
+      )}
+    </>
   );
 };
 

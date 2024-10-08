@@ -208,7 +208,7 @@ const Comments = ({ postId }) => {
   }
 
   return (
-    <div className="mt-36 bg-gray-800 p-4 rounded-lg w-2/4">
+    <div className="mt-0 bg-gray-800 p-4 rounded-lg w-2/4">
       <button 
         className='text-yellow-200 hover:text-slate-100 hover:font-extralight' 
         onClick={() => navigate("/feed")}
