@@ -127,7 +127,7 @@ const PostFeed = () => {
   }
 
   return (
-    <div className="pt-72 mt-auto flex-grow-0 space-y-6 items-start">
+    <div className="p-2 pt-6 mt-auto flex-grow-0 space-y-6 items-start">
       {posts.map((post) => (
         <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
           {/* Display username based on post.userId */}
