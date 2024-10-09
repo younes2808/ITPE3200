@@ -142,7 +142,7 @@ const Profile = () => {
   };
 
   const handleSendMessage = () => {
-    navigate(`/message/${currentUserId}/${userId}`);// Redirect to message page with the userId
+    navigate(`/message/${userId}/${currentUserId}`);// Redirect to message page with the userId
   };
 
   return (
