@@ -1,8 +1,8 @@
 import React from 'react';
-import TopBar from '../Components/TopBar';
-import RightNavbar from '../Components/RightNavbar';
-import LeftNavbar from '../Components/LeftNavbar';
-import BottomNavbar from '../Components/BottomNavbar';
+import TopBar from './../Components/TopBar';
+import RightNavbar from './../Components/RightNavbar';
+import LeftNavbar from './../Components/LeftNavbar';
+import BottomNavbar from './../Components/BottomNavbar';
 import PostFunction from './../Components/Post';
 import PostFeed from './../Components/PostFeed';
 
