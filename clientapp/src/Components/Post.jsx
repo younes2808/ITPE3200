@@ -43,22 +43,21 @@ const TestPage = () => {
     }
   };
 
-  const removeSelectedFile = () => {
-    setSelectedFile(null);
-    setIsVideo(false);
-  };
+    const toggleLinkInput = () => {
+        setShowLinkInput(!showLinkInput);
+    };
 
-  const toggleLinkInput = () => {
-    setShowLinkInput(!showLinkInput);
-  };
+    const handleLinkChange = (event) => {
+        setLink(event.target.value);
+    };
 
-  const handleLinkChange = (event) => {
-    setLink(event.target.value);
-  };
+    const handleTextChange = (event) => {
+        setPostText(event.target.value);
+    };
 
-  const handleTextChange = (event) => {
-    setPostText(event.target.value);
-  };
+    const handleLocationChange = (event) => {
+        setLocation(event.target.value);
+    };
 
 
   const postHandler = async () => {

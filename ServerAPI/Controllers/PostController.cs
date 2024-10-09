@@ -111,7 +111,10 @@ namespace ServerAPI.Controllers
         public async Task<IActionResult> GetAllPosts()
         {
             var posts = await _context.Posts
+<<<<<<< HEAD
+=======
                 .OrderByDescending(p => p.CreatedAt) // Sort posts by CreatedAt in descending order (latest posts first)
+>>>>>>> 111f996698d3905b7884bedf8174e451ee0838f8
                 .Select(p => new 
                 {
                     p.Id,
