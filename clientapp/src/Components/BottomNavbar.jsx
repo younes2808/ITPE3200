@@ -33,7 +33,7 @@ const BottomNavbar = () => {
         onClick={() => handleNavClick("/saved")}
         className="flex flex-col items-center cursor-pointer"
       >
-        <span className="material-icons text-3xl">bookmark</span>
+        <span className="material-icons text-3xl">search</span>
       </a>
       <a
         onClick={() => handleNavClick("/profile")}

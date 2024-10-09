@@ -211,13 +211,18 @@ const PostFeed = () => {
               className="post-textarea w-full p-4 bg-gray-600 text-white rounded-lg resize-none h-28"
             />
           ) : (
-            <h2 className="text-white mb-1.5 font-serif">{post.content}</h2>
+            <h2 className="text-white mb-1.5 break-words font-serif">{post.content}</h2>
           )}
 
           {post.videoUrl && (
-            <a href={post.videoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-              {post.videoUrl}
-            </a>
+             <a
+             href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`}
+             target="_blank"
+             rel="noopener noreferrer"
+             className="text-blue-500 hover:underline flex"
+           >
+             {post.videoUrl}
+           </a>
           )}
 
           {post.location && (

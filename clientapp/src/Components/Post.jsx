@@ -13,27 +13,30 @@ L.Icon.Default.mergeOptions({
 });
 
 // Main map component for TestPage
-const TestPage = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [isVideo, setIsVideo] = useState(false);
-  const [link, setLink] = useState('');
-  const [showLinkInput, setShowLinkInput] = useState(false);
-  const [postText, setPostText] = useState('');
-  const [location, setLocation] = useState(''); // Holds the location string
-  const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState(null);
-  const [showMap, setShowMap] = useState(false);
-
-  // Fetch user from sessionStorage
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUserId(parsedUser.id);
-    } else {
-      console.error("No user found in sessionStorage.");
-    }
-  }, []);
+    const TestPage = () => {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isVideo, setIsVideo] = useState(false);
+    const [link, setLink] = useState('');
+    const [showLinkInput, setShowLinkInput] = useState(false);
+    const [postText, setPostText] = useState('');
+    const [location, setLocation] = useState(''); // Holds the location string
+    const [loading, setLoading] = useState(false);
+    const [userId, setUserId] = useState(null);
+    const [showMap, setShowMap] = useState(false);
+    const [username, setUsername] = useState(''); // State to store username
+  
+  
+    // Fetch user from sessionStorage
+    useEffect(() => {
+      const storedUser = sessionStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setUserId(parsedUser.id);
+        setUsername(parsedUser.username); // Set username
+      } else {
+        console.error("No user found in sessionStorage.");
+      }
+    }, []);
 
   const fileSelectedHandler = (event) => {
     const file = event.target.files[0];
@@ -43,22 +46,27 @@ const TestPage = () => {
     }
   };
 
-    const toggleLinkInput = () => {
-        setShowLinkInput(!showLinkInput);
-    };
+  const removeSelectedFile = () => {
+    setSelectedFile(null); // Clear selected file
+    setIsVideo(false); // Reset video flag
+  };
 
-    const handleLinkChange = (event) => {
-        setLink(event.target.value);
-    };
+  const toggleLinkInput = () => {
+    setShowLinkInput(!showLinkInput);
+  };
 
-    const handleTextChange = (event) => {
-        setPostText(event.target.value);
-    };
+  const handleLinkChange = (event) => {
+    setLink(event.target.value);
+  };
 
-    const handleLocationChange = (event) => {
-        setLocation(event.target.value);
-    };
+  const handleTextChange = (event) => {
+    setPostText(event.target.value);
+  };
 
+  // Optional: You can comment out handleLocationChange if not used
+  // const handleLocationChange = (event) => {
+  //     setLocation(event.target.value);
+  // };
 
   const postHandler = async () => {
     if (!userId) {
@@ -93,8 +101,8 @@ const TestPage = () => {
       setPostText('');
       setLink('');
       setLocation(''); // Reset location
-      removeSelectedFile();
-      window.location.reload()
+      removeSelectedFile(); // Clear the selected file
+      window.location.reload();
     } catch (err) {
       console.error(err);
     } finally {
@@ -107,11 +115,9 @@ const TestPage = () => {
       <div className="bg-gray-700 rounded-lg px-18 min-px-6 min-w-80 shadow-lg p-6 fixed z-50 top-3 ">
         {/* Profile image and post textarea */}
         <div className="flex items-center mb-4">
-          <img
-            src="http://localhost:5249/PostImages/beetle.png"
-            alt="Profile"
-            className="w-10 h-10 rounded-full mr-4"
-          />
+          <span className="text-lg font-semibold">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
+        
+          
           <textarea
             value={postText}
             onChange={handleTextChange}

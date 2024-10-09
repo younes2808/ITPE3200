@@ -53,7 +53,7 @@ const LeftNavbar = () => {
         href={`/profile/${userId}`}
         className="flex items-center space-x-0 pt-8 p-4 mt-24 md:space-x-4  hover:bg-gray-800 rounded-lg transition-colors duration-200"
       >
-        <div className="flex items-center justify-center w-10 h-10 870px:w-12 870px:h-12 rounded-full bg-blue-500"> {/* Use a colored circle */}
+        <div className="flex items-center justify-center w-10 h-10 870px:w-16 870px:h-16 rounded-full bg-blue-500"> {/* Use a colored circle */}
           <span className="text-lg font-semibold">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
         </div>
         <div>
