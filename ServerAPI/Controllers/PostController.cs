@@ -22,73 +22,73 @@ namespace ServerAPI.Controllers
             _logger = logger;
         }
 
-    [HttpPost]
-    public async Task<IActionResult> CreatePost([FromForm] PostRequestModel model)
-    {
-        // Check if the model is null or content is empty
-        if (model == null || string.IsNullOrEmpty(model.Content))
+        [HttpPost]
+        public async Task<IActionResult> CreatePost([FromForm] PostRequestModel model)
         {
-            _logger.LogWarning("CreatePost: Model is null or content is empty.");
-            return BadRequest("Post content cannot be empty.");
-        }
-
-        // Log the model properties for debugging
-        _logger.LogInformation($"Received post with Content: {model.Content}, VideoUrl: {model.VideoUrl}, UserId: {model.UserId}, Location: {model.Location}");
-
-        // Fetch the author user from the database
-        var author = await _context.Users.FindAsync(model.UserId);
-        if (author == null) // Ensure the author exists
-        {
-            _logger.LogWarning($"CreatePost: No user found with ID {model.UserId}.");
-            return NotFound("Author not found.");
-        }
-
-        // Handle image upload
-        string? imagePath = null;
-        if (model.Image != null && model.Image.Length > 0)
-        {
-            // Ensure the directory exists
-            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "PostImages");
-            if (!Directory.Exists(directoryPath))
+            // Check if the model is null or content is empty
+            if (model == null || string.IsNullOrEmpty(model.Content))
             {
-                Directory.CreateDirectory(directoryPath);
+                _logger.LogWarning("CreatePost: Model is null or content is empty.");
+                return BadRequest("Post content cannot be empty.");
             }
 
-            // Save the image
-            var fileName = Path.GetFileName(model.Image.FileName);
-            var filePath = Path.Combine(directoryPath, fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            // Log the model properties for debugging
+            _logger.LogInformation($"Received post with Content: {model.Content}, VideoUrl: {model.VideoUrl}, UserId: {model.UserId}, Location: {model.Location}");
+
+            // Fetch the author user from the database
+            var author = await _context.Users.FindAsync(model.UserId);
+            if (author == null) // Ensure the author exists
             {
-                await model.Image.CopyToAsync(stream);
+                _logger.LogWarning($"CreatePost: No user found with ID {model.UserId}.");
+                return NotFound("Author not found.");
             }
 
-            // Store the path to the image
-            imagePath = Path.Combine("PostImages", fileName);
+            // Handle image upload
+            string? imagePath = null;
+            if (model.Image != null && model.Image.Length > 0)
+            {
+                // Ensure the directory exists
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "PostImages");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                // Save the image
+                var fileName = Path.GetFileName(model.Image.FileName);
+                var filePath = Path.Combine(directoryPath, fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.Image.CopyToAsync(stream);
+                }
+
+                // Store the path to the image
+                imagePath = Path.Combine("PostImages", fileName);
+            }
+
+            // Explicitly set Location to null if it's an empty string
+            string? location = string.IsNullOrEmpty(model.Location) ? null : model.Location;
+
+            // Set VideoUrl to null if it's not provided
+            string? videoUrl = string.IsNullOrEmpty(model.VideoUrl) ? null : model.VideoUrl;
+
+            // Create new post with the correct user ID
+            var post = new Post
+            {
+                Content = model.Content,
+                ImagePath = imagePath,
+                Location = location,  // This will be null if not provided in the request
+                CreatedAt = DateTime.UtcNow, // Set timestamp
+                UserId = model.UserId, // Set the UserId
+                VideoUrl = videoUrl // Set VideoUrl from the request, or null if not provided
+            };
+
+            // Add the post to the context and save changes
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
         }
-
-        // Explicitly set Location to null if it's an empty string
-        string? location = string.IsNullOrEmpty(model.Location) ? null : model.Location;
-
-        // Set VideoUrl to null if it's not provided
-        string? videoUrl = string.IsNullOrEmpty(model.VideoUrl) ? null : model.VideoUrl;
-
-        // Create new post with the correct user ID
-        var post = new Post
-        {
-            Content = model.Content,
-            ImagePath = imagePath,
-            Location = location,  // This will be null if not provided in the request
-            CreatedAt = DateTime.UtcNow, // Set timestamp
-            UserId = model.UserId, // Set the UserId
-            VideoUrl = videoUrl // Set VideoUrl from the request, or null if not provided
-        };
-
-        // Add the post to the context and save changes
-        _context.Posts.Add(post);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetPostById), new { id = post.Id }, post);
-    }
 
 
         [HttpGet("{id}")]
@@ -111,11 +111,8 @@ namespace ServerAPI.Controllers
         public async Task<IActionResult> GetAllPosts()
         {
             var posts = await _context.Posts
-<<<<<<< HEAD
-=======
                 .OrderByDescending(p => p.CreatedAt) // Sort posts by CreatedAt in descending order (latest posts first)
->>>>>>> 111f996698d3905b7884bedf8174e451ee0838f8
-                .Select(p => new 
+                .Select(p => new
                 {
                     p.Id,
                     p.Content,
@@ -190,31 +187,31 @@ namespace ServerAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePostById(int id, [FromForm] PostRequestModel model)
         {
-        // Find the post by its ID
-        var post = await _context.Posts.FindAsync(id);
+            // Find the post by its ID
+            var post = await _context.Posts.FindAsync(id);
 
-        if (post == null)
-        {
-            _logger.LogWarning($"UpdatePostById: No post found with ID {id}.");
-            return NotFound("Post not found.");
-        }
+            if (post == null)
+            {
+                _logger.LogWarning($"UpdatePostById: No post found with ID {id}.");
+                return NotFound("Post not found.");
+            }
 
-        // Validate the new content
-        if (string.IsNullOrEmpty(model.Content))
-        {
-            _logger.LogWarning("UpdatePostById: Content cannot be empty.");
-            return BadRequest("Post content cannot be empty.");
-        }
+            // Validate the new content
+            if (string.IsNullOrEmpty(model.Content))
+            {
+                _logger.LogWarning("UpdatePostById: Content cannot be empty.");
+                return BadRequest("Post content cannot be empty.");
+            }
 
-        // Only update the post's content, leaving other properties unchanged
-        post.Content = model.Content;
+            // Only update the post's content, leaving other properties unchanged
+            post.Content = model.Content;
 
-        // Save the changes to the database
-        _context.Posts.Update(post);
-        await _context.SaveChangesAsync();
+            // Save the changes to the database
+            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
 
-        _logger.LogInformation($"UpdatePostById: Post with ID {id} has been updated.");
-        return Ok(post); // Return the updated post
+            _logger.LogInformation($"UpdatePostById: Post with ID {id} has been updated.");
+            return Ok(post); // Return the updated post
         }
 
     }
