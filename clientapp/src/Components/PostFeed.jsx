@@ -218,7 +218,12 @@ const PostFeed = () => {
 
 
           {post.videoUrl && (
-            <a href={post.videoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+              <a
+              href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline flex"
+            >
               {post.videoUrl}
             </a>
           )}

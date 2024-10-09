@@ -1,26 +1,27 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importer useNavigate fra react-router-dom
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 function TopBar() {
   const [showTopBar, setShowTopBar] = useState(true);
-  let lastScrollY = 0;
-  const navigate = useNavigate(); // Bruk useNavigate for navigasjon
+  const lastScrollY = useRef(0); // Use ref to keep track of the last scroll position
+  const navigate = useNavigate(); // Use useNavigate for navigation
 
-  const handleScroll = () => {
-    if (window.scrollY > lastScrollY) {
-      // Brukeren scroller ned, skjul topbaren
+  // Memoize handleScroll using useCallback
+  const handleScroll = useCallback(() => {
+    if (window.scrollY > lastScrollY.current) {
+      // User scrolled down, hide the top bar
       setShowTopBar(false);
     } else {
-      // Brukeren scroller opp, vis topbaren
+      // User scrolled up, show the top bar
       setShowTopBar(true);
     }
-    lastScrollY = window.scrollY;
-  };
+    lastScrollY.current = window.scrollY; // Update lastScrollY
+  }, []); // No dependencies for now
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [handleScroll]); // Add handleScroll as a dependency
 
   return (
     <div
@@ -28,16 +29,16 @@ function TopBar() {
         showTopBar ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      {/* Venstre side med "RAYS" */}
+      {/* Left side with "RAYS" */}
       <div className="text-3xl font-light">RAYS</div>
 
-      {/* Høyre side med profilbilde som lenke */}
+      {/* Right side with profile picture as a link */}
       <div>
-        <a onClick={() => navigate('/profile')}> {/* Naviger til profil når klikket */}
+        <a href="#/" onClick={() => navigate('/profile')}> {/* Navigate to profile when clicked */}
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/41/Beetlejuice_onstage.jpg" // Her kan du legge inn riktig bilde
+            src="https://upload.wikimedia.org/wikipedia/commons/4/41/Beetlejuice_onstage.jpg" // Add your profile image here
             alt="Profile"
-            className="w-12 h-12 rounded-full cursor-pointer" // Legg til cursor-pointer for å indikere at det er klikkbart
+            className="w-12 h-12 rounded-full cursor-pointer" // Add cursor-pointer to indicate it's clickable
           />
         </a>
       </div>

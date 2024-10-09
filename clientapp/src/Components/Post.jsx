@@ -43,22 +43,27 @@ const TestPage = () => {
     }
   };
 
-    const toggleLinkInput = () => {
-        setShowLinkInput(!showLinkInput);
-    };
+  const removeSelectedFile = () => {
+    setSelectedFile(null); // Clear selected file
+    setIsVideo(false); // Reset video flag
+  };
 
-    const handleLinkChange = (event) => {
-        setLink(event.target.value);
-    };
+  const toggleLinkInput = () => {
+    setShowLinkInput(!showLinkInput);
+  };
 
-    const handleTextChange = (event) => {
-        setPostText(event.target.value);
-    };
+  const handleLinkChange = (event) => {
+    setLink(event.target.value);
+  };
 
-    const handleLocationChange = (event) => {
-        setLocation(event.target.value);
-    };
+  const handleTextChange = (event) => {
+    setPostText(event.target.value);
+  };
 
+  // Optional: You can comment out handleLocationChange if not used
+  // const handleLocationChange = (event) => {
+  //     setLocation(event.target.value);
+  // };
 
   const postHandler = async () => {
     if (!userId) {
@@ -93,8 +98,8 @@ const TestPage = () => {
       setPostText('');
       setLink('');
       setLocation(''); // Reset location
-      removeSelectedFile();
-      window.location.reload()
+      removeSelectedFile(); // Clear the selected file
+      window.location.reload();
     } catch (err) {
       console.error(err);
     } finally {
