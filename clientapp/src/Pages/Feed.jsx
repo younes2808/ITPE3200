@@ -10,7 +10,7 @@ const Feed = () => {
     {/* Left Navbar */}
     <LeftNavbar />
     {/* Post */}
-    <div className="w-4/6 bg-gray-100 p-6 flex justify-center items-center">
+    <div className="w-full bg-gray-800 p-6 flex justify-center items-center ">
     <PostFunction />
     <PostFeed />
     {/* Right Navbar */}
