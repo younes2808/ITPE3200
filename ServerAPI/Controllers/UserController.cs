@@ -90,39 +90,22 @@ namespace ServerAPI.Controllers
             // Return user data excluding password hash
             return Ok(new { user.Id, user.Username, user.Email });
         }
-
-        // Change password based on username and email
-        [HttpPost("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+                // New endpoint for searching users
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<User>>> SearchUsers([FromQuery] string query)
         {
-            // Validate incoming request
-            if (request == null || string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.OldPassword) || string.IsNullOrWhiteSpace(request.NewPassword))
+            if (string.IsNullOrWhiteSpace(query))
             {
-                return BadRequest("Invalid password change request.");
+                return BadRequest("Search query cannot be empty.");
             }
 
-            // Find user by username and email
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Username == request.Username && u.Email == request.Email);
+            // Fetch users matching the search query (by username or email)
+            var users = await _context.Users
+                .Where(u => u.Username.Contains(query) || u.Email.Contains(query))
+                .Select(u => new { u.Id, u.Username, u.Email }) // Select only the fields you want to return
+                .ToListAsync();
 
-            if (user == null)
-            {
-                return NotFound("User not found.");
-            }
-
-            // Verify old password
-            if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, user.PasswordHash))
-            {
-                return Unauthorized("Incorrect old password.");
-            }
-
-            // Update user's password
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-            _context.Entry(user).State = EntityState.Modified;
-
-            await _context.SaveChangesAsync();
-
-            return Ok("Password changed successfully.");
+            return Ok(users);
         }
     }
 }

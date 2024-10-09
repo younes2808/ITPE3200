@@ -111,6 +111,10 @@ namespace ServerAPI.Controllers
         public async Task<IActionResult> GetAllPosts()
         {
             var posts = await _context.Posts
+<<<<<<< HEAD
+=======
+                .OrderByDescending(p => p.CreatedAt) // Sort posts by CreatedAt in descending order (latest posts first)
+>>>>>>> 111f996698d3905b7884bedf8174e451ee0838f8
                 .Select(p => new 
                 {
                     p.Id,
@@ -127,6 +131,7 @@ namespace ServerAPI.Controllers
             return Ok(posts);
         }
 
+
         // New API endpoint to get all posts by User ID
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetPostsByUserId(int userId)
@@ -135,14 +140,22 @@ namespace ServerAPI.Controllers
                 .Where(p => p.UserId == userId) // Filter by User ID
                 .ToListAsync();
 
-            if (posts == null || !posts.Any())
-            {
-                _logger.LogWarning($"GetPostsByUserId: No posts found for user ID {userId}.");
-                return NotFound("No posts found for the specified user ID.");
-            }
-
             return Ok(posts);
         }
+
+        [HttpGet("likedby/{userId}")]
+        public async Task<IActionResult> GetPostIdsLikedByUserId(int userId)
+        {
+            // Query the Likes table to get only the Post IDs liked by the user
+            var likedPostIds = await _context.Likes
+                .Where(like => like.UserId == userId)  // Filter likes by the given userId
+                .Select(like => like.PostId)  // Select only the PostId from the likes
+                .ToListAsync();
+
+            // Return the list of liked post IDs
+            return Ok(likedPostIds);
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePostById(int id)
@@ -177,62 +190,31 @@ namespace ServerAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePostById(int id, [FromForm] PostRequestModel model)
         {
-            // Find the post by its ID
-            var post = await _context.Posts.FindAsync(id);
+        // Find the post by its ID
+        var post = await _context.Posts.FindAsync(id);
 
-            if (post == null)
-            {
-                _logger.LogWarning($"UpdatePostById: No post found with ID {id}.");
-                return NotFound("Post not found.");
-            }
+        if (post == null)
+        {
+            _logger.LogWarning($"UpdatePostById: No post found with ID {id}.");
+            return NotFound("Post not found.");
+        }
 
-            // Validate the new content
-            if (string.IsNullOrEmpty(model.Content))
-            {
-                _logger.LogWarning("UpdatePostById: Content cannot be empty.");
-                return BadRequest("Post content cannot be empty.");
-            }
+        // Validate the new content
+        if (string.IsNullOrEmpty(model.Content))
+        {
+            _logger.LogWarning("UpdatePostById: Content cannot be empty.");
+            return BadRequest("Post content cannot be empty.");
+        }
 
-            // Handle image update
-            if (model.Image != null && model.Image.Length > 0)
-            {
-                // Delete the old image if it exists
-                if (!string.IsNullOrEmpty(post.ImagePath))
-                {
-                    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), post.ImagePath);
-                    if (System.IO.File.Exists(oldImagePath))
-                    {
-                        System.IO.File.Delete(oldImagePath);
-                    }
-                }
+        // Only update the post's content, leaving other properties unchanged
+        post.Content = model.Content;
 
-                // Save the new image
-                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "PostImages");
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
+        // Save the changes to the database
+        _context.Posts.Update(post);
+        await _context.SaveChangesAsync();
 
-                var fileName = Path.GetFileName(model.Image.FileName);
-                var filePath = Path.Combine(directoryPath, fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await model.Image.CopyToAsync(stream);
-                }
-
-                post.ImagePath = Path.Combine("PostImages", fileName); // Update image path
-            }
-
-            // Update content and location
-            post.Content = model.Content;
-            post.Location = string.IsNullOrEmpty(model.Location) ? null : model.Location; // Update location, set to null if empty
-
-            // Save the changes to the database
-            _context.Posts.Update(post);
-            await _context.SaveChangesAsync();
-
-            _logger.LogInformation($"UpdatePostById: Post with ID {id} has been updated.");
-            return Ok(post); // Return updated post
+        _logger.LogInformation($"UpdatePostById: Post with ID {id} has been updated.");
+        return Ok(post); // Return the updated post
         }
 
     }

@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization; // Add this if using System.Text.Json
-
 namespace ServerAPI.Models
 {
     public class User

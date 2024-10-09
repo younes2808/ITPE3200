@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServerAPI.DAL;
 
@@ -10,9 +11,11 @@ using ServerAPI.DAL;
 namespace ServerAPI.Migrations
 {
     [DbContext(typeof(ServerAPIContext))]
-    partial class ServerAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20241003121246_UpdatingComments")]
+    partial class UpdatingComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -45,27 +48,6 @@ namespace ServerAPI.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("ServerAPI.Models.Friend", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Friends");
-                });
-
             modelBuilder.Entity("ServerAPI.Models.Like", b =>
                 {
                     b.Property<int>("UserId")
@@ -82,30 +64,6 @@ namespace ServerAPI.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("Likes");
-                });
-
-            modelBuilder.Entity("ServerAPI.Models.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("ServerAPI.Models.Post", b =>
