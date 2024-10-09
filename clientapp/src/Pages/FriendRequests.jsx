@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LeftNavbar from '../Components/LeftNavbar'; 
 import RightNavbar from '../Components/RightNavbar';
@@ -9,7 +9,7 @@ const FriendRequests = () => {
   const navigate = useNavigate();
 
   // Fetch friend requests for the current user
-  const fetchFriendRequests = async () => {
+  const fetchFriendRequests = useCallback(async () => {
     try {
       const storedUser = sessionStorage.getItem('user');
       if (storedUser) {
@@ -28,7 +28,7 @@ const FriendRequests = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Empty dependency array ensures this is created once
 
   // Fetch usernames for each friend request
   const fetchUsernames = async (requests) => {
@@ -53,7 +53,7 @@ const FriendRequests = () => {
       if (response.ok) {
         // Remove the accepted request from the state
         setFriendRequests(prev => prev.filter(req => req.id !== requestId));
-        window.location.reload();
+        window.location.reload()
       } else {
         console.error("Failed to accept request");
       }
@@ -86,7 +86,7 @@ const FriendRequests = () => {
     // Set up polling to fetch friend requests every 5 seconds
     const interval = setInterval(fetchFriendRequests, 5000);
     return () => clearInterval(interval); // Clean up the interval on unmount
-  }, []);
+  }, [fetchFriendRequests]); // Include fetchFriendRequests as a dependency
 
   if (loading) return <div className="text-white">Loading...</div>;
 

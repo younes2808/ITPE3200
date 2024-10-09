@@ -187,7 +187,7 @@ const PostFeed = () => {
   }
 
   return (
-    <div className="pt-72 mt-auto flex-grow-0 space-y-6 items-start">
+    <div className="pt-72 mt-auto flex-grow-0 max-w-xl max-h-screen space-y-6 items-start">
       {posts.map((post) => (
         <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
           <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />
@@ -211,8 +211,11 @@ const PostFeed = () => {
               className="post-textarea w-full p-4 bg-gray-600 text-white rounded-lg resize-none h-28"
             />
           ) : (
-            <h2 className="text-white mb-1.5 font-serif">{post.content}</h2>
+            <h2 className="text-white max-w-xl mb-1.5 font-serif break-words">
+              {post.content}
+            </h2>
           )}
+
 
           {post.videoUrl && (
             <a href={post.videoUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
