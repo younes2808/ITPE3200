@@ -141,6 +141,7 @@ const Profile = () => {
   
           if (response.ok) {
             setFriendshipStatus('friend'); // Update status to friends
+            window.location.reload()
           } else {
             console.error('Failed to accept friend request');
           }

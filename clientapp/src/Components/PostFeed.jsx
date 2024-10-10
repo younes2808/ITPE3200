@@ -311,7 +311,7 @@ const MapComponent = ({ location }) => {
   if (!coordinates) return null;
 
   return (
-    <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={13} style={{ height: '200px', width: '100%', zIndex: '0' }}>
+    <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={10} style={{ height: '200px', width: '100%', zIndex: '0' }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap contributors' />
       <Marker position={[coordinates.lat, coordinates.lng]}>
         <Popup>Lat: {coordinates.lat}, Lng: {coordinates.lng}</Popup>
