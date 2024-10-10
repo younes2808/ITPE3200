@@ -111,14 +111,13 @@ L.Icon.Default.mergeOptions({
   };
 
   return (
-    <div className="flex-grow-0 items-center bg-gray-800">
-      <div className="bg-gray-700 rounded-lg px-18 min-px-6 min-w-80 shadow-lg p-6 fixed z-50 top-3 ">
+    <div className="flex justify-center p-0">
+      <div className="bg-gray-700 rounded-lg min-w-full p-5 mt-16 510px:mt-3">
         {/* Profile image and post textarea */}
         <div className="flex items-center mb-4">
-          <span className="text-lg font-semibold">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
-        
-          
+          <span className="flex items-center justify-center w-10 h-10 rounded-full mr-4 bg-blue-500 text-base font-medium text-white">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
           <textarea
+            maxLength={1000}
             value={postText}
             onChange={handleTextChange}
             placeholder="What's happening?"
@@ -157,8 +156,8 @@ L.Icon.Default.mergeOptions({
         )}
 
         {/* Action buttons */}
-        <div className="flex items-center justify-between space-x-4 md:space-x-9 lg:space-x-14">
-          <div className="flex space-x-2 md:space-x-3.5 lg:space-x-12">
+        <div className="flex items-center justify-start 400px:space-x-2 580px:space-x-0">
+          <div className="flex 300px:ml-[-0.9rem] space-x-1 580px:ml-0 580px:space-x-2 flex-grow">
             <input
               style={{ display: 'none' }}
               type="file"
@@ -168,13 +167,13 @@ L.Icon.Default.mergeOptions({
             />
             <label
               htmlFor="file-upload-button"
-              className="flex items-center justify-center px-2 py-1 bg-gray-600 text-white rounded-lg cursor-pointer hover:bg-gray-500 transition-colors duration-300 text-sm"
+              className="hidden 510px:block items-center justify-center px-2 py-1 bg-gray-600 text-white rounded-lg cursor-pointer hover:bg-gray-500 transition-colors duration-300 text-sm"
             >
               <span className="material-icons mr-1">photo</span>
               Media
             </label>
             <button
-              className="flex items-center justify-center px-2 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors duration-300 text-sm"
+              className="flex items-center justify-center px-1 580px:px-2 py-1 bg-gray-600 text-white rounded-lg cursor-pointer hover:bg-gray-500 transition-colors duration-300 text-sm"
               onClick={toggleLinkInput}
             >
               <span className="material-icons mr-1">link</span>
@@ -183,7 +182,7 @@ L.Icon.Default.mergeOptions({
 
             {/* Show Map button */}
             <button
-              className="flex items-center justify-center px-2 py-1 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors duration-300 text-sm"
+              className="flex items-center justify-center px-1 580px:px-2 py-1 bg-gray-600 text-white rounded-lg cursor-pointer hover:bg-gray-500 transition-colors duration-300 text-sm"
               onClick={() => {
                 setShowMap(prevState => !prevState); // Toggle the visibility of the map
               }}

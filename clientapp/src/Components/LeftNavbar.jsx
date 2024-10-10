@@ -43,7 +43,7 @@ const LeftNavbar = () => {
         break;
     }
   };
-
+<h2 className="text-2xl font-bold mb-4 text-center lg:text-left">Friends</h2>
   return (
     <div className="fixed w-full hidden 200px:w-8 510px:w-16 510px:items-center md:items-start md:w-32 870px:w-36 lg:w-52 bg-gray-900 text-white h-screen 510px:flex flex-col">
       <h1 className="hidden absolute top-4 pt-3 left-0 right-0 text-3xl 510px:block 510px:text-xl md:text-3xl 870px:text-4xl lg:text-5xl font-light text-center px-2">RAYS</h1>
@@ -54,7 +54,7 @@ const LeftNavbar = () => {
         className="flex items-center space-x-0 pt-8 p-4 mt-24 md:space-x-4  hover:bg-gray-800 rounded-lg transition-colors duration-200"
       >
         <div className="flex items-center justify-center w-10 h-10 870px:w-16 870px:h-16 rounded-full bg-blue-500"> {/* Use a colored circle */}
-          <span className="text-lg font-semibold">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
+          <span className="text-3xl font-semibold">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
         </div>
         <div>
           <h2 className="text-xs hidden md:inline 870px:text-sm lg:text-lg font-semibold">{username}</h2>  {/* Use the dynamic username */}

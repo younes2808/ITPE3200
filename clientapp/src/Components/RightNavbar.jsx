@@ -25,7 +25,7 @@ const RightNavbar = () => {
         }
 
         const friendIds = await response.json();
-        
+        console.log(response)
         // Now fetch details for each friend
         const friendDetailsPromises = friendIds.map(async (friend) => {
           const userResponse = await fetch(`http://localhost:5249/api/User/${friend.friendId}`); // Assuming you have an endpoint to fetch user details
@@ -54,7 +54,7 @@ const RightNavbar = () => {
   if (loading) return <div className="text-white">Loading...</div>;
 
   return (
-    <div className="fixed right-0 top-0 970px:w-36 lg:w-1/6 h-screen bg-gray-900 text-white p-6 flex-col hidden 970px:flex max-w-64 min-w-44">
+    <div className="fixed right-0 top-0 970px:w-36 lg:w-1/6 h-screen bg-gray-900 text-white p-6 hidden 970px:flex flex-col max-w-64 min-w-44">
     <h2 className="text-2xl font-bold mb-4 text-center lg:text-left">Friends</h2>
     <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
       <div className="grid grid-cols-1 gap-3 w-full">
