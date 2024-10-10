@@ -11,7 +11,7 @@ const Profile = () => {
   const navigate = useNavigate(); // For navigation
 
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('example@example.com');
+  const [email, setEmail] = useState('');
   const [activeTab, setActiveTab] = useState('posts');
   const [friendshipStatus, setFriendshipStatus] = useState('none'); // To handle friendship status
   const [currentUserId, setCurrentUserId] = useState(null);
@@ -125,21 +125,36 @@ const Profile = () => {
   };
 
   const handleAcceptFriendRequest = async () => {
-    // Handle accepting the friend request
     try {
-      const response = await fetch(`http://localhost:5249/api/Friend/request/${userId}`, {
-        method: 'PUT', // Assuming you have an endpoint to accept requests
-      });
-
-      if (response.ok) {
-        setFriendshipStatus('friend'); // Update status to friends
+      const requestsResponse = await fetch(`http://localhost:5249/api/Friend/requests/${currentUserId}`);
+      if (requestsResponse.ok) {
+        const requests = await requestsResponse.json();
+        const receivedRequest = requests.find(
+          request => request.senderId === parseInt(userId) && !request.isSender
+        );
+  
+        if (receivedRequest) {
+          const requestId = receivedRequest.id; // Extract the requestId from the received request
+          const response = await fetch(`http://localhost:5249/api/Friend/accept/${requestId}`, {
+            method: 'PUT', // PUT method for accepting the friend request
+          });
+  
+          if (response.ok) {
+            setFriendshipStatus('friend'); // Update status to friends
+          } else {
+            console.error('Failed to accept friend request');
+          }
+        } else {
+          console.error('No pending friend request found to accept.');
+        }
       } else {
-        console.error('Failed to accept friend request');
+        console.error('Failed to fetch friend requests');
       }
     } catch (error) {
       console.error('Error accepting friend request:', error);
     }
   };
+  
 
   const handleSendMessage = () => {
     navigate(`/message/${userId}/${currentUserId}`);// Redirect to message page with the userId
