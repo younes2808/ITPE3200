@@ -19,7 +19,7 @@ const RightNavbar = () => {
       if (storedUser) {
         const user = JSON.parse(storedUser);
         const response = await fetch(`http://localhost:5249/api/Friend/${user.id}`); // Adjust endpoint as necessary
-        
+        console.log(response)
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -30,6 +30,7 @@ const RightNavbar = () => {
         const friendDetailsPromises = friendIds.map(async (friend) => {
           const userResponse = await fetch(`http://localhost:5249/api/User/${friend.friendId}`); // Assuming you have an endpoint to fetch user details
           if (userResponse.ok) {
+            console.log(userResponse)
             return userResponse.json();
           } else {
             throw new Error(`Failed to fetch user with ID: ${friend.friendId}`);
@@ -54,19 +55,19 @@ const RightNavbar = () => {
   if (loading) return <div className="text-white">Loading...</div>;
 
   return (
-    <div className="fixed right-0 top-0 970px:w-36 lg:w-1/6 h-screen bg-gray-900 text-white p-6 hidden 970px:flex flex-col max-w-64 min-w-44">
-    <h2 className="text-2xl font-bold mb-4 text-center lg:text-left">Friends</h2>
+    <div className="hidden 970px:w-48 1150px:w-60 h-screen bg-gray-900 text-white p-6 970px:flex flex-col">
+    <h2 className="text-2xl font-bold ml-4 mt-4 text-left">Friends</h2>
     <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
       <div className="grid grid-cols-1 gap-3 w-full">
         {friends.length > 0 ? (
           friends.map((friend, index) => (
             <div
               key={friend.id} // Ensure this uses the correct property from the fetched user details
-              className="flex flex-col items-center bg-gray-800 p-3 rounded-lg w-full h-40"
+              className="flex flex-col items-center bg-gray-800 p-3 rounded-lg w-full  h-40"
             >
               {/* Color circle for the friend's avatar based on index */}
               <div 
-                className="h-16 w-14 rounded-full flex items-center justify-center text-white text-pretty font-bold mb-2" 
+                className="h-16 w-12 rounded-full flex items-center justify-center text-white text-pretty font-bold mb-2" 
                 style={{ backgroundColor: getColorForIndex(index) }} // Color for the circle based on index
               >
                 <span className="text-white text-l font-bold">
@@ -84,7 +85,7 @@ const RightNavbar = () => {
             </div>
           ))
         ) : (
-          <div className="text-gray-400 text-center">No friends found</div>
+          <div className="text-gray-400 text-center pt-5">No friends found</div>
         )}
     
       </div>

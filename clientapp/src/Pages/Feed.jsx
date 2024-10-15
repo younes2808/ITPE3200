@@ -15,8 +15,8 @@ const Feed = () => {
       {/* Hovedcontainer */}
       <div className="flex flex-grow justify-center"> {/* justify-center holder elementene sentrert */}
         
-        {/* Bruk en container med dynamisk margin for skjermbredde over 1400px */}
-        <div className="flex w-full max-w-[1300px] mx-auto"> 
+        {/* Bruk en container med dynamisk margin for skjermbredde over 1300px */}
+        <div className="flex w-full max-w-[1300px] mx-auto bg-blue-500"> 
           
           {/* Left Navbar - plasseres på venstre side og forblir der */}
           <div className="flex-none">
@@ -24,7 +24,7 @@ const Feed = () => {
           </div>
 
           {/* Post og feed-seksjonen i midten */}
-          <div className="flex-grow bg-gray-100 p-6 overflow-y-auto w-full 400px:pl-6 400px:pr-6 510px:pl-24 md:pl-44 870px:pl-48 870px:pr-16 970px:pr-56 lg:pl-64 lg:pr-56 1150px:pl-72 1150px:pr-72">
+          <div className="flex-grow bg-gray-100 p-6 overflow-y-auto w-full 400px:pl-6 400px:pr-10 510px:pl-24 510px:pr-5 580px:pr-10 md:pl-44 md:pr-16 870px:pl-48 870px:pr-20 970px:pr-16 1150px:pl-64 1150px:pr-14">
             <PostFunction />
             <PostFeed />
           </div>
