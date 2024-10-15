@@ -8,18 +8,16 @@ import PostFeed from './../Components/PostFeed';
 
 const Feed = () => {
   return (
-    <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto"> {/* flex-col for å justere vertikalt */}
+    <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
       {/* Top Bar */}
-      <TopBar /> 
+      <TopBar />
 
       {/* Hovedcontainer */}
-      <div className="flex flex-grow justify-center"> {/* justify-center holder elementene sentrert */}
-        
-        {/* Bruk en container med dynamisk margin for skjermbredde over 1300px */}
-        <div className="flex w-full max-w-[1300px] mx-auto bg-blue-500"> 
-          
-          {/* Left Navbar - plasseres på venstre side og forblir der */}
-          <div className="flex-none">
+        {/* Justert container med dynamisk margin og max-w for å sikre plass til navbarene */}
+        <div className="flex w-full max-w-[1300px] mx-auto bg-blue-500">
+
+          {/* Left Navbar - plasseres på venstre side */}
+          <div className="flex-none"> 
             <LeftNavbar />
           </div>
 
@@ -29,15 +27,14 @@ const Feed = () => {
             <PostFeed />
           </div>
 
-          {/* Right Navbar - plasseres på høyre side og forblir der */}
-          <div className="flex-none">
+          {/* Right Navbar - plasseres på høyre side */}
+          <div className="flex-none"> 
             <RightNavbar />
           </div>
         </div>
-      </div>
 
       {/* Bottom Navbar */}
-      <BottomNavbar /> 
+      <BottomNavbar />
     </div>
   );
 };
