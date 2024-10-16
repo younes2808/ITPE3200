@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const ShowFriends = ({ userId }) => {
-  const [friends, setFriends] = useState([]); // Store friend IDs
   const [friendDetails, setFriendDetails] = useState([]); // Store friend details (including usernames)
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -15,7 +14,6 @@ const ShowFriends = ({ userId }) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const friendIds = await response.json();
-        setFriends(friendIds); // Set the list of friend IDs
         await fetchFriendDetails(friendIds); // Fetch details for each friend
       } catch (error) {
         console.error('Error fetching friends:', error);
