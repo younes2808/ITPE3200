@@ -7,7 +7,7 @@ import Profile from './Pages/Profile';
 import CommentsPage from './Pages/CommentsPage'; 
 import ConversationPage from "./Pages/ConversationPage"; // Make sure to create this component for the conversation list
 import MessagePage from "./Pages/MessagePage"; 
-import FriendRequests from './Pages/FriendRequests';
+import FriendRequests from './Pages/FriendRequestsPage';
 import './Styles/Rays.css';
 import Search from './Pages/Search';
 

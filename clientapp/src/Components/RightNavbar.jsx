@@ -56,14 +56,14 @@ const RightNavbar = () => {
 
   return (
     <div className="hidden 970px:flex flex-col h-full 970px:w-48 1150px:w-60 bg-gray-900 text-white p-6 ">
-    <h2 className="text-2xl font-bold ml-4 mt-4 text-left">Friends</h2>
+    <h2 className="text-2xl font-bold ml-4 mt-4 pb-4 text-left">Friends</h2>
     <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
       <div className="grid grid-cols-1 gap-3 w-full">
         {friends.length > 0 ? (
           friends.map((friend, index) => (
             <div
               key={friend.id} // Ensure this uses the correct property from the fetched user details
-              className="flex flex-col items-center bg-gray-800 p-3 rounded-lg w-full  h-40"
+              className="flex flex-col items-center bg-gray-800 p-3 rounded-lg w-full h-40"
             >
               {/* Color circle for the friend's avatar based on index */}
               <div 
@@ -78,7 +78,7 @@ const RightNavbar = () => {
               <p className="text-xs text-gray-400 leading-tight">@{friend.username}</p>
               <button
                 onClick={() => navigate(`/profile/${friend.id}`)} // Navigate to profile
-                className="mt-3 w-24 py-1 bg-blue-600 text-sm text-white rounded-lg hover:bg-blue-500 transition duration-200 1350px:w-36 1350px:text-base"
+                className="mt-3 w-24 py-1 bg-blue-600 text-sm text-white rounded-lg hover:bg-blue-500 transition duration-200 1150px:w-36 1150px:text-base"
               >
                 View Profile
               </button>
