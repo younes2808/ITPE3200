@@ -25,9 +25,9 @@ const UserSearch = () => {
   };
 
   return (
-    <div className="flex flex-col w-screen items-center p-4 bg-gray-800 text-white min-h-screen">
+    <div className="flex flex-col w-full items-center p-4 bg-gray-800 text-white min-h-screen">
       <h1 className="text-2xl font-bold mb-4">User Search</h1>
-      <div className="flex w-[44vw]"> {/* Set wider max-width for the container */}
+      <div className="flex "> {/* Set wider max-width for the container */}
         <input
           type="text"
           value={query}
