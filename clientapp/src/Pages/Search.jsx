@@ -13,7 +13,7 @@ const Search = () => {
 
       {/* Hovedcontainer */}
         {/* Justert container med dynamisk margin og max-w for å sikre plass til navbarene */}
-        <div className="flex w-full max-w-[1300px] mx-auto bg-blue-500">
+        <div className="flex w-full max-w-[1300px] mx-auto bg-blue-500 h-full">
 
           {/* Left Navbar - plasseres på venstre side */}
           <div className="flex-none"> 

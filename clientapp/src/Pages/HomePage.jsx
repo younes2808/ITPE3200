@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom"; // Import Link
 import { LoginImg } from "./../Utils/utils.js";
 
 
-
 const HomePage = () => {
   // State variables to hold username, password, and any error messages
   const [username, setUsername] = useState("");
