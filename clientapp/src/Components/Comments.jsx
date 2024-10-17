@@ -17,7 +17,7 @@ const UsernameDisplay = ({ userId, fetchUsername }) => {
 
 const Comments = ({ postId }) => {
   const navigate = useNavigate();
-  const commentsEndRef = useRef(null); // Ref for scrolling to the end of the comments list
+  const commentsEndRef = useRef(null); // Ref for scrolling to the end of the comments list.
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
