@@ -83,9 +83,21 @@ const UserLikedPosts = ({ userId }) => {
   }, [likedPosts]);
 
   const toggleLike = async (postId) => {
+    // Retrieve the logged-in user's ID from sessionStorage
+    const userData = sessionStorage.getItem('user');
+    const loggedInUser = JSON.parse(userData);
+    const userId = loggedInUser?.id; // Make sure to handle cases where user data might not exist
+  
+    if (!userId) {
+      console.error('User not logged in');
+      return;
+    }
+  
     const alreadyLiked = likes[postId]?.find(like => like.userId === userId);
+  
     try {
       if (alreadyLiked) {
+        // If already liked, send a DELETE request to remove the like
         await fetch('http://localhost:5249/api/Like', {
           method: 'DELETE',
           headers: {
@@ -93,12 +105,14 @@ const UserLikedPosts = ({ userId }) => {
           },
           body: JSON.stringify({ userId, postId }),
         });
-
+  
+        // Update state by removing the like
         setLikes((prevLikes) => ({
           ...prevLikes,
           [postId]: prevLikes[postId].filter(like => like.userId !== userId),
         }));
       } else {
+        // If not liked, send a POST request to add a like
         await fetch('http://localhost:5249/api/Like', {
           method: 'POST',
           headers: {
@@ -106,7 +120,8 @@ const UserLikedPosts = ({ userId }) => {
           },
           body: JSON.stringify({ userId, postId }),
         });
-
+  
+        // Update state by adding the like
         setLikes((prevLikes) => ({
           ...prevLikes,
           [postId]: [...(prevLikes[postId] || []), { userId, likedAt: new Date() }],
@@ -116,6 +131,7 @@ const UserLikedPosts = ({ userId }) => {
       console.error('Error liking/unliking post:', error);
     }
   };
+  
 
   const deletePost = async (postId) => {
     try {

@@ -145,15 +145,17 @@ namespace ServerAPI.Controllers
         [HttpGet("likedby/{userId}")]
         public async Task<IActionResult> GetPostIdsLikedByUserId(int userId)
         {
-            // Query the Likes table to get only the Post IDs liked by the user
+            // Query the Likes table to get the latest liked Post IDs by the user
             var likedPostIds = await _context.Likes
                 .Where(like => like.UserId == userId)  // Filter likes by the given userId
+                .OrderByDescending(like => like.LikedAt)  // Order likes by the timestamp (assumed column)
                 .Select(like => like.PostId)  // Select only the PostId from the likes
                 .ToListAsync();
 
             // Return the list of liked post IDs
             return Ok(likedPostIds);
         }
+
 
 
         [HttpDelete("{id}")]
