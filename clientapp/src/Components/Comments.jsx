@@ -17,7 +17,7 @@ const UsernameDisplay = ({ userId, fetchUsername }) => {
 
 const Comments = ({ postId }) => {
   const navigate = useNavigate();
-  const commentsEndRef = useRef(null); // Ref for scrolling to the end of the comments list
+  const commentsEndRef = useRef(null); // Ref for scrolling to the end of the comments list.
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -208,7 +208,7 @@ const Comments = ({ postId }) => {
   }
 
   return (
-    <div className="mt-0 bg-gray-800 p-4 rounded-lg w-2/4">
+    <div className="mt-20 bg-gray-800 p-4 rounded-lg w-4/4">
       <button 
         className='text-yellow-200 hover:text-slate-100 hover:font-extralight' 
         onClick={() => navigate("/feed")}
