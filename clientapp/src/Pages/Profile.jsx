@@ -155,14 +155,14 @@ const Profile = () => {
   return (
     <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
       <TopBar />
-      <div className="flex w-full max-w-[1300px] mx-auto bg-gray-900 p-6">
+      <div className="flex w-full max-w-[1300px] mx-auto bg-gray-900">
         {/* Left Navbar */}
-        <div className="flex-none z-10 510px:w-1/4"> {/* Set a width for the left navbar */}
+        <div className="flex-none z-10 510px:mr-16 md:mr-52 "> {/* Set a width for the left navbar */}
           <LeftNavbar />
         </div>
 
         {/* Main content area */}
-        <div className="flex-grow bg-gray-700 p-6 overflow-y-auto h-full rounded-lg mx-4">
+        <div className="flex-grow bg-gray-700 p-6 overflow-y-auto h-full mb- rounded-lg scrollbar-none">
           <div className="relative w-full z-0 h-40 sm:h-48 flex items-center justify-center rounded-md" style={{ backgroundColor: randomColor }}>
             <h1 className="text-4xl font-bold text-white mx-auto">
               {username.charAt(0).toUpperCase()}
@@ -246,7 +246,7 @@ const Profile = () => {
         </div>
 
         {/* Right Navbar */}
-        <div className="flex-none 970px:w-1/4"> {/* Set a width for the right navbar */}
+        <div className="flex-none "> {/* Set a width for the right navbar */}
           <RightNavbar />
         </div>
       </div>

@@ -226,7 +226,7 @@ const UserPost = () => {
               )}
     
               {/* Only render the MapComponent if location exists */}
-              {post.location && post.location.lat && post.location.lng && (
+              {post.location && (
                 <div className="my-4">
                   <MapComponent location={post.location} />
                 </div>
@@ -248,31 +248,31 @@ const UserPost = () => {
                 <button onClick={() => toggleLike(post.id)} className="text-blue-500 hover:underline text-xs 400px:text-base">
                   {likes[post.id]?.find(like => like.userId === loggedInUserId) ? 'Liked' : 'Like'}
                 </button>
-                {/* Show Edit button only if not editing */}
+
+                {/* Only show Edit and Delete buttons if the post belongs to the logged-in user */}
                 {post.userId === loggedInUserId && editingPostId !== post.id && (
-                  <button
-                    onClick={() => {
-                      setEditingPostId(post.id);
-                      setPostText(post.content); // Populate the textarea with the existing content
-                    }}
-                    className="text-yellow-500 hover:underline text-xs 400px:text-base"
-                  >
-                    Edit
-                  </button>
+                  <>
+                    <button
+                      onClick={() => {
+                        setEditingPostId(post.id);
+                        setPostText(post.content); // Populate the textarea with the existing content
+                      }}
+                      className="text-yellow-500 hover:underline text-xs 400px:text-base"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deletePost(post.id)}
+                      className="text-red-500 hover:underline text-xs 400px:text-base"
+                    >
+                      Delete
+                    </button>
+                  </>
                 )}
-                <button
-                  onClick={() => deletePost(post.id)}
-                  className="text-red-500 hover:underline text-xs 400px:text-base"
-                >
-                  Delete
-                </button>
-    
+
                 {/* Confirm edit submission */}
                 {editingPostId === post.id && (
-                  <button
-                    onClick={editPostHandler}
-                    className="text-green-500 hover:underline text-xs 400px:text-base"
-                  >
+                  <button onClick={editPostHandler} className="text-green-500 hover:underline text-xs 400px:text-base">
                     Save
                   </button>
                 )}
@@ -281,6 +281,7 @@ const UserPost = () => {
                   Comment
                 </button>
               </div>
+
             </div>
           ))
         ) : (
@@ -314,22 +315,24 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
     </div>
   );
 };
-
-// MapComponent
+// Map component and location parsing
 const MapComponent = ({ location }) => {
+  const coordinates = parseLocation(location);
+  if (!coordinates) return null;
+
   return (
-    <MapContainer center={[location.lat, location.lng]} zoom={13} scrollWheelZoom={false} className="h-60 w-full">
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker position={[location.lat, location.lng]}>
-        <Popup>
-          Location: {location.lat}, {location.lng}
-        </Popup>
+    <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={5} style={{ height: '200px', width: '100%', zIndex: '0' }}>
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap contributors' />
+      <Marker position={[coordinates.lat, coordinates.lng]}>
+        <Popup>Lat: {coordinates.lat}, Lng: {coordinates.lng}</Popup>
       </Marker>
     </MapContainer>
   );
+};
+
+const parseLocation = (location) => {
+  const match = location.match(/Lat:\s*(-?\d+\.?\d*),\s*Lng:\s*(-?\d+\.?\d*)/);
+  return match ? { lat: parseFloat(match[1]), lng: parseFloat(match[2]) } : null;
 };
 
 export default UserPost;

@@ -52,7 +52,7 @@ const ShowFriends = ({ userId }) => {
   }
 
   return (
-    <div className="text-white">
+    <div className="text-white h-screen">
       <h2 className="text-2xl">Friends</h2>
       <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
         {friendDetails.map(friend => (

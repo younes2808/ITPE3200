@@ -244,12 +244,11 @@ const UserLikedPosts = ({ userId }) => {
             )}
   
             {/* Only render the MapComponent if location exists */}
-            {post.location && post.location.lat && post.location.lng && (
-              <div className="my-4">
-                <MapComponent location={post.location} />
-              </div>
-            )}
-  
+            {post.location && (
+                <div className="my-4">
+                  <MapComponent location={post.location} />
+                </div>
+              )}
             {post.imagePath && (
               <img
                 src={`http://localhost:5249/${post.imagePath}`}
@@ -335,19 +334,25 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
     </div>
   );
 };
-
+// Map component and location parsing
 const MapComponent = ({ location }) => {
+  const coordinates = parseLocation(location);
+  if (!coordinates) return null;
+
   return (
-    <MapContainer center={[location.latitude, location.longitude]} zoom={13} style={{ height: '300px', width: '100%' }}>
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker position={[location.latitude, location.longitude]}>
-        <Popup>{location.description}</Popup>
+    <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={5} style={{ height: '200px', width: '100%', zIndex: '0' }}>
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap contributors' />
+      <Marker position={[coordinates.lat, coordinates.lng]}>
+        <Popup>Lat: {coordinates.lat}, Lng: {coordinates.lng}</Popup>
       </Marker>
     </MapContainer>
   );
 };
+
+const parseLocation = (location) => {
+  const match = location.match(/Lat:\s*(-?\d+\.?\d*),\s*Lng:\s*(-?\d+\.?\d*)/);
+  return match ? { lat: parseFloat(match[1]), lng: parseFloat(match[2]) } : null;
+};
+
 
 export default UserLikedPosts;
