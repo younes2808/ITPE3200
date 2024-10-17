@@ -22,7 +22,7 @@ const Feed = () => {
           </div>
 
           {/* Post og feed-seksjonen i midten */}
-          <div className="flex-grow bg-gray-100 p-6 overflow-y-auto w-full 400px:pl-6 400px:pr-10 510px:pl-24 510px:pr-5 580px:pr-10 md:pl-44 md:pr-16 870px:pl-48 870px:pr-20 970px:pr-16 1150px:pl-64 1150px:pr-14">
+          <div className="flex-grow bg-gray-100 p-6 overflow-y-auto w-full 400px:pl-6 400px:pr-6 510px:pl-24 510px:pr-5 580px:pr-10 md:pl-44 md:pr-16 870px:pl-48 870px:pr-20 970px:pr-16 1150px:pl-64 1150px:pr-14">
             <PostFunction />
             <PostFeed />
           </div>

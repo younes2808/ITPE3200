@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace ServerAPI.Models
-{    
+{
     public class Comment
     {
         [Key]
@@ -13,7 +13,7 @@ namespace ServerAPI.Models
 
         public required string Text { get; set; }
 
-        public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public required DateTime CreatedAt { get; set; } = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo"));
 
         public required int UserId { get; set; }  // Foreign key for User
 

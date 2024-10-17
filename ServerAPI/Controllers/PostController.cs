@@ -78,7 +78,7 @@ namespace ServerAPI.Controllers
                 Content = model.Content,
                 ImagePath = imagePath,
                 Location = location,  // This will be null if not provided in the request
-                CreatedAt = DateTime.UtcNow, // Set timestamp
+                CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo")), // Set timestamp
                 UserId = model.UserId, // Set the UserId
                 VideoUrl = videoUrl // Set VideoUrl from the request, or null if not provided
             };
