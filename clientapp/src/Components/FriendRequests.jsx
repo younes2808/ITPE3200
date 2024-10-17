@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LeftNavbar from '../Components/LeftNavbar'; 
-import RightNavbar from '../Components/RightNavbar';
 
 const FriendRequests = () => {
   const [friendRequests, setFriendRequests] = useState([]);
@@ -91,53 +89,49 @@ const FriendRequests = () => {
   if (loading) return <div className="text-white">Loading...</div>;
 
   return (
-    <div className="flex h-screen bg-gray-900">
-      <LeftNavbar />
-      <div className="flex-grow ml-64 py-6 md:mr-[17vw] mr-5">
-        <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
-          <h2 className="text-3xl font-extrabold text-white mb-6">Friend Requests</h2>
+    <div className="mt-auto flex-grow items-start w-full h-full">
+      <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
+        <h2 className="300px:text-2xl 400px:text-3xl font-extrabold text-white mb-6">Friend Requests</h2>
 
-          <div className="flex-grow space-y-4 overflow-y-auto">
-            {friendRequests.length > 0 ? (
-              friendRequests.map(request => (
-                <div
-                  key={request.id}
-                  className="bg-gray-700 p-4 rounded-lg flex justify-between items-center"
-                >
-                  <p className="text-white">
-                    Friend request from{" "}
-                    <span 
-                      onClick={() => navigate(`/profile/${request.senderId}`)} // Clickable username to navigate to profile
-                      className="text-blue-400 cursor-pointer hover:underline"
-                    >
-                      {request.username}
-                    </span>
-                  </p>
-                  <div>
-                    <button
-                      onClick={() => handleAcceptRequest(request.id)}
-                      className="bg-green-500 text-white px-2 py-1 rounded mr-2"
-                    >
-                      Accept
-                    </button>
-                    <button
-                      onClick={() => handleRejectRequest(request.id)}
-                      className="bg-red-500 text-white px-2 py-1 rounded"
-                    >
-                      Reject
-                    </button>
-                  </div>
+        <div className="flex-grow space-y-4 overflow-y-auto">
+          {friendRequests.length > 0 ? (
+            friendRequests.map(request => (
+              <div
+                key={request.id}
+                className="bg-gray-700 p-4 rounded-lg flex justify-between items-center"
+              >
+                <p className="text-white">
+                  Friend request from{" "}
+                  <span 
+                    onClick={() => navigate(`/profile/${request.senderId}`)} // Clickable username to navigate to profile
+                    className="text-blue-400 cursor-pointer hover:underline"
+                  >
+                    {request.username}
+                  </span>
+                </p>
+                <div>
+                  <button
+                    onClick={() => handleAcceptRequest(request.id)}
+                    className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleRejectRequest(request.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    Reject
+                  </button>
                 </div>
-              ))
-            ) : (
-              <div className="text-gray-400 text-center">No friend requests</div>
-            )}
-          </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-gray-400 text-center">No friend requests</div>
+          )}
         </div>
       </div>
-      <RightNavbar />
     </div>
   );
 };
 
-export default FriendRequests;
+export default FriendRequests; // Eksporter komponenten

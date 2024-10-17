@@ -41,7 +41,7 @@ namespace ServerAPI.Controllers
                 SenderId = messageRequest.SenderId,
                 ReceiverId = messageRequest.ReceiverId,
                 Content = messageRequest.Content,
-                Timestamp = DateTime.UtcNow // Set the timestamp to the current time
+                Timestamp = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo")), // Set the timestamp to the current time
             };
 
             // Add the new message

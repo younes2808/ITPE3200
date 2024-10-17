@@ -1,25 +1,46 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importer useNavigate fra react-router-dom
+import { useEffect, useState, useRef } from 'react';
 
 function TopBar() {
   const [showTopBar, setShowTopBar] = useState(true);
-  let lastScrollY = 0;
-  const navigate = useNavigate(); // Bruk useNavigate for navigasjon
+  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState('');
+  const lastScrollY = useRef(0);
 
   const handleScroll = () => {
-    if (window.scrollY > lastScrollY) {
-      // Brukeren scroller ned, skjul topbaren
+    console.log("Scroll handler triggered");
+    const currentScrollY = window.scrollY;
+
+    console.log("currentScrollY:", currentScrollY);
+    console.log("lastScrollY.current:", lastScrollY.current);
+
+    if (currentScrollY > lastScrollY.current) {
+      console.log("Scrolling down, hiding top bar");
       setShowTopBar(false);
     } else {
-      // Brukeren scroller opp, vis topbaren
+      console.log("Scrolling up, showing top bar");
       setShowTopBar(true);
     }
-    lastScrollY = window.scrollY;
+
+    lastScrollY.current = currentScrollY;
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    console.log("showTopBar changed:", showTopBar);
+  }, [showTopBar]);
+
+  useEffect(() => {
+    document.addEventListener('scroll', handleScroll);
+
+    return () => document.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem('user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setUserId(user.id);
+      setUsername(user.username);
+    }
   }, []);
 
   return (
@@ -28,17 +49,16 @@ function TopBar() {
         showTopBar ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      {/* Venstre side med "RAYS" */}
       <div className="text-3xl font-light">RAYS</div>
 
-      {/* Høyre side med profilbilde som lenke */}
       <div>
-        <a onClick={() => navigate('/profile')}> {/* Naviger til profil når klikket */}
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/41/Beetlejuice_onstage.jpg" // Her kan du legge inn riktig bilde
-            alt="Profile"
-            className="w-12 h-12 rounded-full cursor-pointer" // Legg til cursor-pointer for å indikere at det er klikkbart
-          />
+        <a 
+         href={`/profile/${userId}`}
+          className="flex items-center hover:bg-gray-800 rounded-lg transition-colors duration-200"
+        >
+          <div className="text-center pt-1 w-12 h-12 cursor-pointer rounded-full bg-blue-500">
+            <span className="text-3xl font-semibold">{username.charAt(0).toUpperCase()}</span>
+          </div>
         </a>
       </div>
     </div>

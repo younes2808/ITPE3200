@@ -36,7 +36,7 @@ namespace ServerAPI.Controllers
             }
 
             // If both Post and User exist, proceed to add the comment
-            comment.CreatedAt = DateTime.UtcNow; // Automatically set CreatedAt
+            comment.CreatedAt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo")); // Automatically set CreatedAt
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
@@ -63,7 +63,7 @@ namespace ServerAPI.Controllers
             return Ok(comments);
         }
 
-         // PUT: api/Comment/update
+        // PUT: api/Comment/update
         [HttpPut("update")]
         public async Task<ActionResult> UpdateComment([FromBody] UpdateCommentRequest request)
         {

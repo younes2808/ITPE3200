@@ -16,6 +16,6 @@ namespace ServerAPI.Models
         public required string Content { get; set; }
 
         // Timestamp of when the message was sent
-        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+        public DateTime Timestamp { get; set; } = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Europe/Oslo"));
     }
 }
