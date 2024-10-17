@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import UserPost from '../Components/UserPost';
-import UserLikedPosts from '../Components/UserLikedPosts'; // Import the new UserLikedPosts component
-import ShowFriends from '../Components/ShowFriends'; // Import the ShowFriends component
+import UserLikedPosts from '../Components/UserLikedPosts';
+import ShowFriends from '../Components/ShowFriends';
 import LeftNavbar from '../Components/LeftNavbar';
 import RightNavbar from '../Components/RightNavbar';
+import TopBar from '../Components/TopBar';
+import BottomNavbar from '../Components/BottomNavbar';
 
 const Profile = () => {
-  const { userId } = useParams(); // Get userId from URL
-  const navigate = useNavigate(); // For navigation
+  const { userId } = useParams();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [activeTab, setActiveTab] = useState('posts');
-  const [friendshipStatus, setFriendshipStatus] = useState('none'); // To handle friendship status
+  const [friendshipStatus, setFriendshipStatus] = useState('none');
   const [currentUserId, setCurrentUserId] = useState(null);
   const [randomColor, setRandomColor] = useState('#000000');
 
-  // Function to generate a random color
   const generateRandomColor = () => {
-    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-    return randomColor;
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
   };
 
   useEffect(() => {
@@ -29,9 +29,7 @@ const Profile = () => {
     const fetchUserDetails = async () => {
       try {
         const response = await fetch(`http://localhost:5249/api/User/${userId}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const userData = await response.json();
         setUsername(userData.username);
         setEmail(userData.email || 'example@example.com');
@@ -46,29 +44,25 @@ const Profile = () => {
         const user = JSON.parse(storedUser);
         setCurrentUserId(user.id);
 
-        // Fetch friend requests involving the current user
         const requestsResponse = await fetch(`http://localhost:5249/api/Friend/requests/${user.id}`);
         if (requestsResponse.ok) {
           const requests = await requestsResponse.json();
-          
-          // Check if there are received requests from the userId
           const receivedRequest = requests.find(request => request.senderId === parseInt(userId) && !request.isSender);
           const sentRequest = requests.find(request => request.receiverId === parseInt(userId) && request.isSender);
 
-          // Fetch current user friendships
           const friendsResponse = await fetch(`http://localhost:5249/api/Friend/${user.id}`);
           if (friendsResponse.ok) {
             const friends = await friendsResponse.json();
             const friendExists = friends.some(friend => friend.friendId === parseInt(userId));
 
             if (friendExists) {
-              setFriendshipStatus('friend'); // Users are friends
+              setFriendshipStatus('friend');
             } else if (sentRequest) {
-              setFriendshipStatus('pending-sent'); // Request sent to userId
+              setFriendshipStatus('pending-sent');
             } else if (receivedRequest) {
-              setFriendshipStatus('pending-received'); // Request received from userId
+              setFriendshipStatus('pending-received');
             } else {
-              setFriendshipStatus('none'); // No friend request sent or received
+              setFriendshipStatus('none');
             }
           } else {
             console.error('Failed to fetch friends:', friendsResponse.status);
@@ -94,8 +88,8 @@ const Profile = () => {
       });
 
       if (response.ok) {
-        setFriendshipStatus('none'); // Update state to reflect friend removal
-        window.location.reload(); // Refresh to get the updated state
+        setFriendshipStatus('none');
+        window.location.reload();
       } else {
         console.error('Failed to delete friend');
       }
@@ -111,11 +105,11 @@ const Profile = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ senderId: currentUserId, receiverId: userId }), // Send friend request
+        body: JSON.stringify({ senderId: currentUserId, receiverId: userId }),
       });
 
       if (response.ok) {
-        setFriendshipStatus('pending-sent'); // Update the state to reflect the new friendship
+        setFriendshipStatus('pending-sent');
       } else {
         console.error('Failed to add friend');
       }
@@ -129,19 +123,17 @@ const Profile = () => {
       const requestsResponse = await fetch(`http://localhost:5249/api/Friend/requests/${currentUserId}`);
       if (requestsResponse.ok) {
         const requests = await requestsResponse.json();
-        const receivedRequest = requests.find(
-          request => request.senderId === parseInt(userId) && !request.isSender
-        );
-  
+        const receivedRequest = requests.find(request => request.senderId === parseInt(userId) && !request.isSender);
+
         if (receivedRequest) {
-          const requestId = receivedRequest.id; // Extract the requestId from the received request
+          const requestId = receivedRequest.id;
           const response = await fetch(`http://localhost:5249/api/Friend/accept/${requestId}`, {
-            method: 'PUT', // PUT method for accepting the friend request
+            method: 'PUT',
           });
-  
+
           if (response.ok) {
-            setFriendshipStatus('friend'); // Update status to friends
-            window.location.reload()
+            setFriendshipStatus('friend');
+            window.location.reload();
           } else {
             console.error('Failed to accept friend request');
           }
@@ -155,21 +147,23 @@ const Profile = () => {
       console.error('Error accepting friend request:', error);
     }
   };
-  
 
   const handleSendMessage = () => {
-    navigate(`/message/${userId}/${currentUserId}`);// Redirect to message page with the userId
+    navigate(`/message/${userId}/${currentUserId}`);
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <LeftNavbar />
-      <div className="w-full bg-gray-900 p-6 overflow-y-auto">
-        <div className="w-fit ml-32 md:w-[58vw] md:ml-auto h-screen max-w-5xl bg-gray-700 p-6 mx-auto overflow-x-auto scrollbar-none rounded-lg">
-          <div
-            className="relative w-full h-40 sm:h-48 flex items-center justify-center rounded-md"
-            style={{ backgroundColor: randomColor }}
-          >
+    <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
+      <TopBar />
+      <div className="flex w-full max-w-[1300px] mx-auto bg-gray-900">
+        {/* Left Navbar */}
+        <div className="flex-none z-10 510px:mr-16 md:mr-52 "> {/* Set a width for the left navbar */}
+          <LeftNavbar />
+        </div>
+
+        {/* Main content area */}
+        <div className="flex-grow bg-gray-700 p-6 overflow-y-auto h-full mb- rounded-lg scrollbar-none">
+          <div className="relative w-full z-0 h-40 sm:h-48 flex items-center justify-center rounded-md" style={{ backgroundColor: randomColor }}>
             <h1 className="text-4xl font-bold text-white mx-auto">
               {username.charAt(0).toUpperCase()}
             </h1>
@@ -179,39 +173,36 @@ const Profile = () => {
             <h1 className="text-lg sm:text-2xl font-semibold mt-2 text-white">@{username}</h1>
             <a href={`mailto:${email}`} className="text-blue-400 hover:text-white">{email}</a>
 
-            {/* Display buttons only if it's not the user's own profile */}
             {currentUserId !== parseInt(userId) && (
               <div className="mt-4 space-y-2">
                 {friendshipStatus === 'friend' ? (
-                  <button 
-                    onClick={handleDeleteFriend} 
+                  <button
+                    onClick={handleDeleteFriend}
                     className="bg-red-500 mr-1 text-white px-3 py-1 rounded hover:bg-red-400 transition duration-200"
                   >
                     Delete Friend
                   </button>
                 ) : friendshipStatus === 'pending-sent' ? (
-                  <button 
-                    className="bg-gray-500 mr-1 text-white px-3 py-1 rounded"
-                  >
+                  <button className="bg-gray-500 mr-1 text-white px-3 py-1 rounded">
                     Request Sent
                   </button>
                 ) : friendshipStatus === 'pending-received' ? (
-                  <button 
+                  <button
                     onClick={handleAcceptFriendRequest}
                     className="bg-green-500 mr-1 text-white px-3 py-1 rounded hover:bg-green-400 transition duration-200"
                   >
                     Accept Friend Request
                   </button>
                 ) : (
-                  <button 
-                    onClick={handleAddFriend} 
+                  <button
+                    onClick={handleAddFriend}
                     className="bg-green-500 mr-1 text-white px-3 py-1 rounded hover:bg-green-400 transition duration-200"
                   >
                     Add Friend
                   </button>
                 )}
-                <button 
-                  onClick={handleSendMessage} 
+                <button
+                  onClick={handleSendMessage}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-400 transition duration-200"
                 >
                   Send Message
@@ -222,19 +213,25 @@ const Profile = () => {
 
           <div className="mt-6 flex justify-center space-x-4">
             <button
-              className={`${activeTab === 'posts' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'}`}
+              className={`${
+                activeTab === 'posts' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'
+              } px-4 py-2 transition duration-150`}
               onClick={() => handleTabClick('posts')}
             >
               Posts
             </button>
             <button
-              className={`${activeTab === 'likes' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'}`}
+              className={`${
+                activeTab === 'likes' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'
+              } px-4 py-2 transition duration-150`}
               onClick={() => handleTabClick('likes')}
             >
               Likes
             </button>
             <button
-              className={`${activeTab === 'friends' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'}`}
+              className={`${
+                activeTab === 'friends' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'
+              } px-4 py-2 transition duration-150`}
               onClick={() => handleTabClick('friends')}
             >
               Friends
@@ -247,8 +244,13 @@ const Profile = () => {
             {activeTab === 'friends' && <ShowFriends userId={userId} />}
           </div>
         </div>
+
+        {/* Right Navbar */}
+        <div className="flex-none "> {/* Set a width for the right navbar */}
+          <RightNavbar />
+        </div>
       </div>
-      <RightNavbar />
+      <BottomNavbar />
     </div>
   );
 };

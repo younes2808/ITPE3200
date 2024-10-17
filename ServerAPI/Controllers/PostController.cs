@@ -129,16 +129,18 @@ namespace ServerAPI.Controllers
         }
 
 
-        // New API endpoint to get all posts by User ID
+        // New API endpoint to get all posts by User ID, sorted by latest posts first
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetPostsByUserId(int userId)
         {
             var posts = await _context.Posts
                 .Where(p => p.UserId == userId) // Filter by User ID
+                .OrderByDescending(p => p.CreatedAt) // Sort by creation date in descending order
                 .ToListAsync();
 
             return Ok(posts);
         }
+
 
         [HttpGet("likedby/{userId}")]
         public async Task<IActionResult> GetPostIdsLikedByUserId(int userId)
