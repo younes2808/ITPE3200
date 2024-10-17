@@ -44,15 +44,15 @@ const ShowFriends = ({ userId }) => {
   };
 
   if (loading) {
-    return <div className="text-white h-[100vw]">Loading friends...</div>;
+    return <div className="text-white h-full">Loading friends...</div>;
   }
 
   if (friendDetails.length === 0) {
-    return <div className="text-white h-[100vw]">No friends found.</div>; // Display message if no friends
+    return <div className="text-white h-full">No friends found.</div>; // Display message if no friends
   }
 
   return (
-    <div className="text-white h-screen">
+    <div className="text-white h-full">
       <h2 className="text-2xl">Friends</h2>
       <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
         {friendDetails.map(friend => (
