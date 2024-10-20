@@ -210,7 +210,7 @@ const UserLikedPosts = ({ userId }) => {
   }
 
   if (postsDetails.length === 0) {
-    return <p className="text-gray-400 h-screen">This user hasn't liked any posts yet.</p>;
+    return <p className="text-gray-400 h-full">This user hasn't liked any posts yet.</p>;
   }
 
   const userid = sessionStorage.getItem('user');
