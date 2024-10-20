@@ -19,7 +19,8 @@ const FriendRequests = () => {
         }
 
         const data = await response.json();
-        await fetchUsernames(data); // Fetch usernames for the requests
+        const filteredRequests = data.filter(request => !request.isSender);
+        await fetchUsernames(filteredRequests); // Fetch usernames for the requests
       }
     } catch (error) {
       console.error("Error fetching friend requests:", error);
