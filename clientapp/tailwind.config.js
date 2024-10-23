@@ -18,6 +18,7 @@ module.exports = {
         '510px': '510px', 
         '500px': '500px', 
         '400px': '400px',
+        '355px': '355px',
         '300px': '300px',
         '200px': '200px',
         '100px': '100px',// Egendefinert breakpoint for 970px

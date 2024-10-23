@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from 'react';
 import TopBar from './../Components/TopBar';
 import RightNavbar from './../Components/RightNavbar';
 import LeftNavbar from './../Components/LeftNavbar';
@@ -6,6 +6,7 @@ import BottomNavbar from './../Components/BottomNavbar';
 import FriendRequests from "../Components/FriendRequests"; // Juster importbanen etter behov
 
 const ConversationPage = () => {
+  const scrollRef = useRef(null);
   return (
     <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
       {/* Top Bar */}

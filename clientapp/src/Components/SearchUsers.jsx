@@ -25,8 +25,8 @@ const UserSearch = () => {
   };
 
   return (
-    <div className="flex flex-col w-full items-center p-4 bg-gray-800 text-white h-full rounded-2xl 300px:mt-16 510px:mt-0 300px:mb-10 510px:mb-0 ">
-      <h1 className="text-2xl font-bold mb-4">User Search</h1>
+    <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
+      <h1 className="text-3xl font-extrabold text-white mb-6">User Search</h1>
       <div className="flex "> {/* Set wider max-width for the container */}
         <input
           type="text"

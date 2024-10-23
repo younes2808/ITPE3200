@@ -208,7 +208,7 @@ const Comments = ({ postId }) => {
   }
 
   return (
-    <div className="mt-20 bg-gray-800 p-4 rounded-lg w-4/4">
+    <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
       <button 
         className='text-yellow-200 hover:text-slate-100 hover:font-extralight' 
         onClick={() => navigate("/feed")}
@@ -234,7 +234,7 @@ const Comments = ({ postId }) => {
       {comments.length === 0 ? (
         <p className="text-gray-400">No comments yet.</p>
       ) : (
-        <ul className="max-h-64 overflow-y-auto border border-gray-600 p-2 rounded-lg bg-gray-700">
+        <ul className="h-full overflow-y-auto border border-gray-600 p-2 rounded-lg bg-gray-700">
           {comments
             .filter(comment => comment.id) // Filter out any comments without an id
             .map((comment) => (
