@@ -151,7 +151,7 @@ const Messages = () => {
           <div ref={messagesEndRef} /> {/* Tom div for å rulle til */}
         </div>
 
-        <div className="bg-gray-700 p-4 border-t border-gray-600 mt-4">
+        <div className="bg-gray-700 p-4 border-t border-gray-600 mt-4 rounded-md">
           <div className="flex items-center">
             <input
               type="text"
