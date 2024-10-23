@@ -195,7 +195,7 @@ L.Icon.Default.mergeOptions({
           {/* Post button */}
           <button
             onClick={postHandler}
-            className={`flex items-center justify-center px-3 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300 text-sm ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`flex items-center justify-center px-2 355px:px-3 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300 text-sm ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={loading}
           >
             {loading ? 'Posting...' : 'Post'}

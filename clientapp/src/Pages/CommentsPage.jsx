@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+import React, { useRef } from 'react';
 import TopBar from './../Components/TopBar';
 import RightNavbar from './../Components/RightNavbar';
 import LeftNavbar from './../Components/LeftNavbar';
@@ -7,6 +8,7 @@ import Comments from '../Components/Comments';
 
 const CommentsPage = () => {
   const { postId } = useParams(); // Get postId from URL parameters
+  const scrollRef = useRef(null);
 
   return (
     <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
@@ -23,7 +25,7 @@ const CommentsPage = () => {
           </div>
 
           {/* Post og feed-seksjonen i midten */}
-          <div className="flex-grow bg-gray-100 p-6 overflow-y-auto w-full 400px:pl-6 400px:pr-10 510px:pl-24 510px:pr-5 580px:pr-10 md:pl-44 md:pr-16 870px:pl-48 870px:pr-20 970px:pr-16 1150px:pl-64 1150px:pr-14">
+          <div className="flex-grow bg-gray-100 510px:p-4 h-screen overflow-y-auto 300px:pb-16 300px:pt-20 300px:pl-6 300px:pr-6 510px:pl-24 510px:pr-5 580px:pr-10 md:pl-44 md:pr-16 870px:pl-48 870px:pr-16 970px:pr-16 1150px:pl-64 1150px:pr-12">
             <Comments postId={postId} />
           </div>
 

@@ -10,7 +10,7 @@ const Feed = () => {
   const scrollRef = useRef(null); // Oppretter en ref for scrolling container
 
   return (
-    <div className="bg-orange-500 flex h-screen flex-col">
+    <div className="bg-orange-500 flex h-full flex-col">
       {/* Top Bar */}
       <TopBar scrollContainer={scrollRef} /> {/* Sender ref til TopBar */}
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import UserPost from '../Components/UserPost';
 import UserLikedPosts from '../Components/UserLikedPosts';
@@ -9,6 +9,7 @@ import TopBar from '../Components/TopBar';
 import BottomNavbar from '../Components/BottomNavbar';
 
 const Profile = () => {
+  const scrollRef = useRef(null);
   const { userId } = useParams();
   const navigate = useNavigate();
 
