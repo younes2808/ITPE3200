@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const BottomNavbar = () => {
   const navigate = useNavigate();
-  const [activeButton, setActiveButton] = useState(null);
   const [userId, setUserId] = useState(null); // Store the userId from sessionStorage
-  const [username, setUsername] = useState(''); // State to store username
 
   useEffect(() => {
     // Get user information from sessionStorage
@@ -13,12 +11,10 @@ const BottomNavbar = () => {
     if (storedUser) {
       const user = JSON.parse(storedUser);
       setUserId(user.id); // Store the userId in state
-      setUsername(user.username); // Set username
     }
   }, []);
 
   const handleNavClick = (button) => {
-    setActiveButton(button);
     switch (button) {
       case 'home':
         navigate("/feed");
@@ -46,7 +42,7 @@ const BottomNavbar = () => {
 
   return (
     <div className="fixed bottom-0 w-full bg-gray-900 text-white flex justify-around py-3 510px:hidden">
-      {/* Bunn-navigasjonsmeny for skjermer mindre enn 510px */}
+      {/* Bottom navigation menu for screens smaller than 510px */}
       <a
         href='#/'
         onClick={() => handleNavClick("home")}

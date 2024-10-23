@@ -67,45 +67,45 @@ const LeftNavbar = () => {
         <div className="flex flex-col space-y-4 mb-2">
           <a 
             href='#/' 
-            className={`px-2 transition-colors duration-200 w-full ${activeButton === 'home' ? 'bg-gray-700' : ''}`} 
+            className={`px-2 transition-colors duration-200 w-full ${activeButton === 'home' ? 'bg-gray-700' : '510px:hover:bg-gray-800   md:hover:bg-gray-800 xl:hover:bg-gray-900 '}`} 
             onClick={() => handleNavClick('home')}
           >
-            <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'home' ? '' : 'hover:bg-gray-600'}`}>
+            <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'home' ? '' : ''}`}>
               <span className="material-icons text-3xl md:text-lg 870px:text-2xl pl-2">home</span>
-              <span className="text-sm 870px:text-lg hidden md:inline">Home</span>
+              <span className="text-sm 870px:text-lg hidden md:inline hover:text-white xl:hover:bg-gray-700 hover:rounded xl:px-2 xl:py-1  transition duration-300 ease-in-out">Home</span>
             </div>
           </a>
 
           <a 
             href="#/" 
-            className={`px-2 transition-colors duration-200 w-full ${activeButton === 'messages' ? 'bg-gray-700' : ''}`} 
+            className={`px-2 transition-colors duration-200 w-full ${activeButton === 'messages' ? 'bg-gray-700' : ' 510px:hover:bg-gray-800   md:hover:bg-gray-800 xl:hover:bg-gray-900  '}`} 
             onClick={() => handleNavClick('messages')}
           >
-            <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'messages' ? '' : 'hover:bg-gray-600'}`}>
+            <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'messages' ? '' : ''}`}>
               <span className="material-icons text-3xl md:text-lg 870px:text-2xl pl-2">message</span>
-              <span className="text-sm 870px:text-lg hidden md:inline">Messages</span>
+              <span className="text-sm 870px:text-lg hidden md:inline hover:text-white xl:hover:bg-gray-700 hover:rounded xl:px-2 xl:py-1  transition duration-300 ease-in-out">Messages</span>
             </div>
           </a>
 
           <a 
             href="#/" 
-            className={`px-2 transition-colors duration-200 w-full ${activeButton === 'people' ? 'bg-gray-700' : ''}`} 
+            className={`px-2 transition-colors duration-200 w-full ${activeButton === 'people' ? 'bg-gray-700' : '510px:hover:bg-gray-800   md:hover:bg-gray-800 xl:hover:bg-gray-900  '}`} 
             onClick={() => handleNavClick('people')}
           >
-            <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'people' ? '' : 'hover:bg-gray-600'}`}>
+            <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'people' ? '' : ''}`}>
               <span className="material-icons text-3xl md:text-lg 870px:text-2xl pl-2">people</span>
-              <span className="text-sm 870px:text-lg hidden md:inline">Requests</span>
+              <span className="text-sm 870px:text-lg hidden md:inline hover:text-white xl:hover:bg-gray-700 hover:rounded xl:px-2 xl:py-1  transition duration-300 ease-in-out">Requests</span>
             </div>
           </a>
 
           <a 
             href="#/" 
-            className={`px-2 transition-colors duration-200 w-full ${activeButton === 'saved' ? 'bg-gray-700' : ''}`} 
+            className={`px-2 transition-colors duration-200 w-full ${activeButton === 'saved' ? 'bg-gray-700' : '510px:hover:bg-gray-800   md:hover:bg-gray-800 xl:hover:bg-gray-900 '}`} 
             onClick={() => handleNavClick('search')}
           >
-            <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'saved' ? '' : 'hover:bg-gray-600'}`}>
+            <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'saved' ? '' : ''}`}>
               <span className="material-icons text-3xl md:text-lg 870px:text-2xl pl-2">search</span>
-              <span className="text-sm 870px:text-lg hidden md:inline">Search</span>
+              <span className="text-sm 870px:text-lg hidden md:inline hover:text-white xl:hover:bg-gray-700 hover:rounded xl:px-2 xl:py-1 transition duration-300 ease-in-out">Search</span>
             </div>
           </a>
         </div>
@@ -114,12 +114,12 @@ const LeftNavbar = () => {
       <div className="flex flex-col space-y-4 mb-6">        
         <a 
           href="#/" 
-          className={`px-2 transition-colors duration-200 w-full ${activeButton === 'logout' ? 'bg-gray-700' : ''}`} 
+          className={`px-2 transition-colors duration-200 w-full ${activeButton === 'logout' ? 'bg-gray-700' : '510px:hover:bg-gray-800   md:hover:bg-gray-800 xl:hover:bg-gray-900  '}`} 
           onClick={() => handleNavClick('logout')}
         >
-          <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'logout' ? '' : 'hover:bg-gray-600'}`}>
+          <div className={`flex items-center space-x-3 rounded-lg py-2 870px:py-3 ${activeButton === 'logout' ? '' : ''}`}>
             <span className="material-icons text-3xl md:text-lg 870px:text-2xl pl-2">logout</span>
-            <span className="text-sm 870px:text-lg hidden md:inline">Logout</span>
+            <span className="text-sm 870px:text-lg hidden md:inline hover:text-white xl:hover:bg-gray-700 hover:rounded xl:px-2 xl:py-1 transition duration-300 ease-in-out">Logout</span>
           </div>
         </a>
 

@@ -156,7 +156,7 @@ const Profile = () => {
   return (
     <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
       <TopBar />
-      <div className="flex w-full max-w-[1300px] mx-auto bg-gray-900">
+      <div className="flex w-full max-w-[1300px] mx-auto bg-gray-900 h-full">
         {/* Left Navbar */}
         <div className="flex-none z-10 510px:mr-16 md:mr-52 "> {/* Set a width for the left navbar */}
           <LeftNavbar />
@@ -239,7 +239,7 @@ const Profile = () => {
             </button>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 mb-12">
             {activeTab === 'posts' && <UserPost userId={userId} />}
             {activeTab === 'likes' && <UserLikedPosts userId={userId} />}
             {activeTab === 'friends' && <ShowFriends userId={userId} />}
