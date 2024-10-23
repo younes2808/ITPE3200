@@ -2,7 +2,7 @@
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/index.html"
+    "./public/index.html",
   ],
   theme: {
     extend: {
@@ -21,7 +21,12 @@ module.exports = {
         '355px': '355px',
         '300px': '300px',
         '200px': '200px',
-        '100px': '100px',// Egendefinert breakpoint for 970px
+        '100px': '100px', // Custom breakpoints
+      },
+      fontFamily: {
+        clash: ['ClashGrotesk', 'sans-serif'], // Add your custom font here
+        general: ['General', 'sans-serif'],
+        lexend: ['Lexend', 'sans-serif'],
       },
     },
   },
