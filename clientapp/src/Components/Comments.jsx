@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UsernameDisplay = ({ userId, fetchUsername }) => {
+const UsernameDisplay = ({ userId, fetchUsername, onClick }) => {
   const [username, setUsername] = useState('Loading...');
 
   useEffect(() => {
@@ -12,8 +12,16 @@ const UsernameDisplay = ({ userId, fetchUsername }) => {
     getUsername();
   }, [userId, fetchUsername]);
 
-  return <span className='text-2xl font-general font-medium text-black hover:text-gray-500 hover:underline transition-all duration-200 ease-in-out'>{username}</span>;
+  return (
+    <span 
+      className='text-2xl font-general font-medium text-black hover:text-gray-500 hover:underline transition-all duration-200 ease-in-out'
+      onClick={onClick}  // Make sure to pass the onClick handler here
+    >
+      {username}
+    </span>
+  );
 };
+
 
 const Comments = ({ postId }) => {
   const navigate = useNavigate();
@@ -238,8 +246,8 @@ const Comments = ({ postId }) => {
           {comments
             .filter(comment => comment.id) // Filter out any comments without an id
             .map((comment) => (
-              <li key={`comment-${comment.id}`} className="p-3 rounded-lg mb-2 text-white">
-                <UsernameDisplay userId={comment.userId} fetchUsername={fetchUsername} />
+              <li key={`comment-${comment.id}`} className="p-3 mb-2 border-b-2  text-white">
+                <UsernameDisplay userId={comment.userId} fetchUsername={fetchUsername} onClick={() => navigate(`/profile/${comment.userId}`)} />
                 <p className='font-clash pb-2 font-normal text-sm text-gray-500'>
                   {new Date(comment.createdAt).toLocaleString('en-US', {
                     year: 'numeric',
