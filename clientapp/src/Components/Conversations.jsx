@@ -80,8 +80,8 @@ const Conversations = () => {
 
   return (
     <div className="mt-auto flex-grow items-start w-full h-full">
-      <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
-        <h2 className="text-3xl font-extrabold text-white mb-6">Conversations</h2>
+      <div className="bg-white shadow-lg rounded-lg p-8 h-full flex flex-col">
+        <h2 className="300px:text-2xl 400px:text-3xl font-extrabold font-general text-black mb-6">Conversations</h2>
 
         <div className="flex-grow space-y-4 overflow-y-auto">
           {conversations.length > 0 ? (
@@ -90,15 +90,15 @@ const Conversations = () => {
                 key={conversation.userId}
                 className={`p-4 rounded-lg cursor-pointer transition duration-200 ${
                   conversation.isResponded
-                    ? "bg-gray-700 hover:bg-gray-600" // Sending messages
-                    : "bg-gray-500 hover:bg-gray-400 shadow-md" // Receiving messages
+                    ? "bg-emerald-200 hover:bg-emerald-300" // Sending messages
+                    : "bg-emerald-100 hover:bg-emerald-300 shadow-md" // Receiving messages
                 } flex justify-between items-center`}
                 onClick={() => handleConversationClick(conversation.userId)}
               >
                 <div className="flex flex-col">
                   <p className="text-lg font-semibold">
                     <span
-                      className="text-white hover:underline cursor-pointer"
+                      className="text-black hover:underline font-general cursor-pointer"
                       onClick={() => handleUsernameClick(conversation.userId)}
                     >
                       {conversation.username}
@@ -107,8 +107,8 @@ const Conversations = () => {
                   <p
                     className={`text-sm ${
                       conversation.isResponded
-                        ? "text-gray-400 font-semibold"
-                        : "text-white font-bold"
+                        ? "text-gray-500 font-semibold font-lexend"
+                        : "text-gray-500 font-bold font-lexend"
                     }`}
                   >
                     {conversation.isResponded ? "Sent:" : "Received:"}{" "}
@@ -116,7 +116,7 @@ const Conversations = () => {
                   </p>
                   <p
                     className={`text-xs ${
-                      conversation.isResponded ? "text-gray-400" : "text-white"
+                      conversation.isResponded ? "font-clash pb-2 font-normal text-sm text-gray-500" : "font-clash pb-2 font-normal text-sm text-gray-500"
                     }`}
                   >
                     {new Date(conversation.timestamp).toLocaleString()}
@@ -130,7 +130,7 @@ const Conversations = () => {
               </div>
             ))
           ) : (
-            <div className="text-gray-400 text-center">No conversations yet</div>
+            <div className="text-gray-500 text-center">No conversations yet</div>
           )}
         </div>
       </div>

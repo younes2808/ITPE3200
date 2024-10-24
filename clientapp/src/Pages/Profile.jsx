@@ -242,7 +242,7 @@ const Profile = () => {
         </div>
 
         {/* Right Navbar */}
-        <div className="flex-none "> {/* Set a width for the right navbar */}
+        <div className="flex-none overflow-y-auto max-h-screen"> {/* Set a width for the right navbar */}
           <RightNavbar />
         </div>
       </div>
