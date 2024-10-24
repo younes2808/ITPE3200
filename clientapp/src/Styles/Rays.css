@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .Login-Bakgrunn {
-    @apply bg-orange-200;
+    @apply bg-emerald-200;
 }
 
 .Landing-page-box {
@@ -41,7 +41,6 @@
 }
 
 .post-textarea-grey::-webkit-scrollbar-track {
-    background: #3b3f52; /* Same background color of the track */
     border-radius: 10px; /* Round the track corners */
 }
 
@@ -53,4 +52,19 @@
 /* Optional: Change thumb color on hover for grey scrollbar */
 .post-textarea-grey::-webkit-scrollbar-thumb:hover {
     background-color: #808080; /* Darker grey on hover */
+}
+/* src/styles/tailwind.css */
+@font-face {
+    font-family: 'ClashGrotesk';
+    src: url('./fonts/ClashGrotesk-Variable.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'General';
+    src: url('./fonts/GeneralSans-Variable.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Lexend';
+    src: url('./fonts/Lexend-VariableFont.ttf') format('truetype');
 }

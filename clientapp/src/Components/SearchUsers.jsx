@@ -25,19 +25,19 @@ const UserSearch = () => {
   };
 
   return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
-      <h1 className="text-3xl font-extrabold text-white mb-6">User Search</h1>
+    <div className="bg-white shadow-2xl rounded-lg p-8 h-full flex flex-col">
+      <h1 className="300px:text-2xl 400px:text-3xl font-extrabold font-general text-black mb-6">User Search</h1>
       <div className="flex "> {/* Set wider max-width for the container */}
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for users..."
-          className="p-1 flex-grow border border-gray-600 rounded-l-md bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring focus:ring-gray-500"
+          className="300px:p-1 355px:p-3 flex-grow min-w-36 border border-gray-300 border-2 rounded-md bg-white text-blach placeholder- focus:outline-none focus:ring focus:ring-emerald-500 shadow-md"
         />
         <button 
           onClick={handleSearch} 
-          className="p-3 bg-blue-600 text-white rounded-r-md hover:bg-blue-500 transition duration-200"
+          className="ml-2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
         >
           Search
         </button>
@@ -47,13 +47,13 @@ const UserSearch = () => {
 
       {searchResults.length > 0 ? (
         <div className="mt-4 w-2/5 max-w-xl">
-          <h2 className="font-bold">Search Results:</h2>
+          <h2 className="font-bold font-general">Search Results:</h2>
           <ul className="mt-2">
             {searchResults.map((user) => (
               <li key={user.id} className="border-b border-gray-600 py-2">
                 <button 
                   onClick={() => navigate(`/profile/${user.id}`)} 
-                  className="text-blue-400 hover:underline"
+                  className="text-blue-400 hover:underline font-general"
                 >
                   {user.username} ({user.email})
                 </button>

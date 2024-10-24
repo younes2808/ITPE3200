@@ -55,10 +55,10 @@ const RightNavbar = () => {
   if (loading) return <div className="text-white">Loading...</div>;
 
   return (
-    <div className="hidden 970px:flex flex-col h-full 970px:w-48 1150px:w-60 bg-gray-900 text-white p-6 ">
+    <div className="hidden 970px:flex flex-col h-full 970px:w-48 1150px:w-60 bg-gray-900 text-white p-6">
     <h2 className="text-2xl font-bold ml-4 mt-4 pb-4 text-left">Friends</h2>
-    <div className="flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
-      <div className="grid grid-cols-1 gap-3 w-full">
+    <div className="flex-grow overflow-y-auto post-textarea-grey">
+      <div className="grid grid-cols-1 gap-3 w-full pr-2">
         {friends.length > 0 ? (
           friends.map((friend, index) => (
             <div

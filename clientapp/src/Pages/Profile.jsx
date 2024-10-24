@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import UserPost from '../Components/UserPost';
-import UserLikedPosts from '../Components/UserLikedPosts';
-import ShowFriends from '../Components/ShowFriends';
-import LeftNavbar from '../Components/LeftNavbar';
-import RightNavbar from '../Components/RightNavbar';
-import TopBar from '../Components/TopBar';
-import BottomNavbar from '../Components/BottomNavbar';
+import UserPost from './../Components/UserPost';
+import UserLikedPosts from './../Components/UserLikedPosts';
+import ShowFriends from './../Components/ShowFriends';
+import LeftNavbar from './../Components/LeftNavbar';
+import RightNavbar from './../Components/RightNavbar';
+import TopBar from './../Components/TopBar';
+import BottomNavbar from './../Components/BottomNavbar';
 
 const Profile = () => {
   const scrollRef = useRef(null);
@@ -155,15 +155,15 @@ const Profile = () => {
 
   return (
     <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
-      <TopBar />
-      <div className="flex w-full max-w-[1300px] mx-auto bg-gray-900 h-full">
+      <TopBar scrollContainer={scrollRef}/>
+      <div className="flex w-full max-w-[1200px] mx-auto bg-gray-900 h-full">
         {/* Left Navbar */}
         <div className="flex-none z-10 510px:mr-16 md:mr-52 "> {/* Set a width for the left navbar */}
           <LeftNavbar />
         </div>
 
         {/* Main content area */}
-        <div className="flex-grow bg-gray-700 p-6 overflow-y-auto h-full mb- rounded-lg">
+        <div ref={scrollRef} className="flex-grow bg-gray-700 300px:pt-24 510px:pt-8 p-6 overflow-y-auto h-full mb- rounded-lg">
           <div className="relative w-full z-0 h-40 sm:h-48 flex items-center justify-center rounded-md" style={{ backgroundColor: randomColor }}>
             <h1 className="text-4xl font-bold text-white mx-auto">
               {username.charAt(0).toUpperCase()}

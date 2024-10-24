@@ -54,10 +54,11 @@ const LeftNavbar = () => {
         className="flex items-center space-x-0 pt-8 p-4 mt-24 md:space-x-4  hover:bg-gray-800 rounded-lg transition-colors duration-200"
       >
         <div className="flex items-center justify-center w-10 h-10 md:w-14 md:h-10 870px:w-16 870px:h-12 1150px:w-16 1150px:h-16 rounded-full bg-blue-500"> {/* Use a colored circle */}
-          <span className="text-2xl 870px:text-3xl 1150px:text-4xl font-semibold">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
+          <span className="text-2xl 870px:text-3xl 1150px:text-4xl font-medium">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
         </div>
         <div>
           <h2 className="text-xs hidden md:-ml-2 md:inline 870px:-ml-0 870px:text-sm 1150px:text-lg font-semibold">{username}</h2>  {/* Use the dynamic username */}
+          <br/>
           <p className="text-xs hidden md:-ml-2 md:inline 870px:-ml-0 870px:text-xs 1150px:text-md text-gray-400">@{username.toLowerCase()}</p>  {/* Assuming you want the username as the handle */}
         </div>
       </a>
