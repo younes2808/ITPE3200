@@ -14,7 +14,7 @@ const ConversationPage = () => {
 
       {/* Hovedcontainer */}
         {/* Justert container med dynamisk margin og max-w for å sikre plass til navbarene */}
-        <div className="flex w-full max-w-[1200px] mx-auto">
+        <div className="flex w-full max-w-[1200px] mx-auto h-screen">
 
           {/* Left Navbar - plasseres på venstre side */}
           <div className="flex-none"> 

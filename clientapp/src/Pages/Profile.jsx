@@ -159,7 +159,7 @@ const Profile = () => {
         </div>
 
         {/* Main content area */}
-        <div ref={scrollRef} className="flex-grow bg-gray-100 p-6 overflow-y-auto h-full rounded-lg scrollbar-none 510px:p-4 300px:pb-12 300px:pt-24 300px:pl-4 300px:pr-4 510px:pl-20 510px:pr-4 580px:pr-6 md:pl-40 md:pr-8 870px:pl-44 870px:pr-8 970px:pr-9 1150px:pl-60 1150px:pr-8">
+        <div ref={scrollRef} className="flex-grow post-textarea-grey bg-gray-100 p-6 overflow-y-auto h-full rounded-lg 510px:p-4 300px:pb-12 300px:pt-24 300px:pl-4 300px:pr-4 510px:pl-20 510px:pr-4 580px:pr-6 md:pl-40 md:pr-8 870px:pl-44 870px:pr-8 970px:pr-9 1150px:pl-60 1150px:pr-8">
           <div className="relative w-full bg-emerald-200 z-0 h-40 sm:h-48 flex items-center justify-center rounded-md border-2 border-emerald-400">
             <h1 className="text-4xl font-bold text-black mx-auto">
               {username.charAt(0).toUpperCase()}

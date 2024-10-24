@@ -8,13 +8,13 @@ import Conversations from "../Components/Conversations"; // Juster importbanen e
 const ConversationPage = () => {
   const scrollRef = useRef(null);
   return (
-    <div className="bg-gray-100 border flex h-screen flex-col overflow-y-auto">
+    <div className="bg-gray-100 flex h-screen flex-col overflow-y-auto">
       {/* Top Bar */}
       <TopBar scrollContainer={scrollRef}/>
 
       {/* Hovedcontainer */}
         {/* Justert container med dynamisk margin og max-w for å sikre plass til navbarene */}
-        <div className="flex w-full max-w-[1200px] mx-auto">
+        <div className="flex w-full max-w-[1200px] mx-auto h-screen">
 
           {/* Left Navbar - plasseres på venstre side */}
           <div className="flex-none"> 

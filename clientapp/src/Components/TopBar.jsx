@@ -51,7 +51,7 @@ function TopBar({ scrollContainer }) {
 
   return (
     <div
-      className={`fixed 510px:hidden top-0 left-0 right-0 bg-gray-900 text-white flex items-center justify-between px-6 py-3 z-50 transition-transform duration-300 ${
+      className={`fixed 510px:hidden border-b-2 border-emerald-100 top-0 left-0 right-0 bg-white text-black flex items-center justify-between px-6 py-3 z-50 transition-transform duration-300 ${
         showTopBar ? 'transform translate-y-0' : 'transform -translate-y-full'
       }`}
     >
@@ -64,7 +64,7 @@ function TopBar({ scrollContainer }) {
           href={`/profile/${userId}`}
           className="flex items-center hover:bg-gray-800 rounded-lg transition-colors duration-200"
         >
-          <div className="text-center pt-1 w-12 h-12 cursor-pointer rounded-full bg-blue-500">
+          <div className="text-center pt-1 w-12 h-12 cursor-pointer rounded-full bg-emerald-200">
             <span className="text-3xl font-semibold">
               {username.charAt(0).toUpperCase()}
             </span>

@@ -80,7 +80,7 @@ const LeftNavbar = () => {
         <div className="flex flex-col space-y-4 mb-2">
           <a 
             href='#/' 
-            className={`px-2 transition-colors duration-200 ${activeButton === 'home' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
+            className={`px-2 transition-colors duration-200 ${activeButton === 'home' ? 'border-b-2 border-emerald-200 border-t-2 bg-emerald-50 font-semibold' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
             onClick={() => handleNavClick('home')}
           >
             <div className="flex items-center space-x-3 rounded-lg py-2 870px:py-3">
@@ -93,7 +93,7 @@ const LeftNavbar = () => {
 
           <a  
             href='#/' 
-            className={`px-2 transition-colors duration-200 ${activeButton === 'messages' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
+            className={`px-2 transition-colors duration-200 ${activeButton === 'messages' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50 font-semibold' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
             onClick={() => handleNavClick('messages')}
           >
             <div className="flex items-center space-x-3 rounded-lg py-2 870px:py-3">
@@ -107,7 +107,7 @@ const LeftNavbar = () => {
 
           <a  
             href='#/' 
-            className={`px-2 transition-colors duration-200 ${activeButton === 'people' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
+            className={`px-2 transition-colors duration-200 ${activeButton === 'people' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50 font-semibold' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
             onClick={() => handleNavClick('people')}
           >
             <div className="flex items-center space-x-3 rounded-lg py-2 870px:py-3">
@@ -121,7 +121,7 @@ const LeftNavbar = () => {
 
           <a  
             href='#/' 
-            className={`px-2 transition-colors duration-200 ${activeButton === 'search' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
+            className={`px-2 transition-colors duration-200 ${activeButton === 'search' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50 font-semibold' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
             onClick={() => handleNavClick('search')}
           >
             <div className="flex items-center space-x-3 rounded-lg py-2 870px:py-3">
@@ -132,24 +132,25 @@ const LeftNavbar = () => {
             </div>
           </a>
 
+          <a  
+            href='#/' 
+            className={`px-2 transition-colors duration-200 ${activeButton === 'logout' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50 font-semibold' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
+            onClick={() => handleNavClick('logout')}
+          >
+            <div className="flex items-center space-x-3 rounded-lg py-2 870px:py-3 w-full">
+              <span className="material-icons text-3xl md:text-lg 870px:text-2xl pl-2">logout</span>
+              <span className="text-sm 870px:text-lg hidden md:inline transition duration-300 ease-in-out">
+                Logout
+              </span>
+            </div>
+          </a>
+
         </div>
-      </nav>
-      <div className="flex flex-col space-y-4 mb-6">        
-      <a  
-        href='#/' 
-        className={`px-2 transition-colors duration-200 ${activeButton === 'logout' ? 'border-b-2 border-emerald-300 border-t-2 bg-emerald-50' : '510px:hover:bg-emerald-100 md:hover:bg-emerald-100'}`} 
-        onClick={() => handleNavClick('logout')}
-      >
-        <div className="flex items-center space-x-3 rounded-lg py-2 870px:py-3">
-          <span className="material-icons text-3xl md:text-lg 870px:text-2xl pl-2">logout</span>
-          <span className="text-sm 870px:text-lg hidden md:inline transition duration-300 ease-in-out">
-            Logout
-          </span>
-        </div>
-      </a>
+      </nav>       
+     
 
 
-      </div>
+      
     </div>
   );
 };
