@@ -12,7 +12,7 @@ const UsernameDisplay = ({ userId, fetchUsername }) => {
     getUsername();
   }, [userId, fetchUsername]);
 
-  return <span className='font-extralight text-sm text-slate-200'>{username}</span>;
+  return <span className='font-extralight text-sm text-black'>{username}</span>;
 };
 
 const Comments = ({ postId }) => {
@@ -208,14 +208,14 @@ const Comments = ({ postId }) => {
   }
 
   return (
-    <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
+    <div className="bg-emerald-200 shadow-lg rounded-lg p-8 h-full flex flex-col">
       <button 
-        className='text-yellow-200 hover:text-slate-100 hover:font-extralight' 
+        className='text-gray-800 hover:text-slate-800 hover:font-extralight' 
         onClick={() => navigate("/feed")}
       >
         Go back to feed
       </button>
-      <h1 className="text-white text-xl mb-4">Comments for Post {postId}</h1>
+      <h1 className="text-gray-800 text-xl mb-4">Comments for Post {postId}</h1>
 
       <form onSubmit={handleCommentSubmit} className="mb-6">
         <textarea
@@ -232,15 +232,15 @@ const Comments = ({ postId }) => {
       </form>
 
       {comments.length === 0 ? (
-        <p className="text-gray-400">No comments yet.</p>
+        <p className="text-gray-800">No comments yet.</p>
       ) : (
-        <ul className="h-full overflow-y-auto border border-gray-600 p-2 rounded-lg bg-gray-700">
+        <ul className="h-full overflow-y-auto border border-gray-800 p-2 rounded-lg bg-white">
           {comments
             .filter(comment => comment.id) // Filter out any comments without an id
             .map((comment) => (
               <li key={`comment-${comment.id}`} className="p-3 rounded-lg mb-2 text-white">
                 <UsernameDisplay userId={comment.userId} fetchUsername={fetchUsername} />
-                <p className='font-light font-mono text-slate-400'>
+                <p className='font-clash pb-2 font-normal text-sm text-gray-500'>
                   {new Date(comment.createdAt).toLocaleString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -251,17 +251,17 @@ const Comments = ({ postId }) => {
                     hour12: false,
                   })}
                 </p>
-                <p>{comment.text}</p>
+                <p className='text-black'>{comment.text}</p>
                 {parseInt(comment.userId, 10) === parseInt(JSON.parse(sessionStorage.getItem('user')).id, 10) && (
                   <div className="flex space-x-2 mt-2">
                     <button 
-                      className="bg-yellow-500 text-white p-1 rounded"
+                      className="bg-yellow-500 text-white p-1 rounded hover:bg-yellow-300"
                       onClick={() => handleEdit(comment)}
                     >
                       Edit
                     </button>
                     <button 
-                      className="bg-red-500 text-white p-1 rounded"
+                      className="bg-red-500 text-white p-1 rounded hover:bg-red-300"
                       onClick={() => handleDelete(comment.id)}
                     >
                       Delete
