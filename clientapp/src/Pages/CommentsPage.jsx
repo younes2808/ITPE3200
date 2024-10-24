@@ -11,13 +11,13 @@ const CommentsPage = () => {
   const scrollRef = useRef(null);
 
   return (
-    <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
+    <div className="bg-gray-100 border flex h-screen flex-col overflow-y-auto">
       {/* Top Bar */}
       <TopBar scrollContainer={scrollRef}/>
 
       {/* Hovedcontainer */}
         {/* Justert container med dynamisk margin og max-w for å sikre plass til navbarene */}
-        <div className="flex w-full max-w-[1200px] mx-auto bg-blue-500 h-full">
+        <div className="flex w-full max-w-[1200px] mx-auto bg-gray-100 border h-full">
 
           {/* Left Navbar - plasseres på venstre side */}
           <div className="flex-none"> 

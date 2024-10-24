@@ -10,12 +10,12 @@
     const scrollRef = useRef(null); // Oppretter en ref for scrolling container
 
     return (
-      <div className="bg-orange-500 flex h-screen flex-col">
+      <div className="bg-gray-100 border flex h-screen flex-col">
         {/* Top Bar */}
         <TopBar scrollContainer={scrollRef} /> {/* Sender ref til TopBar */}
 
         {/* Hovedcontainer */}
-        <div className="flex w-full max-w-[1200px] mx-auto bg-blue-500 min-h-screen overflow-y-auto">
+        <div className="flex w-full max-w-[1200px] mx-auto bg-gray-100 border min-h-screen overflow-y-auto">
 
           {/* Left Navbar - plasseres på venstre side */}
           <div className="flex-none"> 

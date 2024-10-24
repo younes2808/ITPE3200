@@ -8,7 +8,7 @@ import Conversations from "../Components/Conversations"; // Juster importbanen e
 const ConversationPage = () => {
   const scrollRef = useRef(null);
   return (
-    <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
+    <div className="bg-gray-100 border flex h-screen flex-col overflow-y-auto">
       {/* Top Bar */}
       <TopBar scrollContainer={scrollRef}/>
 

@@ -34,15 +34,17 @@ function TopBar({ scrollContainer }) {
   }, [lastScrollY, scrollContainer]);
 
   useEffect(() => {
-    // Legg til scroll-eventlistener på containeren når komponenten monteres
-    if (scrollContainer && scrollContainer.current) {
-      scrollContainer.current.addEventListener('scroll', handleScroll);
+    // Capture the current value of scrollContainer to ensure it doesn't change during cleanup
+    const container = scrollContainer.current;
+
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
     }
 
-    // Fjern eventlistener når komponenten demonteres
+    // Cleanup function to remove event listener
     return () => {
-      if (scrollContainer && scrollContainer.current) {
-        scrollContainer.current.removeEventListener('scroll', handleScroll);
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
       }
     };
   }, [handleScroll, scrollContainer]);

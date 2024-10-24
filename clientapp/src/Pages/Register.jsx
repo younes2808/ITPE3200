@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginImg } from "./../Utils/utils.js"; // Assuming you have a relevant image
 
@@ -9,7 +9,6 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState(""); // For client-side validation errors
-  const scrollRef = useRef(null);
 
   const navigate = useNavigate(); // For navigation after registration
   ///// INPUT-VALIDATION //////

@@ -154,9 +154,9 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
+    <div className="bg-gray-100 border flex h-screen flex-col overflow-y-auto">
       <TopBar scrollContainer={scrollRef}/>
-      <div className="flex w-full max-w-[1200px] mx-auto bg-gray-900 h-full">
+      <div className="flex w-full max-w-[1200px] mx-auto bg-gray-100 border h-full">
         {/* Left Navbar */}
         <div className="flex-none z-10 510px:mr-16 md:mr-52 "> {/* Set a width for the left navbar */}
           <LeftNavbar />
