@@ -62,9 +62,9 @@ function TopBar({ scrollContainer }) {
       <div>
         <a
           href={`/profile/${userId}`}
-          className="flex items-center hover:bg-gray-800 rounded-lg transition-colors duration-200"
+          className="flex items-center rounded-lg transition-colors duration-200"
         >
-          <div className="text-center pt-1 w-12 h-12 cursor-pointer rounded-full bg-emerald-200">
+          <div className="text-center pt-1 w-12 h-12 cursor-pointer rounded-full hover:bg-emerald-300 bg-emerald-200">
             <span className="text-3xl font-semibold">
               {username.charAt(0).toUpperCase()}
             </span>
