@@ -222,10 +222,10 @@ const UserLikedPosts = ({ userId }) => {
     <div className="mt-auto mb-4 flex-grow-0 space-y-6 items-start">
       {postsDetails.length > 0 ? (
         postsDetails.map((post) => (
-          <div key={post.id} className="bg-gray-600 p-3.5 rounded-lg shadow-md">
-            <UsernameDisplay userId={post.userId} className="text-white" fetchUsername={fetchUsername} navigate={navigate} />
+          <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
+            <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />
   
-            <h2 className="font-medium font-mono text-slate-400">
+            <h2 className="font-clash pb-2 font-normal text-sm text-gray-500">
               {new Date(post.createdAt).toLocaleString('en-US', {
                 year: 'numeric',
                 month: 'long',
@@ -242,10 +242,10 @@ const UserLikedPosts = ({ userId }) => {
                 maxLength={1000}
                 value={postText}
                 onChange={(e) => setPostText(e.target.value)}
-                className="post-textarea w-full bg-gray-500 text-white rounded-lg resize-none h-full"
+                className="post-textarea w-full bg-white text-black font-lexend rounded-lg resize-none h-full"
               />
             ) : (
-              <h2 className="text-white mb-1.5 break-words font-serif">{post.content}</h2>
+              <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2>
             )}
   
             {post.videoUrl && (
@@ -261,10 +261,11 @@ const UserLikedPosts = ({ userId }) => {
   
             {/* Only render the MapComponent if location exists */}
             {post.location && (
-                <div className="my-4">
-                  <MapComponent location={post.location} />
-                </div>
-              )}
+              <div className="my-4">
+                <MapComponent location={post.location} />
+              </div>
+            )}
+  
             {post.imagePath && (
               <img
                 src={`http://localhost:5249/${post.imagePath}`}
@@ -281,45 +282,40 @@ const UserLikedPosts = ({ userId }) => {
               <button onClick={() => toggleLike(post.id)} className="text-blue-500 hover:underline text-xs 400px:text-base">
                 {likes[post.id]?.find(like => like.userId === loggedInUserId) ? 'Liked' : 'Like'}
               </button>
-  
-              {/* Show Edit button only if not editing */}
-              {/* Show Edit button only if not editing */}
+
+              {/* Only show Edit and Delete buttons if the post belongs to the logged-in user */}
               {post.userId === loggedInUserId && editingPostId !== post.id && (
+                <>
                   <button
                     onClick={() => {
                       setEditingPostId(post.id);
                       setPostText(post.content); // Populate the textarea with the existing content
                     }}
-                    className="text-yellow-500 hover:underline text-xs 400px:text-base "
+                    className="text-yellow-500 hover:underline text-xs 400px:text-base"
                   >
                     Edit
                   </button>
-                )}
-  
-              {/* Delete button should always be visible if the user is the post creator */}
-              {post.userId === loggedInUserId && (
-                <button
-                  onClick={() => deletePost(post.id)}
-                  className="text-red-500 hover:underline text-xs 400px:text-base"
-                >
-                  Delete
-                </button>
+                  <button
+                    onClick={() => deletePost(post.id)}
+                    className="text-red-500 hover:underline text-xs 400px:text-base"
+                  >
+                    Delete
+                  </button>
+                </>
               )}
-  
+
               {/* Confirm edit submission */}
               {editingPostId === post.id && (
-                <button
-                  onClick={editPostHandler}
-                  className="text-green-500 hover:underline text-xs 400px:text-base"
-                >
+                <button onClick={editPostHandler} className="text-green-500 hover:underline text-xs 400px:text-base">
                   Save
                 </button>
               )}
               {/* Comment button */}
-              <button onClick={() => navigate(`/comments/${post.id}`)} className="text-blue-500 text-xs hover:underline 400px:text-base">
+              <button onClick={() => navigate(`/comments/${post.id}`)} className="text-blue-500 hover:underline text-xs 400px:text-base">
                 Comment
               </button>
             </div>
+
           </div>
         ))
       ) : (
@@ -327,9 +323,9 @@ const UserLikedPosts = ({ userId }) => {
       )}
     </div>
   );
-  
 };
 
+// UsernameDisplay component
 const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
   const [username, setUsername] = useState('');
 
@@ -342,11 +338,13 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
   }, [userId, fetchUsername]);
 
   return (
-    <div
-      className="text-white cursor-pointer hover:underline"
-      onClick={() => navigate(`/profile/${userId}`)}
-    >
-      {username}
+    <div className="flex items-center space-x-2">
+      <button
+        className="font-general text-2xl font-medium  text-black hover:underline"
+        onClick={() => navigate(`/profile/${userId}`)}
+      >
+        {username}
+      </button>
     </div>
   );
 };

@@ -99,18 +99,18 @@ const Messages = () => {
 
   return (
     <div className="mt-auto flex-grow items-start w-full h-full">
-      <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
-        <div className="flex items-center justify-between bg-gray-600 p-4 rounded-md">
+      <div className="bg-white shadow-2xl border-gray-300 border-2 rounded-lg p-8 h-full flex flex-col">
+        <div className="flex items-center justify-between bg-emerald-200 p-4 rounded-md">
           {/* Back button using loggedInUserId */}
           <button
             onClick={() => navigate(`/conversation/${loggedInUserId}`)} // Naviger til en spesifikk side basert på loggedInUserId
-            className="text-white text-4xl"
+            className="text-black text-4xl"
           >
             ←
           </button>
 
           <h2 
-            className="text-2xl font-extrabold text-white mr-4 cursor-pointer hover:underline ml-auto"
+            className="text-2xl font-extrabold font-general text-black mr-4 cursor-pointer hover:underline ml-auto"
             onClick={handleProfileClick} // Legg til klikk-håndtering her
           >
             {receiverUsername}
@@ -129,12 +129,12 @@ const Messages = () => {
                 key={message.id}
                 className={`mb-4 p-3 w-fit rounded-lg shadow ${
                   message.senderId === parseInt(senderId)
-                    ? "bg-blue-500 text-white text-right ml-auto rounded-tl-2xl rounded-br-2xl" // Melding fra bruker1 (høyre)
-                    : "bg-gray-300 text-black text-left rounded-tr-2xl rounded-bl-2xl" // Melding fra bruker2 (venstre)
+                    ? "bg-blue-500 text-white font-clash font-normal text-right ml-auto rounded-tl-2xl rounded-br-2xl shadow-lg" // Melding fra bruker1 (høyre)
+                    : "bg-gray-300 text-black font-clash font-normal text-left rounded-tr-2xl rounded-bl-2xl shadow-lg" // Melding fra bruker2 (venstre)
                 }`}
               >
                 {/* Endre tekstfarge basert på bakgrunnsfargen */}
-                <p className={`text-lg font-semibold ${
+                <p className={`text-lg font-semibold font-lexend ${
                   message.senderId === parseInt(senderId) ? "text-white" : "text-black"
                 }`}>
                   {message.content}
@@ -151,18 +151,18 @@ const Messages = () => {
           <div ref={messagesEndRef} /> {/* Tom div for å rulle til */}
         </div>
 
-        <div className="bg-gray-700 p-4 border-t border-gray-600 mt-4 rounded-md">
+        <div className="bg-emerald-200 border p-4 mt-4 rounded-md ">
           <div className="flex items-center">
             <input
               type="text"
-              className="flex-grow border border-gray-600 p-2 rounded mr-2 bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-grow p-2 border-gray-300 border-2 rounded mr-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="Type a message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
             <button
               onClick={sendMessage}
-              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-200"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-200 font-general"
             >
               Send
             </button>

@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link
 import { LoginImg } from "./../Utils/utils.js";
 
-
 const HomePage = () => {
   // State variables to hold username, password, and any error messages
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const navigate = useNavigate(); // For navigation after registration
+  const navigate = useNavigate(); // For navigation after login
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -17,28 +16,42 @@ const HomePage = () => {
 
     try {
       const response = await fetch("http://localhost:5249/api/User/login", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, password }), // Send username and password
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }), // Send username and password
       });
+      console.log(response.status)
+      if (response.status === 401) {
+        // Handle 401 Unauthorized response
+        const errorText = await response.text();
+        console.error("Login failed:", errorText);
 
-      if (response.ok) {
-          const data = await response.json();
-          // Store the user data in sessionStorage
-          sessionStorage.setItem("user", JSON.stringify(data)); 
-          console.log("Login successful!", data);
-          navigate("/feed"); // Redirect to HomePage or another page after successful login
+        if (errorText.trim() === "Invalid password.") {
+          setError("The password you entered is incorrect.");
+        } else if (errorText.trim() === "No such username") {
+          setError("The username you entered does not exist.");
+        } else {
+          setError("Unauthorized access. Please check your credentials.");
+        }
       } else {
-          const errorData = await response.json();
-          console.error("Login failed:", errorData);
-          setError("Invalid username or password");
+        // Handle other non-success responses
+        setError("An unknown error occurred. Please try again.");
       }
-  } catch (err) {
+      if (response.ok) {
+        // Handle successful login response
+        const data = await response.json();
+        // Store the user data in sessionStorage
+        sessionStorage.setItem("user", JSON.stringify(data));
+        console.log("Login successful!", data);
+        navigate("/feed"); // Redirect to the feed page after successful login
+      } 
+      
+    } catch (err) {
       console.error("Error:", err);
       setError("An error occurred. Please try again.");
-  }
+    }
   };
 
   return (
@@ -48,7 +61,7 @@ const HomePage = () => {
           className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
         >
           <div className="flex flex-col justify-center p-8 md:p-14">
-            <span className="mb-3 text-4xl font-mono">RAYS</span>
+            <span className="mb-3 text-5xl font-mono">RAYS</span>
             <span className="font-light text-zinc-500 mb-8 border-b-black border-b-2">
               Welcome Back! Please enter your details:
             </span>
@@ -80,21 +93,25 @@ const HomePage = () => {
                   required
                 />
               </div>
-              <button type="submit" className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-400">
+              <button
+                type="submit"
+                className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-400"
+              >
                 Sign in
               </button>
             </form>
 
             <Link to="/register" className="font-bold text-gray-600 hover:text-gray-300">
-                Sign up for free
+              Sign up for free
             </Link>
           </div>
           <div className="relative">
-            <img src={LoginImg} alt="Login-page bilde" className="w-[550px] h-full hidden rounded-r-2xl md:block object-cover" />
-            {/* Tekst over bilde */}
-            <div className="absolute hidden bottom-10 right-6 p-6 bg-white bg-opacity-25 backdrop-blur-sm rounded drop-shadow-lg md:block">
-              <span className="text-white text-xl">Very Cool</span>
-            </div>
+            <img
+              src={LoginImg}
+              alt="Login-page bilde"
+              className="w-[550px] h-full hidden rounded-r-2xl blur-sm md:block object-cover"
+            />
+          
           </div>
         </div>
       </div>

@@ -91,21 +91,21 @@ const FriendRequests = () => {
 
   return (
     <div className="mt-auto flex-grow items-start w-full h-full">
-      <div className="bg-gray-800 shadow-lg rounded-lg p-8 h-full flex flex-col">
-        <h2 className="300px:text-2xl 400px:text-3xl font-extrabold text-white mb-6">Friend Requests</h2>
+      <div className="bg-white shadow-lg rounded-lg p-8 h-full flex flex-col">
+        <h2 className="300px:text-2xl 400px:text-3xl font-extrabold font-general text-black mb-6">Friend Requests</h2>
 
         <div className="flex-grow space-y-4 overflow-y-auto">
           {friendRequests.length > 0 ? (
             friendRequests.map(request => (
               <div
                 key={request.id}
-                className="bg-gray-700 p-4 rounded-lg flex justify-between items-center"
+                className="bg-emerald-200 p-4 rounded-lg flex justify-between items-center"
               >
-                <p className="text-white">
+                <p className="text-black">
                   Friend request from{" "}
                   <span 
                     onClick={() => navigate(`/profile/${request.senderId}`)} // Clickable username to navigate to profile
-                    className="text-blue-400 cursor-pointer hover:underline"
+                    className="text-blue-700 text-lg font-semibold cursor-pointer hover:underline"
                   >
                     {request.username}
                   </span>
@@ -113,13 +113,13 @@ const FriendRequests = () => {
                 <div>
                   <button
                     onClick={() => handleAcceptRequest(request.id)}
-                    className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                    className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded 510px:mr-2"
                   >
                     Accept
                   </button>
                   <button
                     onClick={() => handleRejectRequest(request.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
+                    className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded"
                   >
                     Reject
                   </button>

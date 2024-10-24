@@ -171,7 +171,7 @@ const UserPost = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-800">
-        <div className="bg-gray-700 p-6 rounded-lg shadow-lg">Loading...</div>
+        <div className="bg-emerald-200 p-6 rounded-lg shadow-lg">Loading...</div>
       </div>
     );
   }
@@ -179,117 +179,116 @@ const UserPost = () => {
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-800">
-        <div className="bg-gray-700 p-6 rounded-lg shadow-lg text-red-500">{error}</div>
+        <div className="bg-emerald-200 p-6 rounded-lg shadow-lg text-red-500">{error}</div>
       </div>
     );
   }
 
   return (
-      <div className="mt-auto mb-4 flex-grow-0 space-y-6 items-start">
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <div key={post.id} className="bg-gray-600 p-3.5 rounded-lg shadow-md">
-              <UsernameDisplay userId={post.userId} className="text-white" fetchUsername={fetchUsername} navigate={navigate} />
-    
-              <h2 className="font-medium font-mono text-slate-400">
-                {new Date(post.createdAt).toLocaleString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit',
-                  hour12: false,
-                })}
-              </h2>
-    
-              {editingPostId === post.id ? (
-                <textarea
-                  maxLength={1000}
-                  value={postText}
-                  onChange={(e) => setPostText(e.target.value)}
-                  className="post-textarea w-full bg-gray-500 text-white rounded-lg resize-none h-full"
-                />
-              ) : (
-                <h2 className="text-white mb-1.5 break-words font-serif">{post.content}</h2>
-              )}
-    
-              {post.videoUrl && (
-                <a
-                  href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline flex"
-                >
-                  {post.videoUrl}
-                </a>
-              )}
-    
-              {/* Only render the MapComponent if location exists */}
-              {post.location && (
-                <div className="my-4">
-                  <MapComponent location={post.location} />
-                </div>
-              )}
-    
-              {post.imagePath && (
-                <img
-                  src={`http://localhost:5249/${post.imagePath}`}
-                  alt="Post"
-                  className="mt-2 h-50% w-full rounded-lg"
-                />
-              )}
-    
-              <span className="text-red-500 font-light">
-                {likes[post.id]?.length || 0} ♡
-              </span>
-    
-              <div className="flex justify-between mt-2 space-x-4">
-                <button onClick={() => toggleLike(post.id)} className="text-blue-500 hover:underline text-xs 400px:text-base">
-                  {likes[post.id]?.find(like => like.userId === loggedInUserId) ? 'Liked' : 'Like'}
-                </button>
-
-                {/* Only show Edit and Delete buttons if the post belongs to the logged-in user */}
-                {post.userId === loggedInUserId && editingPostId !== post.id && (
-                  <>
-                    <button
-                      onClick={() => {
-                        setEditingPostId(post.id);
-                        setPostText(post.content); // Populate the textarea with the existing content
-                      }}
-                      className="text-yellow-500 hover:underline text-xs 400px:text-base"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => deletePost(post.id)}
-                      className="text-red-500 hover:underline text-xs 400px:text-base"
-                    >
-                      Delete
-                    </button>
-                  </>
-                )}
-
-                {/* Confirm edit submission */}
-                {editingPostId === post.id && (
-                  <button onClick={editPostHandler} className="text-green-500 hover:underline text-xs 400px:text-base">
-                    Save
-                  </button>
-                )}
-                {/* Comment button */}
-                <button onClick={() => navigate(`/comments/${post.id}`)} className="text-blue-500 hover:underline text-xs 400px:text-base">
-                  Comment
-                </button>
+    <div className="mt-auto mb-4 flex-grow-0 space-y-6 items-start">
+      {posts.length > 0 ? (
+        posts.map((post) => (
+          <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
+            <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />
+  
+            <h2 className="font-clash pb-2 font-normal text-sm text-gray-500">
+              {new Date(post.createdAt).toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+              })}
+            </h2>
+  
+            {editingPostId === post.id ? (
+              <textarea
+                maxLength={1000}
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)}
+                className="post-textarea w-full bg-white text-black font-lexend rounded-lg resize-none h-full"
+              />
+            ) : (
+              <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2>
+            )}
+  
+            {post.videoUrl && (
+              <a
+                href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline flex"
+              >
+                {post.videoUrl}
+              </a>
+            )}
+  
+            {/* Only render the MapComponent if location exists */}
+            {post.location && (
+              <div className="my-4">
+                <MapComponent location={post.location} />
               </div>
+            )}
+  
+            {post.imagePath && (
+              <img
+                src={`http://localhost:5249/${post.imagePath}`}
+                alt="Post"
+                className="mt-2 h-50% w-full rounded-lg"
+              />
+            )}
+  
+            <span className="text-red-500 font-light">
+              {likes[post.id]?.length || 0} ♡
+            </span>
+  
+            <div className="flex justify-between mt-2 space-x-4">
+              <button onClick={() => toggleLike(post.id)} className="text-blue-500 hover:underline text-xs 400px:text-base">
+                {likes[post.id]?.find(like => like.userId === loggedInUserId) ? 'Liked' : 'Like'}
+              </button>
 
+              {/* Only show Edit and Delete buttons if the post belongs to the logged-in user */}
+              {post.userId === loggedInUserId && editingPostId !== post.id && (
+                <>
+                  <button
+                    onClick={() => {
+                      setEditingPostId(post.id);
+                      setPostText(post.content); // Populate the textarea with the existing content
+                    }}
+                    className="text-yellow-500 hover:underline text-xs 400px:text-base"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deletePost(post.id)}
+                    className="text-red-500 hover:underline text-xs 400px:text-base"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+
+              {/* Confirm edit submission */}
+              {editingPostId === post.id && (
+                <button onClick={editPostHandler} className="text-green-500 hover:underline text-xs 400px:text-base">
+                  Save
+                </button>
+              )}
+              {/* Comment button */}
+              <button onClick={() => navigate(`/comments/${post.id}`)} className="text-blue-500 hover:underline text-xs 400px:text-base">
+                Comment
+              </button>
             </div>
-          ))
-        ) : (
-          <div className="bg-gray-700 p-6 rounded-lg shadow-lg text-white">No posts available.</div>
-        )}
-      </div>
-    );
-    
+
+          </div>
+        ))
+      ) : (
+        <div className="bg-emerald-200 p-6 rounded-lg shadow-lg text-black">No posts available.</div>
+      )}
+    </div>
+  );
 };
 
 // UsernameDisplay component
@@ -307,7 +306,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
   return (
     <div className="flex items-center space-x-2">
       <button
-        className="text-white hover:underline"
+        className="font-general text-2xl font-medium  text-black hover:underline"
         onClick={() => navigate(`/profile/${userId}`)}
       >
         {username}
