@@ -51,7 +51,7 @@ function TopBar({ scrollContainer }) {
 
   return (
     <div
-      className={`fixed 510px:hidden border-b-2 border-emerald-100 top-0 left-0 right-0 bg-white text-black flex items-center justify-between px-6 py-3 z-50 transition-transform duration-300 ${
+      className={`fixed 510px:hidden border-b-2 border-emerald-200 top-0 left-0 right-0 bg-white text-black flex items-center justify-between px-6 py-3 z-50 transition-transform duration-300 ${
         showTopBar ? 'transform translate-y-0' : 'transform -translate-y-full'
       }`}
     >
