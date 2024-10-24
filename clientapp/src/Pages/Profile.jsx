@@ -154,32 +154,32 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
+    <div className="bg-gray-100 flex h-screen flex-col overflow-y-auto">
       <TopBar scrollContainer={scrollRef}/>
-      <div className="flex w-full max-w-[1200px] mx-auto bg-gray-900 h-full">
+      <div className="flex w-full max-w-[1200px] mx-auto bg-gray-100 h-full">
         {/* Left Navbar */}
-        <div className="flex-none z-10 510px:mr-16 md:mr-52 "> {/* Set a width for the left navbar */}
+        <div className="flex-none z-10"> {/* Set a width for the left navbar */}
           <LeftNavbar />
         </div>
 
         {/* Main content area */}
-        <div ref={scrollRef} className="flex-grow bg-gray-700 300px:pt-24 510px:pt-8 p-6 overflow-y-auto h-full mb- rounded-lg">
-          <div className="relative w-full z-0 h-40 sm:h-48 flex items-center justify-center rounded-md" style={{ backgroundColor: randomColor }}>
-            <h1 className="text-4xl font-bold text-white mx-auto">
+        <div ref={scrollRef} className="flex-grow bg-gray-100 p-6 overflow-y-auto h-full rounded-lg scrollbar-none 510px:p-4 300px:pb-12 300px:pt-24 300px:pl-4 300px:pr-4 510px:pl-20 510px:pr-4 580px:pr-6 md:pl-40 md:pr-8 870px:pl-44 870px:pr-8 970px:pr-9 1150px:pl-60 1150px:pr-8">
+          <div className="relative w-full bg-emerald-200 z-0 h-40 sm:h-48 flex items-center justify-center rounded-md ">
+            <h1 className="text-4xl font-bold text-black mx-auto">
               {username.charAt(0).toUpperCase()}
             </h1>
           </div>
 
           <div className="text-center mt-6">
-            <h1 className="text-lg sm:text-2xl font-semibold mt-2 text-white">@{username}</h1>
-            <a href={`mailto:${email}`} className="text-blue-400 hover:text-white">{email}</a>
+            <h1 className="text-lg sm:text-2xl font-general font-medium  mt-2 text-black">@{username}</h1>
+            <a href={`mailto:${email}`} className="text-blue-700 font-clash hover:text-blue-950">{email}</a>
 
             {currentUserId !== parseInt(userId) && (
               <div className="mt-4 space-y-2">
                 {friendshipStatus === 'friend' ? (
                   <button
                     onClick={handleDeleteFriend}
-                    className="bg-red-500 mr-1 text-white px-3 py-1 rounded hover:bg-red-400 transition duration-200"
+                    className="bg-red-500 mr-1 text-white px-3 py-1 rounded hover:bg-red-700 transition duration-200"
                   >
                     Delete Friend
                   </button>
@@ -212,10 +212,10 @@ const Profile = () => {
             )}
           </div>
 
-          <div className="mt-6 flex justify-center space-x-4">
+          <div className="mt-6 flex font-lexend justify-center space-x-4">
             <button
               className={`${
-                activeTab === 'posts' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'
+                activeTab === 'posts' ? 'text-emerald-500 font-bold' : 'text-black hover:text-white hover:bg-emerald-400 rounded'
               } px-4 py-2 transition duration-150`}
               onClick={() => handleTabClick('posts')}
             >
@@ -223,7 +223,7 @@ const Profile = () => {
             </button>
             <button
               className={`${
-                activeTab === 'likes' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'
+                activeTab === 'likes' ? 'text-emerald-500 font-bold' : 'text-black hover:text-white hover:bg-emerald-400 rounded'
               } px-4 py-2 transition duration-150`}
               onClick={() => handleTabClick('likes')}
             >
@@ -231,7 +231,7 @@ const Profile = () => {
             </button>
             <button
               className={`${
-                activeTab === 'friends' ? 'text-blue-500 font-bold' : 'text-gray-100 hover:text-white hover:bg-gray-400 rounded'
+                activeTab === 'friends' ? 'text-emerald-500 font-bold' : 'text-black hover:text-white hover:bg-emerald-400 rounded'
               } px-4 py-2 transition duration-150`}
               onClick={() => handleTabClick('friends')}
             >

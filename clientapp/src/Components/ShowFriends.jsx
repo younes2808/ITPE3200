@@ -44,19 +44,19 @@ const ShowFriends = ({ userId }) => {
   };
 
   if (loading) {
-    return <div className="text-white h-full">Loading friends...</div>;
+    return <div className="text-black h-full">Loading friends...</div>;
   }
 
   if (friendDetails.length === 0) {
-    return <div className="text-white h-full">No friends found.</div>; // Display message if no friends
+    return <div className="text-black h-full">No friends found.</div>; // Display message if no friends
   }
 
   return (
     <div className="text-white h-full">
-      <h2 className="text-2xl">Friends</h2>
+      <h2 className="text-2xl text-black">Friends</h2>
       <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
         {friendDetails.map(friend => (
-          <div key={friend.id} className="p-2 mr-0 bg-gray-600 rounded-md">
+          <div key={friend.id} className="p-2 mr-0 bg-white rounded-md">
             <button 
               onClick={() => handleFriendClick(friend.id)} 
               className="text-blue-400 hover:underline"

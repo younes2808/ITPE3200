@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginImg } from "./../Utils/utils.js"; // Assuming you have a relevant image
 
@@ -9,7 +9,6 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState(""); // For client-side validation errors
-  const scrollRef = useRef(null);
 
   const navigate = useNavigate(); // For navigation after registration
   ///// INPUT-VALIDATION //////
@@ -136,11 +135,7 @@ const Register = () => {
               </Link>
           </div>
           <div className="relative">
-            <img src={LoginImg} alt="Register-page bilde" className="w-[550px] h-full hidden rounded-r-2xl md:block object-cover" />
-            {/* Tekst over bilde */}
-            <div className="absolute hidden bottom-10 right-6 p-6 bg-white bg-opacity-25 backdrop-blur-sm rounded drop-shadow-lg md:block">
-              <span className="text-white text-xl">Welcome to RAYS!</span>
-            </div>
+            <img src={LoginImg} alt="Register-page bilde" className="w-[550px] h-full hidden rounded-r-2xl blur-sm md:block object-cover" />
           </div>
         </div>
       </div>
