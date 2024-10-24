@@ -115,7 +115,7 @@ L.Icon.Default.mergeOptions({
       <div className="bg-emerald-200 rounded-lg min-w-full p-5 mt-16 510px:mt-3 shadow-md">
         {/* Profile image and post textarea */}
         <div className="flex items-center mb-4">
-          <span className="flex items-center justify-center w-10 h-10 rounded-full mr-4 bg-blue-500 text-lg font-medium text-white">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
+          <span className="flex items-center justify-center w-10 h-10 rounded-full mr-4 bg-white text-lg font-medium text-black">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
           <textarea
             maxLength={1000}
             value={postText}
