@@ -163,7 +163,7 @@ const Profile = () => {
         </div>
 
         {/* Main content area */}
-        <div className="flex-grow bg-gray-700 p-6 overflow-y-auto h-full mb- rounded-lg scrollbar-none">
+        <div className="flex-grow bg-gray-700 p-6 overflow-y-auto h-full mb- rounded-lg">
           <div className="relative w-full z-0 h-40 sm:h-48 flex items-center justify-center rounded-md" style={{ backgroundColor: randomColor }}>
             <h1 className="text-4xl font-bold text-white mx-auto">
               {username.charAt(0).toUpperCase()}
@@ -247,7 +247,7 @@ const Profile = () => {
         </div>
 
         {/* Right Navbar */}
-        <div className="flex-none "> {/* Set a width for the right navbar */}
+        <div className="flex-none overflow-y-auto max-h-screen"> {/* Set a width for the right navbar */}
           <RightNavbar />
         </div>
       </div>
