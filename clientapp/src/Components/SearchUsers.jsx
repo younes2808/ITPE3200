@@ -33,7 +33,7 @@ const UserSearch = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for users..."
-          className="300px:p-1 355px:p-3 flex-grow min-w-36 border border-gray-300 border-2 rounded-md bg-white text-blach placeholder- focus:outline-none focus:ring focus:ring-emerald-500 shadow-md"
+          className="300px:p-1 355px:p-3 flex-grow min-w-36 border-gray-300 border-2 rounded-md bg-white text-blach placeholder- focus:outline-none focus:ring focus:ring-emerald-500 shadow-md"
         />
         <button 
           onClick={handleSearch} 
@@ -46,16 +46,16 @@ const UserSearch = () => {
       {error && <div className="text-red-500 mt-4">{error}</div>}
 
       {searchResults.length > 0 ? (
-        <div className="mt-4 w-2/5 max-w-xl">
-          <h2 className="font-bold font-general">Search Results:</h2>
+        <div className=" mt-4 w-2/5 mx-auto max-w-xl">
+          <h2 className="font-bold text-center font-general">Search Results:</h2>
           <ul className="mt-2">
             {searchResults.map((user) => (
-              <li key={user.id} className="border-b border-gray-600 py-2">
+              <li key={user.id} className="border-b  text-center border-gray-600 py-2">
                 <button 
                   onClick={() => navigate(`/profile/${user.id}`)} 
                   className="text-blue-400 hover:underline font-general"
                 >
-                  {user.username} ({user.email})
+                  {user.username}
                 </button>
               </li>
             ))}
