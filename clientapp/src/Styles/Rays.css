@@ -17,12 +17,12 @@
 
 /* Scrollbar styles for WebKit browsers */
 .post-textarea::-webkit-scrollbar {
-    width: 10px; /* Width of the scrollbar */
+    width: 7px; /* Width of the scrollbar */
 }
 
 .post-textarea::-webkit-scrollbar-track {
-    background: #3b3f52; /* Background color of the track */
-    border-radius: 10px; /* Round the track corners */
+    background: grey; /* Background color of the track */
+    border-radius: 5px; /* Round the track corners */
 }
 
 .post-textarea::-webkit-scrollbar-thumb {
@@ -37,7 +37,7 @@
 
 /* Grey version - Copy all styles from post-textarea */
 .post-textarea-grey::-webkit-scrollbar {
-    width: 5px; /* Width of the scrollbar */
+    width: 3px; /* Width of the scrollbar */
 }
 
 .post-textarea-grey::-webkit-scrollbar-track {
@@ -47,6 +47,7 @@
 .post-textarea-grey::-webkit-scrollbar-thumb {
     background-color: grey; /* Color of the scrollbar thumb */
     border-radius: 10px; /* Round the thumb corners */
+    max-height: 10px;
 }
 
 /* Optional: Change thumb color on hover for grey scrollbar */
