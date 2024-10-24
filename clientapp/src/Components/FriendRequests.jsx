@@ -113,13 +113,13 @@ const FriendRequests = () => {
                 <div>
                   <button
                     onClick={() => handleAcceptRequest(request.id)}
-                    className="bg-green-500 text-white px-2 py-1 rounded 510px:mr-2"
+                    className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded 510px:mr-2"
                   >
                     Accept
                   </button>
                   <button
                     onClick={() => handleRejectRequest(request.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
+                    className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded"
                   >
                     Reject
                   </button>
