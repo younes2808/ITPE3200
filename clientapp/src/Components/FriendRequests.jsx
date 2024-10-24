@@ -113,7 +113,7 @@ const FriendRequests = () => {
                 <div>
                   <button
                     onClick={() => handleAcceptRequest(request.id)}
-                    className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                    className="bg-green-500 text-white px-2 py-1 rounded 510px:mr-2"
                   >
                     Accept
                   </button>
