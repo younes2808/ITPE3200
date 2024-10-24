@@ -172,16 +172,16 @@ const PostFeed = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-800">
-        <div className="bg-gray-700 p-6 rounded-lg shadow-lg">Loading...</div>
+      <div className="flex justify-center items-center min-h-screen bg-emerald-200">
+        <div className="bg-emerald-200 p-6 rounded-lg shadow-lg">Loading...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-800">
-        <div className="bg-gray-700 p-6 rounded-lg shadow-lg text-red-500">{error}</div>
+      <div className="flex justify-center items-center min-h-screen bg-emerald-200">
+        <div className="bg-emerald-200 p-6 rounded-lg shadow-lg text-red-500">{error}</div>
       </div>
     );
   }
@@ -189,10 +189,10 @@ const PostFeed = () => {
   return (
     <div className="pt-4 mt-auto flex-grow-0 space-y-4 items-start">
       {posts.map((post) => (
-        <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
+        <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
           <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />
 
-          <h2 className="font-extralight font-mono text-gray-400">
+          <h2 className="font-clash pb-2 font-normal text-sm text-gray-500">
             {new Date(post.createdAt).toLocaleString('en-US', {
               year: 'numeric',
               month: 'long',
@@ -209,10 +209,10 @@ const PostFeed = () => {
               maxLength={1000}
               value={postText}
               onChange={(e) => setPostText(e.target.value)}
-              className="post-textarea w-full p-4 bg-gray-600 text-white rounded-lg resize-none h-28"
+              className="post-textarea w-full p-4 bg-white text-black rounded-lg resize-none h-28"
             />
           ) : (
-            <h2 className="text-white mb-1.5 break-words font-serif">{post.content}</h2>
+            <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2>
           )}
 
           {post.videoUrl && (
@@ -296,7 +296,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
   return (
     <button 
       onClick={handleUsernameClick} 
-      className="text-2xl font-light font-sans text-slate-100 hover:text-blue-300 hover:underline transition-all duration-200 ease-in-out"
+      className="text-2xl font-general font-medium text-black hover:text-gray-500 hover:underline transition-all duration-200 ease-in-out"
     >
       {username}
     </button>
