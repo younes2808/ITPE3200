@@ -187,7 +187,7 @@ const PostFeed = () => {
   }
 
   return (
-    <div className="pt-6 mt-auto flex-grow-0 space-y-6 items-start">
+    <div className="pt-4 mt-auto flex-grow-0 space-y-4 items-start">
       {posts.map((post) => (
         <div key={post.id} className="bg-gray-700 p-3.5 rounded-lg shadow-md">
           <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />

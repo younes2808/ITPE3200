@@ -41,7 +41,6 @@
 }
 
 .post-textarea-grey::-webkit-scrollbar-track {
-    background: #3b3f52; /* Same background color of the track */
     border-radius: 10px; /* Round the track corners */
 }
 

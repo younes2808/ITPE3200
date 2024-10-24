@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 
-function TopBar() {
+function TopBar({ scrollContainer }) {
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState('');
   const [showTopBar, setShowTopBar] = useState(true);
@@ -16,32 +16,36 @@ function TopBar() {
     }
   }, []);
 
-  // Funksjon for å håndtere scroll-eventet
+  // Funksjon for å håndtere scroll-eventet i en spesifikk container
   const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
+    if (scrollContainer && scrollContainer.current) {
+      const currentScrollY = scrollContainer.current.scrollTop;
 
-    // Sjekk om brukeren scroller ned eller opp
-    if (currentScrollY > lastScrollY && currentScrollY > 0) {
-      // Hvis brukeren scroller ned, skjul topbaren
-      setShowTopBar(false);
-    } else {
-      // Hvis brukeren scroller opp, vis topbaren
-      setShowTopBar(true);
+      if (currentScrollY > lastScrollY) {
+        // Hvis brukeren scroller ned, skjul topbaren
+        setShowTopBar(false);
+      } else {
+        // Hvis brukeren scroller opp, vis topbaren
+        setShowTopBar(true);
+      }
+
+      setLastScrollY(currentScrollY);
     }
-
-    // Oppdater den siste scrollposisjonen
-    setLastScrollY(currentScrollY);
-  }, [lastScrollY]);
+  }, [lastScrollY, scrollContainer]);
 
   useEffect(() => {
-    // Legg til scroll-eventlistener når komponenten monteres
-    window.addEventListener('scroll', handleScroll);
+    // Legg til scroll-eventlistener på containeren når komponenten monteres
+    if (scrollContainer && scrollContainer.current) {
+      scrollContainer.current.addEventListener('scroll', handleScroll);
+    }
 
     // Fjern eventlistener når komponenten demonteres
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      if (scrollContainer && scrollContainer.current) {
+        scrollContainer.current.removeEventListener('scroll', handleScroll);
+      }
     };
-  }, [handleScroll]);
+  }, [handleScroll, scrollContainer]);
 
   return (
     <div

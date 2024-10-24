@@ -33,11 +33,11 @@ const UserSearch = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for users..."
-          className="p-1 flex-grow border border-gray-600 rounded-l-md bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring focus:ring-gray-500"
+          className="300px:p-1 355px:p-3 flex-grow min-w-36 border border-gray-600 rounded-md bg-gray-900 text-white placeholder-gray-400 focus:outline-none focus:ring focus:ring-gray-500"
         />
         <button 
           onClick={handleSearch} 
-          className="p-3 bg-blue-600 text-white rounded-r-md hover:bg-blue-500 transition duration-200"
+          className="ml-2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
         >
           Search
         </button>

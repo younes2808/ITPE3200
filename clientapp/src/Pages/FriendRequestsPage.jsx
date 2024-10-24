@@ -10,11 +10,11 @@ const ConversationPage = () => {
   return (
     <div className="bg-orange-500 flex h-screen flex-col overflow-y-auto">
       {/* Top Bar */}
-      <TopBar />
+      <TopBar scrollContainer={scrollRef} />
 
       {/* Hovedcontainer */}
         {/* Justert container med dynamisk margin og max-w for å sikre plass til navbarene */}
-        <div className="flex w-full max-w-[1300px] mx-auto">
+        <div className="flex w-full max-w-[1200px] mx-auto">
 
           {/* Left Navbar - plasseres på venstre side */}
           <div className="flex-none"> 
