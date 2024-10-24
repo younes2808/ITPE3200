@@ -296,7 +296,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
   return (
     <button 
       onClick={handleUsernameClick} 
-      className="text-2xl font-light font-sans text-black hover:text-gray-500 hover:underline transition-all duration-200 ease-in-out"
+      className="text-2xl font-general font-medium text-black hover:text-gray-500 hover:underline transition-all duration-200 ease-in-out"
     >
       {username}
     </button>

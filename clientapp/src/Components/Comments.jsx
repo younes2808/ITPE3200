@@ -12,7 +12,7 @@ const UsernameDisplay = ({ userId, fetchUsername }) => {
     getUsername();
   }, [userId, fetchUsername]);
 
-  return <span className='font-extralight text-sm text-black'>{username}</span>;
+  return <span className='text-2xl font-general font-medium text-black hover:text-gray-500 hover:underline transition-all duration-200 ease-in-out'>{username}</span>;
 };
 
 const Comments = ({ postId }) => {
@@ -251,7 +251,7 @@ const Comments = ({ postId }) => {
                     hour12: false,
                   })}
                 </p>
-                <p className='text-black'>{comment.text}</p>
+                <p className='text-black font-general'>{comment.text}</p>
                 {parseInt(comment.userId, 10) === parseInt(JSON.parse(sessionStorage.getItem('user')).id, 10) && (
                   <div className="flex space-x-2 mt-2">
                     <button 

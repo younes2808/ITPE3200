@@ -112,7 +112,7 @@ L.Icon.Default.mergeOptions({
 
   return (
     <div className="flex justify-center p-0">
-      <div className="bg-emerald-200 rounded-lg min-w-full p-5 mt-16 510px:mt-3">
+      <div className="bg-emerald-200 rounded-lg min-w-full p-5 mt-16 510px:mt-3 shadow-md">
         {/* Profile image and post textarea */}
         <div className="flex items-center mb-4">
           <span className="flex items-center justify-center w-10 h-10 rounded-full mr-4 bg-blue-500 text-lg font-medium text-white">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
@@ -121,7 +121,7 @@ L.Icon.Default.mergeOptions({
             value={postText}
             onChange={handleTextChange}
             placeholder="What's happening?"
-            className="post-textarea w-full p-4 bg-white text-black hover:bg-gray-300 rounded-lg resize-none h-28"
+            className="post-textarea w-full p-4 bg-white focus:ring-emerald-500 focus:ring-2 text-black rounded-lg resize-none h-28"
           />
         </div>
 
@@ -133,7 +133,7 @@ L.Icon.Default.mergeOptions({
               value={link}
               onChange={handleLinkChange}
               placeholder="Enter link..."
-              className="w-full p-3 bg-white text-black rounded-lg hover:bg-gray-300 focus:outline-none"
+              className="w-full p-3 bg-white focus:ring-emerald-500 focus:ring-2 text-black rounded-lg focus:outline-none"
             />
           </div>
         )}
@@ -167,13 +167,13 @@ L.Icon.Default.mergeOptions({
             />
             <label
               htmlFor="file-upload-button"
-              className="hidden 510px:block items-center justify-center px-2 py-1 bg-white text-black rounded-lg cursor-pointer hover:bg-emerald-500 hover:text-white transition-colors duration-300 text-sm"
+              className="hidden 510px:block items-center justify-center px-2 py-1 bg-white text-black rounded-lg cursor-pointer hover:bg-emerald-500 hover:text-white transition-colors duration-300 text-sm font-general"
             >
               <span className="material-icons mr-1">photo</span>
               Media
             </label>
             <button
-              className="flex items-center justify-center px-1 580px:px-2 py-1 bg-white text-black rounded-lg cursor-pointer hover:bg-emerald-500 hover:text-white  transition-colors duration-300 text-sm"
+              className="flex items-center justify-center px-1 580px:px-2 py-1 bg-white text-black rounded-lg cursor-pointer hover:bg-emerald-500 hover:text-white  transition-colors duration-300 text-sm font-general"
               onClick={toggleLinkInput}
             >
               <span className="material-icons mr-1">link</span>
@@ -182,7 +182,7 @@ L.Icon.Default.mergeOptions({
 
             {/* Show Map button */}
             <button
-              className="flex items-center justify-center px-1 580px:px-2 py-1 bg-white text-black rounded-lg cursor-pointer hover:bg-emerald-500 hover:text-white transition-colors duration-300 text-sm"
+              className="flex items-center justify-center px-1 580px:px-2 py-1 bg-white text-black rounded-lg cursor-pointer hover:bg-emerald-500 hover:text-white transition-colors duration-300 text-sm font-general"
               onClick={() => {
                 setShowMap(prevState => !prevState); // Toggle the visibility of the map
               }}
@@ -195,7 +195,7 @@ L.Icon.Default.mergeOptions({
           {/* Post button */}
           <button
             onClick={postHandler}
-            className={`flex items-center justify-center px-2 355px:px-3 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition-colors duration-300 text-sm ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`flex items-center justify-center px-2 355px:px-3 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition-colors duration-300 text-sm font-general ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             disabled={loading}
           >
             {loading ? 'Posting...' : 'Post'}
