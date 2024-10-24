@@ -18,14 +18,9 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('posts');
   const [friendshipStatus, setFriendshipStatus] = useState('none');
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [randomColor, setRandomColor] = useState('#000000');
-
-  const generateRandomColor = () => {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
-  };
 
   useEffect(() => {
-    setRandomColor(generateRandomColor());
+    
 
     const fetchUserDetails = async () => {
       try {
