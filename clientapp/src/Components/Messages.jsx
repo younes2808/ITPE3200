@@ -1,170 +1,144 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { fetchMessagesBetweenUsers, sendMessage } from "../Services/messageService";
+import { fetchUsernameById } from "../Services/userService";
 
 const Messages = () => {
-  const { receiverId, senderId } = useParams();
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [receiverUsername, setReceiverUsername] = useState(""); // State for å holde mottakerens brukernavn
-  const messagesEndRef = useRef(null); // Ref for å rulle til bunnen
-  const navigate = useNavigate(); // useNavigate for å navigere
+  const { receiverId, senderId } = useParams(); // Get the receiver's and sender's ID from the URL
+  const [messages, setMessages] = useState([]); // State for messages
+  const [newMessage, setNewMessage] = useState(""); // State for new message
+  const [loading, setLoading] = useState(true); // State for loading
+  const [receiverUsername, setReceiverUsername] = useState(""); // State for receiver's username
+  const [sending, setSending] = useState(false); // State to track if a message is being sent
+  const messagesEndRef = useRef(null); // Ref to scroll to the bottom of the message list
+  const navigate = useNavigate(); // Hook for navigation
 
-  // Hent loggedInUserId fra sessionStorage
-  const userid = sessionStorage.getItem('user'); // Assuming userId is stored in session storage
+  // Get loggedInUserId from sessionStorage
+  const userid = sessionStorage.getItem('user');
   const id = JSON.parse(userid);
-  const loggedInUserId = id?.id; // Sjekk om id finnes for å unngå feil
+  const loggedInUserId = id?.id; // Get ID if it exists
 
-  // Fetch meldinger initialt og deretter med jevne mellomrom
+  // Fetch messages and username
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5249/api/message/${senderId}/${receiverId}`
-        );
-        const data = await response.json();
-        setMessages(data);
-        setLoading(false);
+        const data = await fetchMessagesBetweenUsers(senderId, receiverId); // Fetch messages between users
+        setMessages(data); // Update messages in state
       } catch (error) {
-        console.error("Error fetching messages:", error);
-        setLoading(false);
+        console.error("Error fetching messages:", error); // Log error
+      } finally {
+        setLoading(false); // Set loading to false regardless
       }
     };
 
-    // Fetch mottakerens brukernavn
     const fetchReceiverUsername = async () => {
       try {
-        const response = await fetch(`http://localhost:5249/api/User/${receiverId}`);
-        const data = await response.json();
-        setReceiverUsername(data.username); // Sett brukernavnet for mottakeren
+        const username = await fetchUsernameById(receiverId); // Fetch receiver's username
+        setReceiverUsername(username); // Update receiver's username in state
       } catch (error) {
-        console.error("Error fetching receiver's username:", error);
+        console.error("Error fetching receiver's username:", error); // Log error
       }
     };
 
-    // Initial fetch for meldinger og mottakerens brukernavn
-    fetchMessages();
-    fetchReceiverUsername();
+    fetchMessages(); // Call to fetch messages
+    fetchReceiverUsername(); // Call to fetch username
 
-    // Polling hvert 5. sekund for å oppdatere meldingene
-    const interval = setInterval(() => {
-      fetchMessages();
-    }, 1000);
+    // Polling to update messages every second
+    const interval = setInterval(fetchMessages, 1000);
+    return () => clearInterval(interval); // Clean up interval when component unmounts
+  }, [receiverId, senderId]); // Run effect when receiverId or senderId changes
 
-    // Rens intervallet når komponenten avmonteres
-    return () => clearInterval(interval);
-  }, [receiverId, senderId]);
-
-  // Auto-scroll til bunnen når meldinger endres
+  // Auto-scroll to the bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (newMessage.trim() === "") return;
+  const handleSendMessage = async () => {
+    if (newMessage.trim() === "" || sending) return; // Check if the message is empty or if sending is in progress
+
+    setSending(true); // Set sending to true to indicate that the message is being sent
 
     try {
-      const messageToSend = {
-        senderId: parseInt(senderId, 10),
-        receiverId: parseInt(receiverId, 10),
-        content: newMessage,
-      };
-
-      await fetch("http://localhost:5249/api/Message/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(messageToSend),
-      });
-
-      // Fetch oppdaterte meldinger etter sending
-      const response = await fetch(
-        `http://localhost:5249/api/message/${senderId}/${receiverId}`
-      );
-      const updatedMessages = await response.json();
-      setMessages(updatedMessages);
-      setNewMessage(""); // Tøm inndatafelt
+      await sendMessage(senderId, receiverId, newMessage); // Send the message
+      const updatedMessages = await fetchMessagesBetweenUsers(senderId, receiverId); // Fetch updated messages
+      setMessages(updatedMessages); // Update messages in state
+      setNewMessage(""); // Clear the input field
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Error sending message:", error); // Log error
+    } finally {
+      setSending(false); // Set sending back to false
     }
   };
 
-  // Ny funksjon for å håndtere klikk på brukernavnet
-  const handleProfileClick = () => {
-    navigate(`/profile/${receiverId}`); // Naviger til profil-siden
+  // Handle input change for message field
+  const handleInputChange = (e) => {
+    setNewMessage(e.target.value); // Update state with new message
   };
 
-  if (loading) return <div className="text-white">Loading...</div>;
-
+  if (loading) return <div className="text-white">Loading...</div>; // Show loading indicator
   return (
     <div className="mt-auto flex-grow items-start w-full h-full">
       <div className="bg-white shadow-2xl border-gray-300 border-2 rounded-lg p-8 h-full flex flex-col">
+        {/* Header with back button and receiver's username */}
         <div className="flex items-center justify-between bg-emerald-200 p-4 rounded-md">
-          {/* Back button using loggedInUserId */}
           <button
-            onClick={() => navigate(`/conversation/${loggedInUserId}`)} // Naviger til en spesifikk side basert på loggedInUserId
+            onClick={() => navigate(`/conversation/${loggedInUserId}`)} // Navigate back to conversations
             className="text-black text-4xl"
           >
             ←
           </button>
-
           <h2 
             className="text-2xl font-extrabold font-general text-black mr-4 cursor-pointer hover:underline ml-auto"
-            onClick={handleProfileClick} // Legg til klikk-håndtering her
+            onClick={() => navigate(`/profile/${receiverId}`)} // Navigate to receiver's profile
           >
             {receiverUsername}
           </h2>
         </div>
 
-        <div
-          className="flex-grow space-y-4 overflow-y-auto mt-4 post-textarea-grey"
-          style={{
-            paddingRight: '5px', // Forhindre at innhold blir kuttet av av scrollbar
-          }}
-        >
+        {/* Message display area */}
+        <div className="flex-grow space-y-4 overflow-y-auto mt-4 post-textarea-grey">
           {messages.length > 0 ? (
             messages.map((message) => (
               <div
-                key={message.id}
+                key={message.id} // Unique key for each message
                 className={`mb-4 p-3 w-fit rounded-lg shadow ${
                   message.senderId === parseInt(senderId)
-                    ? "bg-blue-500 text-white font-clash font-normal text-right ml-auto rounded-tl-2xl rounded-br-2xl shadow-lg" // Melding fra bruker1 (høyre)
-                    : "bg-gray-300 text-black font-clash font-normal text-left rounded-tr-2xl rounded-bl-2xl shadow-lg" // Melding fra bruker2 (venstre)
+                    ? "bg-blue-500 text-white font-normal text-right ml-auto rounded-tl-2xl rounded-br-2xl"
+                    : "bg-gray-300 text-black font-normal text-left rounded-tr-2xl rounded-bl-2xl"
                 }`}
               >
-                {/* Endre tekstfarge basert på bakgrunnsfargen */}
-                <p className={`text-lg font-semibold font-lexend ${
+                <p className={`text-lg font-semibold ${
                   message.senderId === parseInt(senderId) ? "text-white" : "text-black"
                 }`}>
-                  {message.content}
+                  {message.content} {/* Display message content*/}
                 </p>
-
                 <p className="text-xs">
-                  {new Date(message.timestamp).toLocaleString()}
+                  {new Date(message.timestamp).toLocaleString()} {/* Display message timestamp */}
                 </p>
               </div>
             ))
           ) : (
-            <div className="text-gray-400 text-center">No messages yet</div>
+            <div className="text-gray-400 text-center">No messages yet</div> // Message if there are no messages
           )}
-          <div ref={messagesEndRef} /> {/* Tom div for å rulle til */}
+          <div ref={messagesEndRef} /> {/* Ref to scroll to the bottom */}
         </div>
 
-        <div className="bg-emerald-200 border p-4 mt-4 rounded-md ">
+        {/* Input area for sending new messages */}
+        <div className="bg-emerald-200 border p-4 mt-4 rounded-md">
           <div className="flex items-center">
             <input
               type="text"
               className="flex-grow p-2 border-gray-300 border-2 rounded mr-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="Type a message..."
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              onChange={handleInputChange} // Handle input change
             />
             <button
-              onClick={sendMessage}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-200 font-general"
+              onClick={handleSendMessage} // Call to send message
+              disabled={sending} // Disable button if sending is in progress
+              className={`bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-200 ${sending ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              Send
+              Send // Button to send the message
             </button>
           </div>
         </div>
@@ -173,4 +147,4 @@ const Messages = () => {
   );
 };
 
-export default Messages;
+export default Messages; // Export the Messages component

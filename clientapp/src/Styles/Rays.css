@@ -55,6 +55,7 @@
     background-color: #808080; /* Darker grey on hover */
 }
 /* src/styles/tailwind.css */
+/* These are the different fonts*/
 @font-face {
     font-family: 'ClashGrotesk';
     src: url('./fonts/ClashGrotesk-Variable.ttf') format('truetype');

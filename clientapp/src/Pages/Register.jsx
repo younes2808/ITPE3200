@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginImg } from "./../Utils/utils.js"; // Assuming you have a relevant image
+import { registerUser } from "../Services/userService"; // Import registerUser function
 
 const Register = () => {
-  // State variables to hold email, username, password, and error messages
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -11,7 +11,7 @@ const Register = () => {
   const [validationError, setValidationError] = useState(""); // For client-side validation errors
 
   const navigate = useNavigate(); // For navigation after registration
-  ///// INPUT-VALIDATION //////
+
   // Email format validation
   const isValidEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -35,48 +35,30 @@ const Register = () => {
       setValidationError("Username must be at least 3 characters long.");
       return;
     }
-    if (!password ||password.length < 6) {
+    if (!password || password.length < 6) {
       setValidationError("Password must be at least 6 characters long.");
       return;
     }
 
     // Proceed with API call after client-side validation passes
     try {
-      const response = await fetch("http://localhost:5249/api/User/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, username, password }), // Send email, username, and password
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Handle successful registration (redirect, show message, etc.)
-        console.log("Registration successful!", data);
-        navigate("/"); // Redirect to HomePage or another page after successful registration
-      } else if (response.status === 409) {
-        // Handle conflict (e.g., username or email already exists)
+      const result = await registerUser(email, username, password); // Use the service function
+      console.log("Registration successful!", result);
+      navigate("/"); // Redirect to HomePage or another page after successful registration
+    } catch (err) {
+      if (err.message === "409") {
         setError("Username or email already exists.");
-      } else if (response.status >= 500) {
-        // Handle server errors
-        setError("Server error. Please try again later.");
       } else {
-        // Handle other types of errors
         setError("Registration failed. Please check your details.");
       }
-    } catch (err) {
-      console.error("Error:", err);
-      setError("An error occurred. Please try again.");
+      console.error("Error during registration:", err);
     }
   };
 
   return (
     <body className="Login-Bakgrunn">
       <div className="Landing-page-box">
-        <div
-          className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0"
-        >
+        <div className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
           <div className="flex flex-col justify-center p-8 md:p-14">
             <span className="mb-3 text-4xl font-mono">RAYS</span>
             <span className="font-light text-zinc-500 mb-8 border-b-black border-b-2">
@@ -130,9 +112,9 @@ const Register = () => {
                 Sign up
               </button>
             </form>
-              <Link to="/" className="font-bold text-black hover:text-gray-300">
-                Sign in here
-              </Link>
+            <Link to="/" className="font-bold text-black hover:text-gray-300">
+              Sign in here
+            </Link>
           </div>
           <div className="relative">
             <img src={LoginImg} alt="Register-page bilde" className="w-[550px] h-full hidden rounded-r-2xl blur-sm md:block object-cover" />
@@ -144,3 +126,4 @@ const Register = () => {
 };
 
 export default Register;
+

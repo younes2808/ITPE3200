@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
+import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+// API calls
+import { fetchUsernameById } from './../Services/userService';
+import {
+  fetchPostsByUserId,
+  fetchLikesByPostId,
+  deletePostById,
+  likePost,
+  unlikePost,
+  updatePost,
+} from './../Services/postService';
 
 // Initialize Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -14,42 +24,33 @@ L.Icon.Default.mergeOptions({
 
 const UserPost = () => {
   const navigate = useNavigate();
-  const { userId } = useParams(); // Get userId from URL parameters
+  const { userId } = useParams();
 
   const [posts, setPosts] = useState([]);
   const [usernames, setUsernames] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [likes, setLikes] = useState({});
-  const [editingPostId, setEditingPostId] = useState(null); // Track which post is being edited
-  const [postText, setPostText] = useState(''); // Handle editing post content
+  const [editingPostId, setEditingPostId] = useState(null);
+  const [postText, setPostText] = useState('');
+  const [showErrorPopup, setShowErrorPopup] = useState(false); // State for error popup
 
-  const userid = sessionStorage.getItem('user'); // Assuming userId is stored in session storage
+  const userid = sessionStorage.getItem('user');
   const id = JSON.parse(userid);
   const loggedInUserId = id.id;
-  // Fetch posts when the component mounts or userId changes
-  useEffect(() => {
-    const fetchPosts = async () => {  
-    // Get logged-in user ID from session storage
-    
-      setLoading(true); // Start loading
-      try {
-        const response = await fetch(`http://localhost:5249/api/Post/user/${userId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch posts');
-        }
-        const data = await response.json();
-        setPosts(data);
 
-        // Fetch likes for each post
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchPostsByUserId(userId);
+        setPosts(data);
         const likesData = {};
         for (const post of data) {
-          const likesResponse = await fetch(`http://localhost:5249/api/Like/${post.id}`);
-          const likesInfo = await likesResponse.json();
+          const likesInfo = await fetchLikesByPostId(post.id);
           likesData[post.id] = likesInfo;
         }
         setLikes(likesData);
-
       } catch (err) {
         setError(err.message);
       } finally {
@@ -58,62 +59,35 @@ const UserPost = () => {
     };
 
     fetchPosts();
-  }, [userId]); // Trigger on userId change
+  }, [userId]);
 
-  // Fetch username for a specific userId (on demand)
   const fetchUsername = async (userId) => {
     if (usernames[userId]) {
-      return usernames[userId]; // Return cached username if it exists
+      return usernames[userId];
     }
-
     try {
-      const response = await fetch(`http://localhost:5249/api/User/${userId}`); // API that fetches user data by ID
-      if (!response.ok) {
-        throw new Error('Failed to fetch username');
-      }
-      const userData = await response.json();
+      const userData = await fetchUsernameById(userId);
       setUsernames((prevUsernames) => ({
         ...prevUsernames,
-        [userId]: userData.username, // Cache the username
+        [userId]: userData.username,
       }));
       return userData.username;
     } catch (err) {
-      console.error('Error fetching username:', err);
-      return 'Unknown User'; // Fallback if there's an error
+      return 'Unknown User';
     }
   };
 
-  // Toggle like/unlike
   const toggleLike = async (postId) => {
     const alreadyLiked = likes[postId]?.find(like => like.userId === loggedInUserId);
-
     try {
       if (alreadyLiked) {
-        // Unlike the post
-        await fetch('http://localhost:5249/api/Like', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId: loggedInUserId, postId }),
-        });
-
-        // Update state to remove like
+        await unlikePost(loggedInUserId, postId);
         setLikes((prevLikes) => ({
           ...prevLikes,
           [postId]: prevLikes[postId].filter(like => like.userId !== loggedInUserId),
         }));
       } else {
-        // Like the post
-        await fetch('http://localhost:5249/api/Like', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId: loggedInUserId, postId }),
-        });
-
-        // Update state to add like
+        await likePost(loggedInUserId, postId);
         setLikes((prevLikes) => ({
           ...prevLikes,
           [postId]: [...prevLikes[postId], { userId: loggedInUserId, likedAt: new Date() }],
@@ -124,16 +98,9 @@ const UserPost = () => {
     }
   };
 
-  // Handle post deletion
   const deletePost = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:5249/api/Post/${postId}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete post');
-      }
-      // Remove the post from state
+      await deletePostById(postId);
       setPosts(posts.filter(post => post.id !== postId));
       alert('Post deleted successfully');
     } catch (error) {
@@ -141,31 +108,29 @@ const UserPost = () => {
     }
   };
 
-  // Handle edit submission
   const editPostHandler = async () => {
     if (!editingPostId || !loggedInUserId) return;
 
-    const formData = new FormData();
-    formData.append('Content', postText);
-    formData.append('UserId', loggedInUserId);
+    // Check if postText is empty
+    if (postText.trim() === '') {
+      setError('Input field cannot be empty!'); // Set the error message
+      setShowErrorPopup(true); // Show the error popup
+      return;
+    }
 
     try {
-      const response = await fetch(`http://localhost:5249/api/Post/${editingPostId}`, {
-        method: 'PUT',
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update post');
-      }
-
-      // Reset the editing state and reload posts
+      await updatePost(editingPostId, postText, loggedInUserId);
       setEditingPostId(null);
       setPostText('');
       alert('Post updated successfully');
-      window.location.reload(); // Refresh to show updated post
+      window.location.reload();
     } catch (error) {
       console.error('Error updating post:', error);
     }
+  };
+
+  const closeErrorPopup = () => {
+    setShowErrorPopup(false); // Close the error popup
   };
 
   if (loading) {
@@ -190,7 +155,6 @@ const UserPost = () => {
         posts.map((post) => (
           <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
             <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />
-  
             <h2 className="font-clash pb-2 font-normal text-sm text-gray-500">
               {new Date(post.createdAt).toLocaleString('en-US', {
                 year: 'numeric',
@@ -202,7 +166,7 @@ const UserPost = () => {
                 hour12: false,
               })}
             </h2>
-  
+
             {editingPostId === post.id ? (
               <textarea
                 maxLength={1000}
@@ -213,7 +177,7 @@ const UserPost = () => {
             ) : (
               <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2>
             )}
-  
+
             {post.videoUrl && (
               <a
                 href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`}
@@ -224,14 +188,13 @@ const UserPost = () => {
                 {post.videoUrl}
               </a>
             )}
-  
-            {/* Only render the MapComponent if location exists */}
+
             {post.location && (
               <div className="my-4">
                 <MapComponent location={post.location} />
               </div>
             )}
-  
+
             {post.imagePath && (
               <img
                 src={`http://localhost:5249/${post.imagePath}`}
@@ -239,23 +202,22 @@ const UserPost = () => {
                 className="mt-2 h-50% w-full rounded-lg"
               />
             )}
-  
+
             <span className="text-red-500 font-light">
               {likes[post.id]?.length || 0} ♡
             </span>
-  
+
             <div className="flex justify-between mt-2 space-x-4">
               <button onClick={() => toggleLike(post.id)} className="text-blue-500 hover:underline text-xs 400px:text-base">
                 {likes[post.id]?.find(like => like.userId === loggedInUserId) ? 'Liked' : 'Like'}
               </button>
 
-              {/* Only show Edit and Delete buttons if the post belongs to the logged-in user */}
               {post.userId === loggedInUserId && editingPostId !== post.id && (
                 <>
                   <button
                     onClick={() => {
                       setEditingPostId(post.id);
-                      setPostText(post.content); // Populate the textarea with the existing content
+                      setPostText(post.content);
                     }}
                     className="text-yellow-500 hover:underline text-xs 400px:text-base"
                   >
@@ -270,22 +232,34 @@ const UserPost = () => {
                 </>
               )}
 
-              {/* Confirm edit submission */}
               {editingPostId === post.id && (
                 <button onClick={editPostHandler} className="text-green-500 hover:underline text-xs 400px:text-base">
                   Save
                 </button>
               )}
-              {/* Comment button */}
               <button onClick={() => navigate(`/comments/${post.id}`)} className="text-blue-500 hover:underline text-xs 400px:text-base">
                 Comment
               </button>
             </div>
-
           </div>
         ))
       ) : (
         <div className="bg-emerald-200 p-6 rounded-lg shadow-lg text-black">No posts available.</div>
+      )}
+
+      {showErrorPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg p-5 text-center">
+            <h2 className="text-lg font-bold text-red-600">Error</h2>
+            <p className="mt-2">Input field cannot be empty!</p>
+            <button
+              className="mt-4 px-4 py-2 bg-emerald-500 text-white rounded-lg"
+              onClick={closeErrorPopup}
+            >
+              Close
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -297,7 +271,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
 
   useEffect(() => {
     const getUsername = async () => {
-      const name = await fetchUsername(userId);
+      const name = await fetchUsernameById(userId);
       setUsername(name);
     };
     getUsername();
@@ -306,7 +280,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
   return (
     <div className="flex items-center space-x-2">
       <button
-        className="font-general text-2xl font-medium  text-black hover:underline"
+        className="font-general text-2xl font-medium text-black hover:underline"
         onClick={() => navigate(`/profile/${userId}`)}
       >
         {username}
@@ -314,6 +288,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
     </div>
   );
 };
+
 // Map component and location parsing
 const MapComponent = ({ location }) => {
   const coordinates = parseLocation(location);
