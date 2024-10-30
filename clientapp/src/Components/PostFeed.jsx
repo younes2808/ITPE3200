@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
+import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS for map styling
 import L from 'leaflet';
+import {
+  fetchPostsByUserId,
+  fetchLikesByPostId,
+  deletePostById,
+  likePost,
+  unlikePost,
+  updatePost,
+} from './../Services/postService'; // Import service functions for post operations
+import { fetchUsernameById } from './../Services/userService'; // Import function to fetch username by user ID
 
 // Initialize Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -15,111 +24,59 @@ L.Icon.Default.mergeOptions({
 const PostFeed = () => {
   const navigate = useNavigate();
 
-  const [posts, setPosts] = useState([]);
-  const [usernames, setUsernames] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [likes, setLikes] = useState({});
-  const [userId, setUserId] = useState(null);
-  const [editingPostId, setEditingPostId] = useState(null); // Track which post is being edited
-  const [postText, setPostText] = useState(''); // Handle editing post content
+  const [posts, setPosts] = useState([]); // State to store posts
+  const [usernames, setUsernames] = useState({}); // Cache for usernames to avoid repeated fetches
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state for general errors
+  const [editError, setEditError] = useState(null); // Error state for editing posts
+  const [likes, setLikes] = useState({}); // Cache for likes by post ID
+  const [userId, setUserId] = useState(null); // State to store current user's ID
+  const [editingPostId, setEditingPostId] = useState(null); // State to manage editing post ID
+  const [postText, setPostText] = useState(''); // State for text input during editing
 
   // Fetch user from sessionStorage when the component mounts
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      setUserId(parsedUser.id);
+      setUserId(parsedUser.id); // Set user ID
+      loadPosts(parsedUser.id); // Load posts for the user
     }
   }, []);
 
-  // Fetch posts when the component mounts
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch('http://localhost:5249/api/Post');
-        if (!response.ok) {
-          throw new Error('Failed to fetch posts');
-        }
-        const data = await response.json();
-        setPosts(data);
-
-        // Fetch likes for each post
-        const likesData = {};
-        for (const post of data) {
-          const likesResponse = await fetch(`http://localhost:5249/api/Like/${post.id}`);
-          const likesInfo = await likesResponse.json();
-          likesData[post.id] = likesInfo;
-        }
-        setLikes(likesData);
-
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
-  }, []);
-
-  // Toggle like/unlike
-  const toggleLike = async (postId) => {
-    const alreadyLiked = likes[postId]?.find(like => like.userId === userId);
-
+  // Load posts for a given user ID
+  const loadPosts = async (userId) => {
     try {
-      if (alreadyLiked) {
-        // Unlike the post
-        await fetch('http://localhost:5249/api/Like', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId, postId }),
-        });
+      const data = await fetchPostsByUserId(userId); // Fetch posts
+      setPosts(data); // Set posts in state
 
-        // Update state to remove like
-        setLikes((prevLikes) => ({
-          ...prevLikes,
-          [postId]: prevLikes[postId].filter(like => like.userId !== userId),
-        }));
-      } else {
-        // Like the post
-        await fetch('http://localhost:5249/api/Like', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId, postId }),
-        });
-
-        // Update state to add like
-        setLikes((prevLikes) => ({
-          ...prevLikes,
-          [postId]: [...prevLikes[postId], { userId, likedAt: new Date() }],
-        }));
+      // Fetch likes for each post
+      const likesData = {};
+      for (const post of data) {
+        const likesInfo = await fetchLikesByPostId(post.id); // Fetch likes for each post
+        likesData[post.id] = likesInfo; // Store likes in the cache
       }
-    } catch (error) {
-      console.error('Error liking/unliking post:', error);
+      setLikes(likesData); // Update likes state
+    } catch (err) {
+      setError(err.message); // Set error message on failure
+    } finally {
+      setLoading(false); // Set loading to false
     }
   };
 
-  // Fetch username for a specific userId (on demand)
+  // Fetch username for a specific user ID (on demand)
   const fetchUsername = async (userId) => {
     if (usernames[userId]) {
       return usernames[userId]; // Return cached username if it exists
     }
 
     try {
-      const response = await fetch(`http://localhost:5249/api/User/${userId}`); // API that fetches user data by ID
-      if (!response.ok) {
-        throw new Error('Failed to fetch username');
-      }
-      const userData = await response.json();
+      const username = await fetchUsernameById(userId); // Fetch username
       setUsernames((prevUsernames) => ({
         ...prevUsernames,
-        [userId]: userData.username, // Cache the username
+        [userId]: username, // Cache the username
       }));
-      return userData.username;
+      return username;
     } catch (err) {
       console.error('Error fetching username:', err);
       return 'Unknown User'; // Fallback if there's an error
@@ -127,49 +84,67 @@ const PostFeed = () => {
   };
 
   // Handle post deletion
-  const deletePost = async (postId) => {
+  const handleDeletePost = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:5249/api/Post/${postId}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete post');
-      }
+      await deletePostById(postId); // Call service to delete post
       // Remove the post from state
-      setPosts(posts.filter(post => post.id !== postId));
-      alert('Post deleted successfully');
+      setPosts(posts.filter(post => post.id !== postId)); // Update posts state
+      alert('Post deleted successfully'); // Notify user
     } catch (error) {
-      console.error('Error deleting post:', error);
+      console.error('Error deleting post:', error); // Log error
     }
   };
 
   // Handle edit submission
-  const editPostHandler = async () => {
-    if (!editingPostId || !userId) return;
+  const handleEditPost = async () => {
+    if (!editingPostId || !userId) return; // Validate editing state
 
-    const formData = new FormData();
-    formData.append('Content', postText);
-    formData.append('UserId', userId);
+    // Check if post text is empty
+    if (postText.trim() === '') {
+      setEditError('Post content cannot be empty.'); // Set error message
+      return; // Stop further execution
+    }
+
+    setEditError(null); // Clear previous error message
 
     try {
-      const response = await fetch(`http://localhost:5249/api/Post/${editingPostId}`, {
-        method: 'PUT',
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update post');
-      }
-
+      await updatePost(editingPostId, postText, userId); // Call service to update post
       // Reset the editing state and reload posts
-      setEditingPostId(null);
-      setPostText('');
-      alert('Post updated successfully');
-      window.location.reload(); // Refresh to show updated post
+      setEditingPostId(null); // Clear editing state
+      setPostText(''); // Clear text input
+      alert('Post updated successfully'); // Notify user
+      loadPosts(userId); // Reload posts
     } catch (error) {
-      console.error('Error updating post:', error);
+      console.error('Error updating post:', error); // Log error
     }
   };
 
+  // Handle like/unlike action
+  const handleLikeToggle = async (postId) => {
+    const alreadyLiked = likes[postId]?.find(like => like.userId === userId); // Check if post is already liked
+    
+    try {
+      if (alreadyLiked) {
+        await unlikePost(userId, postId); // Call service to unlike post
+        // Update state to remove like
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [postId]: prevLikes[postId].filter(like => like.userId !== userId), // Filter out the like
+        }));
+      } else {
+        await likePost(userId, postId); // Call service to like post
+        // Update state to add like
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [postId]: [...prevLikes[postId], { userId, likedAt: new Date() }], // Add new like
+        }));
+      }
+    } catch (error) {
+      console.error('Error liking/unliking post:', error); // Log error
+    }
+  };
+
+  // Show loading state
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-emerald-200">
@@ -178,6 +153,7 @@ const PostFeed = () => {
     );
   }
 
+  // Show error state
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-emerald-200">
@@ -186,11 +162,12 @@ const PostFeed = () => {
     );
   }
 
+  // Render posts
   return (
     <div className="pt-4 mt-auto flex-grow-0 space-y-4 items-start">
       {posts.map((post) => (
         <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
-          <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />
+          <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} /> {/* Display username */}
 
           <h2 className="font-clash pb-2 font-normal text-sm text-gray-500">
             {new Date(post.createdAt).toLocaleString('en-US', {
@@ -204,63 +181,67 @@ const PostFeed = () => {
             })}
           </h2>
 
-          {editingPostId === post.id ? (
-            <textarea
-              maxLength={1000}
-              value={postText}
-              onChange={(e) => setPostText(e.target.value)}
-              className="post-textarea w-full p-4 bg-white text-black rounded-lg resize-none h-28"
-            />
+          {editingPostId === post.id ? ( // Show textarea if editing
+            <>
+              <textarea
+                maxLength={1000}
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)} // Update post text
+                className="post-textarea w-full p-4 bg-white text-black rounded-lg resize-none h-28"
+              />
+              {editError && <div className="text-red-500">{editError}</div>} {/* Display edit error message */}
+            </>
           ) : (
-            <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2>
+            <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2> // Display post content
           )}
 
           {post.videoUrl && (
-             <a
-             href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`}
-             target="_blank"
-             rel="noopener noreferrer"
-             className="text-blue-500 hover:underline flex"
-           >
-             {post.videoUrl}
-           </a>
+            <a
+              href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`} // Link to video if available
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline flex"
+            >
+              {post.videoUrl}
+            </a>
           )}
 
           {post.location && (
             <div className="my-4">
-              <MapComponent location={post.location} />
+              <MapComponent location={post.location} /> {/* Render map component for location */}
             </div>
           )}
 
           {post.imagePath && (
-            <img src={`http://localhost:5249/${post.imagePath}`} alt="Post" className="mt-2 h-50% w-full w-rounded-lg" />
-          )}
+            <img src={`http://localhost:5249/${post.imagePath}`} alt="Post" className="mt-2 h-50% w-full rounded-lg" /> 
+          )} {/* Display post image */}
 
           <span className="text-red-500 font-light">
-            {likes[post.id]?.length || 0} ♡
+            {likes[post.id]?.length || 0} ♡ {/* Display number of likes */}
           </span>
 
           <div className="flex justify-between space-x-4">
-            <button onClick={() => toggleLike(post.id)} className="text-blue-500 hover:underline">
-              {likes[post.id]?.find(like => like.userId === userId) ? 'Liked' : 'Like'}
+            <button onClick={() => handleLikeToggle(post.id)} className="text-blue-500 hover:underline">
+              {likes[post.id]?.find(like => like.userId === userId) ? 'Liked' : 'Like'} {/* Toggle like button */}
             </button>
+
             {/* Edit and Delete buttons, only visible for the post's creator */}
-            {post.userId === userId && (
+            {post.userId === userId && ( // Only show if the user is the post creator
               <>
-                {editingPostId === post.id ? (
-                  <button onClick={editPostHandler} className="text-green-500 hover:underline">
+                {editingPostId === post.id ? ( // If currently editing
+                  <button onClick={handleEditPost} className="text-green-500 hover:underline">
                     Save
                   </button>
                 ) : (
                   <button onClick={() => {
-                    setEditingPostId(post.id);
+                    setEditingPostId(post.id); // Set post to edit
                     setPostText(post.content); // Set the post text to be edited
                   }} className="text-yellow-500 hover:underline">
                     Edit
                   </button>
                 )}
 
-                <button onClick={() => deletePost(post.id)} className="text-red-500 hover:underline">
+                <button onClick={() => handleDeletePost(post.id)} className="text-red-500 hover:underline">
                   Delete
                 </button>
               </>
@@ -268,8 +249,6 @@ const PostFeed = () => {
             <button onClick={() => navigate(`/comments/${post.id}`)} className="text-blue-500 hover:underline">
               Comment
             </button>
-
-
           </div>
         </div>
       ))}
@@ -279,16 +258,18 @@ const PostFeed = () => {
 
 // Separate component to handle username display and fetching
 const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
-  const [username, setUsername] = useState('Loading...');
+  const [username, setUsername] = useState('Loading...'); // State to store username
 
+  // Fetch username when component mounts
   useEffect(() => {
     const getUsername = async () => {
-      const name = await fetchUsername(userId);
-      setUsername(name);
+      const name = await fetchUsername(userId); // Fetch username from service
+      setUsername(name); // Update username state
     };
     getUsername();
   }, [userId, fetchUsername]);
 
+  // Navigate to user profile on username click
   const handleUsernameClick = () => {
     navigate(`/profile/${userId}`);
   };
@@ -303,24 +284,25 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
   );
 };
 
-// Map component and location parsing
+// Map component for displaying location
 const MapComponent = ({ location }) => {
-  const coordinates = parseLocation(location);
-  if (!coordinates) return null;
+  const coordinates = parseLocation(location); // Parse location string to coordinates
+  if (!coordinates) return null; // Return null if no valid coordinates
 
   return (
-    <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={13} style={{ height: '200px', width: '100%', zIndex: '0' }}>
+    <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={5} style={{ height: '200px', width: '100%', zIndex: '0' }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap contributors' />
       <Marker position={[coordinates.lat, coordinates.lng]}>
-        <Popup>Lat: {coordinates.lat}, Lng: {coordinates.lng}</Popup>
+        <Popup>Lat: {coordinates.lat}, Lng: {coordinates.lng}</Popup> {/* Display coordinates in popup */}
       </Marker>
     </MapContainer>
   );
 };
 
+// Utility function to parse location string into coordinates
 const parseLocation = (location) => {
-  const match = location.match(/Lat:\s*(-?\d+\.?\d*),\s*Lng:\s*(-?\d+\.?\d*)/);
-  return match ? { lat: parseFloat(match[1]), lng: parseFloat(match[2]) } : null;
+  const match = location.match(/Lat:\s*(-?\d+\.?\d*),\s*Lng:\s*(-?\d+\.?\d*)/); // Regex to extract coordinates
+  return match ? { lat: parseFloat(match[1]), lng: parseFloat(match[2]) } : null; // Return parsed coordinates or null
 };
 
-export default PostFeed;
+export default PostFeed; // Export the PostFeed component

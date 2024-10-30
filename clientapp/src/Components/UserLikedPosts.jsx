@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
+import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+// API calls
+import { fetchLikedPostsByUserId, fetchPostDetailsById, toggleLike } from './../Services/likedpostService';
+import { fetchLikesByPostId, deletePostById, updatePost } from './../Services/postService';
+import { fetchUsernameById } from './../Services/userService';
 
 // Initialize Leaflet marker icons
-delete L.Icon.Default.prototype._getIconUrl;
+delete L.Icon.Default.prototype._getIconUrl; // Remove default icon URL
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -13,25 +17,23 @@ L.Icon.Default.mergeOptions({
 });
 
 const UserLikedPosts = ({ userId }) => {
-  const [likedPosts, setLikedPosts] = useState([]);
-  const [postsDetails, setPostsDetails] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [likes, setLikes] = useState({});
-  const [usernames, setUsernames] = useState({});
-  const [editingPostId, setEditingPostId] = useState(null); // Track which post is being edited
-  const [postText, setPostText] = useState(''); // Handle editing post content
-  const navigate = useNavigate();
+  const [likedPosts, setLikedPosts] = useState([]); // State for liked posts IDs
+  const [postsDetails, setPostsDetails] = useState([]); // State for post details
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+  const [likes, setLikes] = useState({}); // State for likes per post
+  const [editErrorMessage, setEditErrorMessage] = useState(''); // Error message for editing
+  const [usernames, setUsernames] = useState({}); // State for usernames
+  const [editingPostId, setEditingPostId] = useState(null); // State for editing post ID
+  const [postText, setPostText] = useState(''); // State for post text
+  const navigate = useNavigate(); // Navigation hook
 
+  // Fetch liked posts on mount
   useEffect(() => {
     const fetchLikedPosts = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5249/api/Post/likedby/${userId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch liked posts');
-        }
-        const postIds = await response.json();
+        const postIds = await fetchLikedPostsByUserId(userId);
         setLikedPosts(postIds);
       } catch (err) {
         console.error('Error fetching liked posts:', err);
@@ -44,6 +46,7 @@ const UserLikedPosts = ({ userId }) => {
     fetchLikedPosts();
   }, [userId]);
 
+  // Fetch post details based on liked posts
   useEffect(() => {
     const fetchPostsDetails = async () => {
       if (likedPosts.length === 0) {
@@ -52,22 +55,12 @@ const UserLikedPosts = ({ userId }) => {
       }
 
       try {
-        const postsDetailsPromises = likedPosts.map(async (postId) => {
-          const response = await fetch(`http://localhost:5249/api/Post/${postId}`);
-          if (!response.ok) {
-            throw new Error(`Failed to fetch post with ID: ${postId}`);
-          }
-          return await response.json();
-        });
-
-        const details = await Promise.all(postsDetailsPromises);
+        const details = await Promise.all(likedPosts.map(postId => fetchPostDetailsById(postId)));
         setPostsDetails(details);
 
-        // Fetch likes for each post
         const likesData = {};
         for (const post of details) {
-          const likesResponse = await fetch(`http://localhost:5249/api/Like/${post.id}`);
-          const likesInfo = await likesResponse.json();
+          const likesInfo = await fetchLikesByPostId(post.id);
           likesData[post.id] = likesInfo;
         }
         setLikes(likesData);
@@ -82,65 +75,39 @@ const UserLikedPosts = ({ userId }) => {
     fetchPostsDetails();
   }, [likedPosts]);
 
-  const toggleLike = async (postId) => {
-    // Retrieve the logged-in user's ID from sessionStorage
+  // Toggle like on a post
+  const toggleLikeHandler = async (postId) => {
     const userData = sessionStorage.getItem('user');
     const loggedInUser = JSON.parse(userData);
-    const userId = loggedInUser?.id; // Make sure to handle cases where user data might not exist
-  
+    const userId = loggedInUser?.id;
+
     if (!userId) {
       console.error('User not logged in');
       return;
     }
-  
+
     const alreadyLiked = likes[postId]?.find(like => like.userId === userId);
-  
+
     try {
-      if (alreadyLiked) {
-        // If already liked, send a DELETE request to remove the like
-        await fetch('http://localhost:5249/api/Like', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId, postId }),
-        });
-  
-        // Update state by removing the like
-        setLikes((prevLikes) => ({
-          ...prevLikes,
-          [postId]: prevLikes[postId].filter(like => like.userId !== userId),
-        }));
-      } else {
-        // If not liked, send a POST request to add a like
-        await fetch('http://localhost:5249/api/Like', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId, postId }),
-        });
-  
-        // Update state by adding the like
-        setLikes((prevLikes) => ({
-          ...prevLikes,
-          [postId]: [...(prevLikes[postId] || []), { userId, likedAt: new Date() }],
-        }));
-      }
+      await toggleLike(userId, postId, alreadyLiked);
+      setLikes(prevLikes => {
+        const updatedLikes = { ...prevLikes };
+        if (alreadyLiked) {
+          updatedLikes[postId] = updatedLikes[postId].filter(like => like.userId !== userId);
+        } else {
+          updatedLikes[postId] = [...(updatedLikes[postId] || []), { userId, likedAt: new Date() }];
+        }
+        return updatedLikes;
+      });
     } catch (error) {
       console.error('Error liking/unliking post:', error);
     }
   };
-  
 
-  const deletePost = async (postId) => {
+  // Delete a post
+  const deletePostHandler = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:5249/api/Post/${postId}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete post');
-      }
+      await deletePostById(postId);
       setPostsDetails(postsDetails.filter(post => post.id !== postId));
       alert('Post deleted successfully');
     } catch (error) {
@@ -148,179 +115,165 @@ const UserLikedPosts = ({ userId }) => {
     }
   };
 
+  // Edit a post
   const editPostHandler = async () => {
-    if (!editingPostId || !loggedInUserId) return;
-  
-    const formData = new FormData();
-    formData.append('Content', postText);
-    formData.append('UserId', userId);
-  
-    try {
-      const response = await fetch(`http://localhost:5249/api/Post/${editingPostId}`, {
-        method: 'PUT',
-        body: formData,
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update post');
-      }
-  
-      // Update the post in the state
-      setPostsDetails((prevPosts) =>
-        prevPosts.map((post) => 
-          post.id === editingPostId ? { ...post, content: postText } : post
-        )
-      );
-  
-      setEditingPostId(null);
-      setPostText('');
-      alert('Post updated successfully');
-    } catch (error) {
-      console.error('Error updating post:', error);
-    }
+  if (!editingPostId || !loggedInUserId) return;
+
+  // Check if postText is empty
+  if (postText.trim() === '') {
+    setEditErrorMessage('Post content cannot be empty.'); // Set error message
+    return;
+  }
+
+  try {
+    await updatePost(editingPostId, postText, loggedInUserId);
+    setEditingPostId(null);
+    setPostText('');
+    setEditErrorMessage(''); // Clear error message on successful update
+    alert('Post updated successfully');
+    window.location.reload();
+  } catch (error) {
+    console.error('Error updating post:', error);
+  }
   };
   
+
+  // Fetch username by user ID
   const fetchUsername = async (userId) => {
     if (usernames[userId]) {
       return usernames[userId];
     }
-
     try {
-      const response = await fetch(`http://localhost:5249/api/User/${userId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch username');
-      }
-      const userData = await response.json();
-      setUsernames((prevUsernames) => ({
+      const userData = await fetchUsernameById(userId);
+      setUsernames(prevUsernames => ({
         ...prevUsernames,
         [userId]: userData.username,
       }));
       return userData.username;
     } catch (err) {
-      console.error('Error fetching username:', err);
       return 'Unknown User';
     }
   };
 
+  // Render loading state
   if (loading) {
     return <p className="text-white">Loading liked posts...</p>;
   }
 
+  // Render error state
   if (error) {
     return <p className="text-red-500">Error: {error}</p>;
   }
 
+  // Render no liked posts state
   if (postsDetails.length === 0) {
     return <p className="text-gray-400 h-full">This user hasn't liked any posts yet.</p>;
   }
 
-  const userid = sessionStorage.getItem('user');
-  const id = JSON.parse(userid);
-  const loggedInUserId = id.id;
+  const loggedInUser = JSON.parse(sessionStorage.getItem('user'));
+  const loggedInUserId = loggedInUser?.id;
 
-  
   return (
     <div className="mt-auto mb-4 flex-grow-0 space-y-6 items-start">
-      {postsDetails.length > 0 ? (
-        postsDetails.map((post) => (
-          <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
-            <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />
-  
-            <h2 className="font-clash pb-2 font-normal text-sm text-gray-500">
-              {new Date(post.createdAt).toLocaleString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false,
-              })}
-            </h2>
-  
-            {editingPostId === post.id ? (
-              <textarea
-                maxLength={1000}
-                value={postText}
-                onChange={(e) => setPostText(e.target.value)}
-                className="post-textarea w-full bg-white text-black font-lexend rounded-lg resize-none h-full"
-              />
-            ) : (
-              <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2>
-            )}
-  
-            {post.videoUrl && (
-              <a
-                href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline flex"
-              >
-                {post.videoUrl}
-              </a>
-            )}
-  
-            {/* Only render the MapComponent if location exists */}
-            {post.location && (
-              <div className="my-4">
-                <MapComponent location={post.location} />
-              </div>
-            )}
-  
-            {post.imagePath && (
-              <img
-                src={`http://localhost:5249/${post.imagePath}`}
-                alt="Post"
-                className="mt-2 h-50% w-full rounded-lg"
-              />
-            )}
-  
-            <span className="text-red-500 font-light">
-              {likes[post.id]?.length || 0} ♡
-            </span>
-  
-            <div className="flex justify-between mt-2 space-x-4">
-              <button onClick={() => toggleLike(post.id)} className="text-blue-500 hover:underline text-xs 400px:text-base">
-                {likes[post.id]?.find(like => like.userId === loggedInUserId) ? 'Liked' : 'Like'}
-              </button>
-
-              {/* Only show Edit and Delete buttons if the post belongs to the logged-in user */}
-              {post.userId === loggedInUserId && editingPostId !== post.id && (
-                <>
-                  <button
-                    onClick={() => {
-                      setEditingPostId(post.id);
-                      setPostText(post.content); // Populate the textarea with the existing content
-                    }}
-                    className="text-yellow-500 hover:underline text-xs 400px:text-base"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => deletePost(post.id)}
-                    className="text-red-500 hover:underline text-xs 400px:text-base"
-                  >
-                    Delete
-                  </button>
-                </>
-              )}
-
-              {/* Confirm edit submission */}
-              {editingPostId === post.id && (
-                <button onClick={editPostHandler} className="text-green-500 hover:underline text-xs 400px:text-base">
-                  Save
-                </button>
-              )}
-              {/* Comment button */}
-              <button onClick={() => navigate(`/comments/${post.id}`)} className="text-blue-500 hover:underline text-xs 400px:text-base">
-                Comment
-              </button>
-            </div>
-
-          </div>
-        ))
-      ) : (
-        <div className="bg-gray-700 p-6 rounded-lg shadow-lg text-white">No posts available.</div>
+      {editErrorMessage && (
+        <div className="bg-red-200 text-red-600 p-4 rounded-lg">
+          {editErrorMessage}
+        </div>
       )}
+      {/*Mapping every post from endpoint based on state*/}
+      {postsDetails.map(post => (
+        <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
+          {/*Fetching username based on userID and making it clickable*/}
+          <UsernameDisplay userId={post.userId} fetchUsername={fetchUsername} navigate={navigate} />
+          <h2 className="font-clash pb-2 font-normal text-sm text-gray-500">
+            {new Date(post.createdAt).toLocaleString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            })}
+          </h2>
+          {/*Conditionally rendered content/edit post-area*/}
+          {editingPostId === post.id ? (
+            <textarea
+              maxLength={1000}
+              value={postText}
+              onChange={(e) => setPostText(e.target.value)}
+              className="post-textarea w-full bg-white text-black font-lexend rounded-lg resize-none h-full"
+            />
+          ) : (
+            <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2>
+          )}
+          {/*Conditionally rendered clickable URL*/}
+          {post.videoUrl && (
+            <a
+              href={post.videoUrl.startsWith('http') ? post.videoUrl : `http://${post.videoUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline flex"
+            >
+              {post.videoUrl}
+            </a>
+          )}
+          {/*Conditionally rendered Map Component*/}
+          {post.location && (
+            <div className="my-4">
+              <MapComponent location={post.location} />
+            </div>
+          )}
+          {/*Conditionally rendered image*/}
+          {post.imagePath && (
+            <img
+              src={`http://localhost:5249/${post.imagePath}`}
+              alt="Post"
+              className="mt-2 h-50% w-full rounded-lg"
+            />
+          )}
+
+          <span className="text-red-500 font-light">
+            {likes[post.id]?.length || 0} ♡
+          </span>
+          {/*Like button show status based on if user has liked the post*/}
+          <div className="flex justify-between mt-2 space-x-4">
+            <button onClick={() => toggleLikeHandler(post.id)} className="text-blue-500 hover:underline text-xs 400px:text-base">
+              {likes[post.id]?.find(like => like.userId === loggedInUserId) ? 'Liked' : 'Like'}
+            </button>
+            {/*Conditionally rendered edit/delete buttons*/}
+            {post.userId === loggedInUserId && editingPostId !== post.id && (
+              <>
+                <button
+                  onClick={() => {
+                    setEditingPostId(post.id);
+                    setPostText(post.content);
+                  }}
+                  className="text-yellow-500 hover:underline text-xs 400px:text-base"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => deletePostHandler(post.id)}
+                  className="text-red-500 hover:underline text-xs 400px:text-base"
+                >
+                  Delete
+                </button>
+              </>
+            )}
+            {/*Conditionally rendered save on edit button*/}
+            {editingPostId === post.id && (
+              <button onClick={editPostHandler} className="text-green-500 hover:underline text-xs 400px:text-base">
+                Save
+              </button>
+            )}
+            {/*Button to navigate to comment page of post*/}
+            <button onClick={() => navigate(`/comments/${post.id}`)} className="text-blue-500 hover:underline text-xs 400px:text-base">
+              Comment
+            </button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
@@ -331,7 +284,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
 
   useEffect(() => {
     const getUsername = async () => {
-      const name = await fetchUsername(userId);
+      const name = await fetchUsernameById(userId);
       setUsername(name);
     };
     getUsername();
@@ -340,7 +293,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
   return (
     <div className="flex items-center space-x-2">
       <button
-        className="font-general text-2xl font-medium  text-black hover:underline"
+        className="font-general text-2xl font-medium text-black hover:underline"
         onClick={() => navigate(`/profile/${userId}`)}
       >
         {username}
@@ -348,6 +301,7 @@ const UsernameDisplay = ({ userId, fetchUsername, navigate }) => {
     </div>
   );
 };
+
 // Map component and location parsing
 const MapComponent = ({ location }) => {
   const coordinates = parseLocation(location);
@@ -363,10 +317,10 @@ const MapComponent = ({ location }) => {
   );
 };
 
+// Parse location string to extract coordinates
 const parseLocation = (location) => {
   const match = location.match(/Lat:\s*(-?\d+\.?\d*),\s*Lng:\s*(-?\d+\.?\d*)/);
   return match ? { lat: parseFloat(match[1]), lng: parseFloat(match[2]) } : null;
 };
-
 
 export default UserLikedPosts;

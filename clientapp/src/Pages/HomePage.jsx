@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link
 import { LoginImg } from "./../Utils/utils.js";
+import { loginUser } from './../Services/userService'; // Import the login function
+
 
 const HomePage = () => {
   // State variables to hold username, password, and any error messages
@@ -13,21 +15,15 @@ const HomePage = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
-
+  
     try {
-      const response = await fetch("http://localhost:5249/api/User/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }), // Send username and password
-      });
-      console.log(response.status)
+      const response = await loginUser(username, password); // Use the new service function
+      console.log(response.status);
+      
       if (response.status === 401) {
-        // Handle 401 Unauthorized response
         const errorText = await response.text();
         console.error("Login failed:", errorText);
-
+  
         if (errorText.trim() === "Invalid password.") {
           setError("The password you entered is incorrect.");
         } else if (errorText.trim() === "No such username") {
@@ -35,24 +31,21 @@ const HomePage = () => {
         } else {
           setError("Unauthorized access. Please check your credentials.");
         }
-      } else {
-        // Handle other non-success responses
-        setError("An unknown error occurred. Please try again.");
-      }
-      if (response.ok) {
-        // Handle successful login response
+      } else if (response.ok) {
         const data = await response.json();
-        // Store the user data in sessionStorage
         sessionStorage.setItem("user", JSON.stringify(data));
         console.log("Login successful!", data);
         navigate("/feed"); // Redirect to the feed page after successful login
-      } 
-      
+      } else {
+        setError("An unknown error occurred. Please try again.");
+      }
+  
     } catch (err) {
       console.error("Error:", err);
       setError("An error occurred. Please try again.");
     }
   };
+  
 
   return (
     <div className="Login-Bakgrunn">
