@@ -46,7 +46,7 @@ const Register = () => {
       console.log("Registration successful!", result);
       navigate("/"); // Redirect to HomePage or another page after successful registration
     } catch (err) {
-      if (err.message === "409") {
+      if (err.message.includes("409")) {
         setError("Username or email already exists.");
       } else {
         setError("Registration failed. Please check your details.");

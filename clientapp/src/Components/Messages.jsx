@@ -138,7 +138,7 @@ const Messages = () => {
               disabled={sending} // Disable button if sending is in progress
               className={`bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-200 ${sending ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              Send // Button to send the message
+              Send
             </button>
           </div>
         </div>

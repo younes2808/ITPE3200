@@ -38,14 +38,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/register"
-          element={
-            <ProtectedRoute>
-              <Register />
-            </ProtectedRoute>
-          }
-        />
+        <Route path='/register' element={<Register />} />
         <Route
           path="/profile/:userId"
           element={

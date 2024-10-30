@@ -17,7 +17,7 @@ const HomePage = () => {
     e.preventDefault(); // Prevent default form submission
   
     try {
-      const response = await loginUser(username, password); // Use the new service function
+      const response = await loginUser(username, password);
       console.log(response.status);
       
       if (response.status === 401) {
