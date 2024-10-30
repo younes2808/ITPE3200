@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS for map styling
 import L from 'leaflet';
 import {
-  fetchPostsByUserId,
+  fetchAllPosts,
   fetchLikesByPostId,
   deletePostById,
   likePost,
@@ -23,7 +23,6 @@ L.Icon.Default.mergeOptions({
 
 const PostFeed = () => {
   const navigate = useNavigate();
-
   const [posts, setPosts] = useState([]); // State to store posts
   const [usernames, setUsernames] = useState({}); // Cache for usernames to avoid repeated fetches
   const [loading, setLoading] = useState(true); // Loading state
@@ -40,14 +39,14 @@ const PostFeed = () => {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUserId(parsedUser.id); // Set user ID
-      loadPosts(parsedUser.id); // Load posts for the user
+      loadPosts(); // Load all posts when user is found
     }
   }, []);
 
-  // Load posts for a given user ID
-  const loadPosts = async (userId) => {
+  // Load all posts
+  const loadPosts = async () => {
     try {
-      const data = await fetchPostsByUserId(userId); // Fetch posts
+      const data = await fetchAllPosts(); // Fetch posts
       setPosts(data); // Set posts in state
 
       // Fetch likes for each post
@@ -113,7 +112,7 @@ const PostFeed = () => {
       setEditingPostId(null); // Clear editing state
       setPostText(''); // Clear text input
       alert('Post updated successfully'); // Notify user
-      loadPosts(userId); // Reload posts
+      loadPosts(); // Reload posts
     } catch (error) {
       console.error('Error updating post:', error); // Log error
     }
@@ -136,7 +135,7 @@ const PostFeed = () => {
         // Update state to add like
         setLikes((prevLikes) => ({
           ...prevLikes,
-          [postId]: [...prevLikes[postId], { userId, likedAt: new Date() }], // Add new like
+          [postId]: [...(prevLikes[postId] || []), { userId, likedAt: new Date() }], // Add new like
         }));
       }
     } catch (error) {

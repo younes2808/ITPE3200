@@ -8,7 +8,18 @@ export const fetchPostsByUserId = async (userId) => {
   }
   return response.json();
 };
-
+//fetch all posts
+export const fetchAllPosts = async () => {
+  const response = await fetch(`${API_URL}/api/Post`, {
+    method: 'GET', // Explicitly set method to GET
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch posts');
+  }
+  
+  return response.json();
+};
 // Fetch likes for a specific postID
 export const fetchLikesByPostId = async (postId) => {
   const response = await fetch(`${API_URL}/Like/${postId}`);
