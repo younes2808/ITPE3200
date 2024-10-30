@@ -107,25 +107,26 @@ const UserPost = () => {
   };
 
   const editPostHandler = async () => {
-    if (!editingPostId || !loggedInUserId) return;
+  if (!editingPostId || !loggedInUserId) return;
 
-    // Check if postText is empty
-    if (postText.trim() === '') {
-      setEditErrorMessage('Please write something before posting.'); // Set error message
-      return;
-    }
+  // Check if postText is empty
+  if (postText.trim() === '') {
+    setEditErrorMessage('Post content cannot be empty.'); // Set error message
+    return;
+  }
 
-    try {
-      await updatePost(editingPostId, postText, loggedInUserId);
-      setEditingPostId(null);
-      setPostText('');
-      setEditErrorMessage(''); // Clear error message on successful update
-      alert('Post updated successfully');
-      window.location.reload();
-    } catch (error) {
-      console.error('Error updating post:', error);
-    }
-  };
+  try {
+    await updatePost(editingPostId, postText, loggedInUserId);
+    setEditingPostId(null);
+    setPostText('');
+    setEditErrorMessage(''); // Clear error message on successful update
+    alert('Post updated successfully');
+    window.location.reload();
+  } catch (error) {
+    console.error('Error updating post:', error);
+  }
+};
+
 
   if (loading) {
     return (

@@ -22,6 +22,7 @@ const UserLikedPosts = ({ userId }) => {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const [likes, setLikes] = useState({}); // State for likes per post
+  const [editErrorMessage, setEditErrorMessage] = useState(''); // Error message for editing
   const [usernames, setUsernames] = useState({}); // State for usernames
   const [editingPostId, setEditingPostId] = useState(null); // State for editing post ID
   const [postText, setPostText] = useState(''); // State for post text
@@ -116,24 +117,26 @@ const UserLikedPosts = ({ userId }) => {
 
   // Edit a post
   const editPostHandler = async () => {
-    if (!editingPostId) return;
+  if (!editingPostId || !loggedInUserId) return;
 
-    const userData = sessionStorage.getItem('user');
-    const loggedInUser = JSON.parse(userData);
-    const loggedInUserId = loggedInUser?.id;
+  // Check if postText is empty
+  if (postText.trim() === '') {
+    setEditErrorMessage('Post content cannot be empty.'); // Set error message
+    return;
+  }
 
-    try {
-      await updatePost(editingPostId, postText, loggedInUserId);
-      setPostsDetails(prevPosts => 
-        prevPosts.map(post => (post.id === editingPostId ? { ...post, content: postText } : post))
-      );
-      setEditingPostId(null);
-      setPostText('');
-      alert('Post updated successfully');
-    } catch (error) {
-      console.error('Error updating post:', error);
-    }
+  try {
+    await updatePost(editingPostId, postText, loggedInUserId);
+    setEditingPostId(null);
+    setPostText('');
+    setEditErrorMessage(''); // Clear error message on successful update
+    alert('Post updated successfully');
+    window.location.reload();
+  } catch (error) {
+    console.error('Error updating post:', error);
+  }
   };
+  
 
   // Fetch username by user ID
   const fetchUsername = async (userId) => {
@@ -172,6 +175,11 @@ const UserLikedPosts = ({ userId }) => {
 
   return (
     <div className="mt-auto mb-4 flex-grow-0 space-y-6 items-start">
+      {editErrorMessage && (
+        <div className="bg-red-200 text-red-600 p-4 rounded-lg">
+          {editErrorMessage}
+        </div>
+      )}
       {/*Mapping every post from endpoint based on state*/}
       {postsDetails.map(post => (
         <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
