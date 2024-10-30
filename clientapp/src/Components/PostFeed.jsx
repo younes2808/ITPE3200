@@ -27,7 +27,8 @@ const PostFeed = () => {
   const [posts, setPosts] = useState([]); // State to store posts
   const [usernames, setUsernames] = useState({}); // Cache for usernames to avoid repeated fetches
   const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [error, setError] = useState(null); // Error state for general errors
+  const [editError, setEditError] = useState(null); // Error state for editing posts
   const [likes, setLikes] = useState({}); // Cache for likes by post ID
   const [userId, setUserId] = useState(null); // State to store current user's ID
   const [editingPostId, setEditingPostId] = useState(null); // State to manage editing post ID
@@ -97,6 +98,14 @@ const PostFeed = () => {
   // Handle edit submission
   const handleEditPost = async () => {
     if (!editingPostId || !userId) return; // Validate editing state
+
+    // Check if post text is empty
+    if (postText.trim() === '') {
+      setEditError('Post content cannot be empty.'); // Set error message
+      return; // Stop further execution
+    }
+
+    setEditError(null); // Clear previous error message
 
     try {
       await updatePost(editingPostId, postText, userId); // Call service to update post
@@ -173,12 +182,15 @@ const PostFeed = () => {
           </h2>
 
           {editingPostId === post.id ? ( // Show textarea if editing
-            <textarea
-              maxLength={1000}
-              value={postText}
-              onChange={(e) => setPostText(e.target.value)} // Update post text
-              className="post-textarea w-full p-4 bg-white text-black rounded-lg resize-none h-28"
-            />
+            <>
+              <textarea
+                maxLength={1000}
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)} // Update post text
+                className="post-textarea w-full p-4 bg-white text-black rounded-lg resize-none h-28"
+              />
+              {editError && <div className="text-red-500">{editError}</div>} {/* Display edit error message */}
+            </>
           ) : (
             <h2 className="text-gray-800 mb-1.5 break-words font-lexend font-normal">{post.content}</h2> // Display post content
           )}

@@ -25,16 +25,14 @@ L.Icon.Default.mergeOptions({
 const UserPost = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
-
   const [posts, setPosts] = useState([]);
   const [usernames, setUsernames] = useState({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(''); // Feilmelding
   const [likes, setLikes] = useState({});
   const [editingPostId, setEditingPostId] = useState(null);
   const [postText, setPostText] = useState('');
-  const [showErrorPopup, setShowErrorPopup] = useState(false); // State for error popup
-
+  const [editErrorMessage, setEditErrorMessage] = useState(''); // Error message for editing
   const userid = sessionStorage.getItem('user');
   const id = JSON.parse(userid);
   const loggedInUserId = id.id;
@@ -113,8 +111,7 @@ const UserPost = () => {
 
     // Check if postText is empty
     if (postText.trim() === '') {
-      setError('Input field cannot be empty!'); // Set the error message
-      setShowErrorPopup(true); // Show the error popup
+      setEditErrorMessage('Please write something before posting.'); // Set error message
       return;
     }
 
@@ -122,15 +119,12 @@ const UserPost = () => {
       await updatePost(editingPostId, postText, loggedInUserId);
       setEditingPostId(null);
       setPostText('');
+      setEditErrorMessage(''); // Clear error message on successful update
       alert('Post updated successfully');
       window.location.reload();
     } catch (error) {
       console.error('Error updating post:', error);
     }
-  };
-
-  const closeErrorPopup = () => {
-    setShowErrorPopup(false); // Close the error popup
   };
 
   if (loading) {
@@ -151,6 +145,12 @@ const UserPost = () => {
 
   return (
     <div className="mt-auto mb-4 flex-grow-0 space-y-6 items-start">
+      {editErrorMessage && (
+        <div className="bg-red-200 text-red-600 p-4 rounded-lg">
+          {editErrorMessage}
+        </div>
+      )}
+
       {posts.length > 0 ? (
         posts.map((post) => (
           <div key={post.id} className="bg-emerald-200 p-3.5 rounded-lg shadow-md">
@@ -218,6 +218,7 @@ const UserPost = () => {
                     onClick={() => {
                       setEditingPostId(post.id);
                       setPostText(post.content);
+                      setEditErrorMessage(''); // Clear any existing error message when editing
                     }}
                     className="text-yellow-500 hover:underline text-xs 400px:text-base"
                   >
@@ -245,21 +246,6 @@ const UserPost = () => {
         ))
       ) : (
         <div className="bg-emerald-200 p-6 rounded-lg shadow-lg text-black">No posts available.</div>
-      )}
-
-      {showErrorPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg p-5 text-center">
-            <h2 className="text-lg font-bold text-red-600">Error</h2>
-            <p className="mt-2">Input field cannot be empty!</p>
-            <button
-              className="mt-4 px-4 py-2 bg-emerald-500 text-white rounded-lg"
-              onClick={closeErrorPopup}
-            >
-              Close
-            </button>
-          </div>
-        </div>
       )}
     </div>
   );
