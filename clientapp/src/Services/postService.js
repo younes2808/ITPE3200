@@ -10,7 +10,7 @@ export const fetchPostsByUserId = async (userId) => {
 };
 //fetch all posts
 export const fetchAllPosts = async () => {
-  const response = await fetch(`${API_URL}/api/Post`, {
+  const response = await fetch(`${API_URL}/Post`, {
     method: 'GET', // Explicitly set method to GET
   });
   
