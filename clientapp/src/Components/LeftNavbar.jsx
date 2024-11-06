@@ -66,7 +66,7 @@ const LeftNavbar = () => {
         href={`/profile/${userId}`} // Link to the user's profile
         className="flex items-center space-x-0 pt-8 p-4 mt-24 md:space-x-4 hover:bg-emerald-50 rounded-lg transition-colors duration-200 w-full"
       >
-        <div className="flex items-center justify-center w-10 h-10 md:w-14 md:h-10 870px:w-16 870px:h-12 1150px:w-16 1150px:h-16 rounded-full bg-emerald-200"> {/* Circle for the profile picture */}
+        <div className="flex items-center justify-center w-10 h-10 md:w-14 md:h-10 870px:w-16 870px:h-12 1150px:w-16 1150px:h-16 rounded-full bg-emerald-200 border-2 border-emerald-300"> {/* Circle for the profile picture */}
           <span className="text-2xl 870px:text-3xl 1150px:text-4xl font-semibold">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
         </div>
         <div>
