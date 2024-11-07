@@ -88,13 +88,13 @@ const HomePage = () => {
               </div>
               <button
                 type="submit"
-                className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-400"
+                className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-gray-300 hover:text-black hover:border hover:border-gray-900"
               >
                 Sign in
               </button>
             </form>
 
-            <Link to="/register" className="font-bold text-gray-600 hover:text-gray-300">
+            <Link to="/register" className="font-bold text-black hover:text-gray-500">
               Sign up for free
             </Link>
           </div>
