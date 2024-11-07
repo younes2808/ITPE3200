@@ -58,7 +58,7 @@ const Register = () => {
   return (
     <body className="Login-Bakgrunn">
       <div className="Landing-page-box">
-        <div className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
+        <div className="relative flex flex-col space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
           <div className="flex flex-col justify-center p-8 md:p-14">
             <span className="mb-3 text-4xl font-mono">RAYS</span>
             <span className="font-light text-zinc-500 mb-8 border-b-black border-b-2">
@@ -108,11 +108,11 @@ const Register = () => {
                   required
                 />
               </div>
-              <button className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-400">
+              <button className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-gray-300 hover:text-black hover:border hover:border-gray-900">
                 Sign up
               </button>
             </form>
-            <Link to="/" className="font-bold text-black hover:text-gray-300">
+            <Link to="/" className="font-bold text-black hover:text-gray-500">
               Sign in here
             </Link>
           </div>
