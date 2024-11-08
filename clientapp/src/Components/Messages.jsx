@@ -10,6 +10,7 @@ const Messages = () => {
   const [loading, setLoading] = useState(true); // State for loading
   const [receiverUsername, setReceiverUsername] = useState(""); // State for receiver's username
   const [sending, setSending] = useState(false); // State to track if a message is being sent
+  const [warning, setWarning] = useState(""); // State for warning message
   const messagesEndRef = useRef(null); // Ref to scroll to the bottom of the message list
   const navigate = useNavigate(); // Hook for navigation
 
@@ -54,9 +55,15 @@ const Messages = () => {
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (newMessage.trim() === "" || sending) return; // Check if the message is empty or if sending is in progress
+    if (newMessage.trim() === "") {
+      setWarning("You cannot send an empty message!"); // Set warning if message is empty
+      return; // Prevent sending if the message is empty
+    }
+
+    if (sending) return; // Prevent sending if already in progress
 
     setSending(true); // Set sending to true to indicate that the message is being sent
+    setWarning(""); // Clear the warning message if a valid message is being sent
 
     try {
       await sendMessage(senderId, receiverId, newMessage); // Send the message
@@ -122,6 +129,9 @@ const Messages = () => {
           )}
           <div ref={messagesEndRef} /> {/* Ref to scroll to the bottom */}
         </div>
+
+        {/* Warning message */}
+        {warning && <div className="text-red-500 text-center mt-2">{warning}</div>}
 
         {/* Input area for sending new messages */}
         <div className="bg-emerald-200 border p-4 mt-4 rounded-md">

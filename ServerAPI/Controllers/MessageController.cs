@@ -99,6 +99,7 @@ namespace ServerAPI.Controllers
                 .Where(m =>
                     (m.SenderId == senderId && m.ReceiverId == receiverId) ||
                     (m.SenderId == receiverId && m.ReceiverId == senderId))
+                .OrderBy(m => m.Timestamp)
                 .ToListAsync();
 
             return Ok(conversation);
