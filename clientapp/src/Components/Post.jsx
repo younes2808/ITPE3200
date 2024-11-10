@@ -13,81 +13,78 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-// Main map component for PostFunction
 const PostFunction = () => {
     const [selectedFile, setSelectedFile] = useState(null);
-    const [isVideo, setIsVideo] = useState(false);
     const [link, setLink] = useState('');
     const [showLinkInput, setShowLinkInput] = useState(false);
     const [postText, setPostText] = useState('');
-    const [location, setLocation] = useState(''); // Holds the location string
+    const [location, setLocation] = useState('');
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useState(null);
     const [showMap, setShowMap] = useState(false);
-    const [username, setUsername] = useState(''); // State to store username
-    const [error, setError] = useState(''); // State for error messages
-    const [showErrorPopup, setShowErrorPopup] = useState(false); // State to control error popup
-  
+    const [username, setUsername] = useState('');
+    const [error, setError] = useState('');
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+
     // Fetch user from sessionStorage
     useEffect(() => {
       const storedUser = sessionStorage.getItem("user");
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
         setUserId(parsedUser.id);
-        setUsername(parsedUser.username); // Set username
+        setUsername(parsedUser.username);
       } else {
         console.error("No user found in sessionStorage.");
       }
     }, []);
 
-    // Handle file selection
+    // Handle file selection (only allow images)
     const fileSelectedHandler = (event) => {
         const file = event.target.files[0];
         if (file) {
-            setSelectedFile(file);
-            setIsVideo(file.type.includes('video'));
+            if (!file.type.startsWith('image/')) {
+                setError('Only image files are allowed.');
+                setShowErrorPopup(true);
+                setSelectedFile(null); // Clear the selected file if invalid
+                return;
+            }
+            setSelectedFile(file); // Set the file if valid
+            setError(''); // Clear any previous errors
         }
     };
 
     // Remove selected file
     const removeSelectedFile = () => {
-        setSelectedFile(null); // Clear selected file
-        setIsVideo(false); // Reset video flag
+        setSelectedFile(null);
     };
 
-    // Toggle visibility of link input
     const toggleLinkInput = () => {
         setShowLinkInput(!showLinkInput);
     };
 
-    // Handle link input change
     const handleLinkChange = (event) => {
         setLink(event.target.value);
     };
 
-    // Handle post text change
     const handleTextChange = (event) => {
         setPostText(event.target.value);
-        setError(''); // Clear error when text changes
+        setError('');
     };
 
-    // Handle post submission
     const postHandler = async () => {
         if (!userId) {
             console.log("user not found");
             return;
         }
 
-        // Validation: Check if postText is empty
         if (postText.trim() === '') {
-            setError('Please write something before posting.'); // Set error message
-            setShowErrorPopup(true); // Show the error popup
+            setError('Please write something before posting.');
+            setShowErrorPopup(true);
             return;
         }
 
         setLoading(true);
 
-        // Prepare post data
         const postData = {
             postText,
             location: typeof location === 'string' ? location : String(location),
@@ -97,12 +94,11 @@ const PostFunction = () => {
         };
 
         try {
-            await createPost(postData); // Call the service function
-            // Reset form after successful submission
+            await createPost(postData);
             setPostText('');
             setLink('');
-            setLocation(''); // Reset location
-            removeSelectedFile(); // Clear the selected file
+            setLocation('');
+            removeSelectedFile();
             window.location.reload();
         } catch (err) {
             console.error('Failed to create post:', err);
@@ -111,18 +107,16 @@ const PostFunction = () => {
         }
     };
 
-    // Close error popup
     const closeErrorPopup = () => {
         setShowErrorPopup(false);
-        setError(''); // Clear the error message
+        setError('');
     };
 
     return (
         <div className="flex justify-center p-0">
             <div className="bg-emerald-200 rounded-lg min-w-full p-5 mt-16 510px:mt-3 shadow-md">
-                {/* Profile image and post textarea */}
                 <div className="flex items-center mb-4">
-                    <span className="flex items-center justify-center w-10 h-10 rounded-full mr-4 bg-white text-lg font-medium text-black">{username.charAt(0).toUpperCase()}</span> {/* Display the first letter of the username */}
+                    <span className="flex items-center justify-center w-10 h-10 rounded-full mr-4 bg-white text-lg font-medium text-black">{username.charAt(0).toUpperCase()}</span>
                     <textarea
                         maxLength={1000}
                         value={postText}
@@ -132,7 +126,6 @@ const PostFunction = () => {
                     />
                 </div>
 
-                {/* Input for link */}
                 {showLinkInput && (
                     <div className="my-4">
                         <input
@@ -145,14 +138,9 @@ const PostFunction = () => {
                     </div>
                 )}
 
-                {/* Media preview */}
                 {selectedFile && (
                     <div className="relative mb-4">
-                        {isVideo ? (
-                            <video src={URL.createObjectURL(selectedFile)} controls className="w-full max-h-60 rounded-lg" />
-                        ) : (
-                            <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="w-full max-h-60 object-cover rounded-lg" />
-                        )}
+                        <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="w-full max-h-60 object-cover rounded-lg" />
                         <button
                             onClick={removeSelectedFile}
                             className="absolute top-0 right-0 bg-white text-black rounded-full w-6 h-6 flex justify-center items-center hover:bg-red-500"
@@ -162,7 +150,6 @@ const PostFunction = () => {
                     </div>
                 )}
 
-                {/* Action buttons */}
                 <div className="flex items-center justify-start 400px:space-x-2 580px:space-x-0">
                     <div className="flex 300px:ml-[-0.9rem] space-x-1 580px:ml-0 580px:space-x-2 flex-grow">
                         <input
@@ -170,7 +157,7 @@ const PostFunction = () => {
                             type="file"
                             onChange={fileSelectedHandler}
                             id="file-upload-button"
-                            accept="image/*,video/*"
+                            accept="image/*"
                         />
                         <label
                             htmlFor="file-upload-button"
@@ -186,17 +173,14 @@ const PostFunction = () => {
                             <span className="material-icons mr-1">link</span>
                             Hyperlink
                         </button>
-
-                        {/* Show Map button */}
                         <button
                             className="flex items-center justify-center px-1 580px:px-2 py-1 bg-white text-black rounded-lg cursor-pointer hover:bg-emerald-500 hover:text-white transition-colors duration-300 text-sm font-general"
                             onClick={() => {
                                 setShowMap(prevState => {
                                     if (prevState) {
-                                        // If the map is currently shown, clear the location when hiding
-                                        setLocation(''); // Reset location when hiding the map
+                                        setLocation('');
                                     }
-                                    return !prevState; // Toggle visibility
+                                    return !prevState;
                                 });
                             }}
                         >
@@ -204,8 +188,6 @@ const PostFunction = () => {
                             {showMap ? 'Hide Map' : 'Show Map'}
                         </button>
                     </div>
-
-                    {/* Post button */}
                     <button
                         onClick={postHandler}
                         className={`flex items-center justify-center px-2 355px:px-3 py-1 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition-colors duration-300 text-sm font-general ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -216,9 +198,8 @@ const PostFunction = () => {
                     </button>
                 </div>
 
-                {/* Error Popup */}
                 {showErrorPopup && (
-                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"> {/* Add z-50 */}
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                       <div className="bg-white rounded-lg p-5 text-center">
                           <h2 className="text-lg font-bold text-red-600">Error</h2>
                           <p className="mt-2">{error}</p>
@@ -232,21 +213,20 @@ const PostFunction = () => {
                   </div>
                 )}
 
-                {/* Show Map only if the error popup is not shown */}
                 {!showErrorPopup && showMap && (
                     <div className="my-4 bg-emerald-200 rounded-lg p-4">
                         <MapContainer
-                            center={[20, 0]} // Center the map on load
-                            zoom={2} // Initial zoom level
-                            style={{ height: '400px', width: '100%' }} // Ensure the map takes full space
+                            center={[20, 0]}
+                            zoom={2}
+                            style={{ height: '400px', width: '100%' }}
                         >
                             <TileLayer
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             />
-                            <MapContent setLocation={setLocation} /> {/* Pass setLocation to MapContent */}
+                            <MapContent setLocation={setLocation} />
                         </MapContainer>
-                        <p className="text-black mt-2">Location: {location}</p> {/* Display selected location */}
+                        <p className="text-black mt-2">Location: {location}</p>
                     </div>
                 )}
             </div>
@@ -254,33 +234,30 @@ const PostFunction = () => {
     );
 };
 
-// Separate component for map interactions
 const MapContent = ({ setLocation }) => {
-    const [position, setPosition] = useState(null); // Position state for marker
-    const map = useMap(); // Access the map instance
+    const [position, setPosition] = useState(null);
+    const map = useMap();
 
-    // Handle map click to set position
     const handleMapClick = useCallback((event) => {
-        const { lat, lng } = event.latlng; // Get the lat and lng from the click event
-        console.log('Map clicked at:', { lat, lng }); // Debug log
-        setPosition([lat, lng]); // Update position state with lat and lng
-        setLocation(`Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`); // Update location state with formatted string
-    }, [setLocation]); // Dependencies are now stable
+        const { lat, lng } = event.latlng;
+        console.log('Map clicked at:', { lat, lng });
+        setPosition([lat, lng]);
+        setLocation(`Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`);
+    }, [setLocation]);
 
-    // Attach the click event handler to the map when the component mounts
     useEffect(() => {
-        map.on('click', handleMapClick); // Attach the click event to the map
+        map.on('click', handleMapClick);
 
         return () => {
-            map.off('click', handleMapClick); // Clean up the event listener on component unmount
+            map.off('click', handleMapClick);
         };
-    }, [map, handleMapClick]); // Now all dependencies are included and stable
+    }, [map, handleMapClick]);
 
     return (
         <>
-            {position && ( // Render marker only if position is set
+            {position && (
                 <Marker position={position}>
-                    <Popup>{`Marker at: ${position[0].toFixed(5)}, ${position[1].toFixed(5)}`}</Popup> {/* Optional: Show coordinates in popup */}
+                    <Popup>{`Marker at: ${position[0].toFixed(5)}, ${position[1].toFixed(5)}`}</Popup>
                 </Marker>
             )}
         </>
