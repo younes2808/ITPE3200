@@ -71,23 +71,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 
 
-Rafey:
-Comments.jsx --> commentService.js
-SearchUsers.jsx --> userSearchService.js
-Post.jsx --> 
-PostFeed.jsx -->
-
-Shoeb:
-Message.jsx
-
-Younes
-Userpost.jsx --> FetchUsernameByID, PostService
-UserLikedPosts.jsx -->
-Profile.jsx -->
-Showfriends.jsx -->
-
-
-
-Ali:
-FriendRequest.jsx --> friendService.js
-Home.jsx --> loginUser
