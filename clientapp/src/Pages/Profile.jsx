@@ -1,8 +1,7 @@
 // Profile.js
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import UserPost from './../Components/UserPost';
-import UserLikedPosts from './../Components/UserLikedPosts';
+import PostList from './../Components/PostList';
 import ShowFriends from './../Components/ShowFriends';
 import LeftNavbar from './../Components/LeftNavbar';
 import RightNavbar from './../Components/RightNavbar';
@@ -154,8 +153,8 @@ const Profile = () => {
           </div>
 
           <div className="mt-6 mb-12">
-            {activeTab === 'posts' && <UserPost userId={userId} />}
-            {activeTab === 'likes' && <UserLikedPosts userId={userId} />}
+            {activeTab === 'posts' && <PostList userId={userId} type="user" />}
+            {activeTab === 'likes' && <PostList userId={userId} type="liked" />}
             {activeTab === 'friends' && <ShowFriends userId={userId} />}
           </div>
         </div>
