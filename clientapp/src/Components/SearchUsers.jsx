@@ -30,11 +30,11 @@ const UserSearch = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)} // Update query state on change
           placeholder="Search for users..."
-          className="300px:p-1 355px:p-3 flex-grow min-w-36 border-gray-300 border-2 rounded-md bg-white text-black placeholder- focus:outline-none focus:ring focus:ring-emerald-500 shadow-md"
+          className="300px:p-1 355px:p-3 font-general flex-grow min-w-36 border-gray-300 border-2 rounded-md bg-white text-black placeholder- focus:outline-none focus:ring focus:ring-emerald-500 shadow-md"
         />
         <button 
           onClick={handleSearch} 
-          className="ml-2 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition duration-200"
+          className="ml-2 p-2 bg-blue-600 text-white font-clash rounded-md hover:bg-blue-500 transition duration-200"
         >
           Search
         </button>
@@ -59,7 +59,7 @@ const UserSearch = () => {
           </ul>
         </div>
       ) : (
-        <div className="mt-4 text-gray-400">No users found.</div> // Show message if no results
+        <div className="mt-4 text-gray-400 font-general">No users found.</div> // Show message if no results
       )}
     </div>
   );

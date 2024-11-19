@@ -81,7 +81,7 @@ const FriendRequests = () => {
                 key={request.id} // Use request ID as a unique key
                 className="bg-emerald-200 p-4 rounded-lg flex justify-between items-center"
               >
-                <p className="text-black">
+                <p className="text-black font-general">
                   Friend request from{" "}
                   <span 
                     onClick={() => navigate(`/profile/${request.senderId}`)} // Clickable username to navigate to profile
@@ -93,13 +93,13 @@ const FriendRequests = () => {
                 <div>
                   <button
                     onClick={() => handleAcceptRequest(request.id)} // Accept request handler
-                    className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded 510px:mr-2"
+                    className="bg-green-500 hover:bg-green-700 font-clash text-white px-2 py-1 rounded 510px:mr-2"
                   >
                     Accept
                   </button>
                   <button
                     onClick={() => handleRejectRequest(request.id)} // Reject request handler
-                    className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded"
+                    className="bg-red-500 hover:bg-red-700 font-clash text-white px-2 py-1 rounded"
                   >
                     Reject
                   </button>
