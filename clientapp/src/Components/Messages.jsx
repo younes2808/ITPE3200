@@ -12,12 +12,21 @@ const Messages = () => {
   const [sending, setSending] = useState(false); // State to track if a message is being sent
   const [warning, setWarning] = useState(""); // State for warning message
   const messagesEndRef = useRef(null); // Ref to scroll to the bottom of the message list
+  const [firstLoad, setFirstLoad] = useState(false); // State to track first load
   const navigate = useNavigate(); // Hook for navigation
 
   // Get loggedInUserId from sessionStorage
   const userid = sessionStorage.getItem('user');
   const id = JSON.parse(userid);
   const loggedInUserId = id?.id; // Get ID if it exists
+
+  // Check if senderId matches loggedInUserId
+  useEffect(() => {
+    if (parseInt(senderId) !== loggedInUserId) {
+      setWarning("You are not authorized to access this conversation.");
+      setTimeout(() => navigate("/feed"), 3000); // Redirecting to the feed after 3 seconds
+    }
+  }, [loggedInUserId, senderId, navigate]); // Run effect on mount and if these dependencies change
 
   // Fetch messages and username
   useEffect(() => {
@@ -41,48 +50,62 @@ const Messages = () => {
       }
     };
 
-    fetchMessages(); // Call to fetch messages
-    fetchReceiverUsername(); // Call to fetch username
+    if (parseInt(senderId) === loggedInUserId) {
+      fetchMessages(); // Call to fetch messages
+      fetchReceiverUsername(); // Call to fetch username
 
-    // Polling to update messages every second
-    const interval = setInterval(fetchMessages, 1000);
-    return () => clearInterval(interval); // Clean up interval when component unmounts
-  }, [receiverId, senderId]); // Run effect when receiverId or senderId changes
+      // Polling to update messages every second
+      const interval = setInterval(fetchMessages, 1000);
+      return () => clearInterval(interval); // Clean up interval when component unmounts
+    }
+  }, [receiverId, senderId, loggedInUserId]); // Run effect when receiverId, senderId, or loggedInUserId changes
 
-  // Auto-scroll to the bottom when messages change
+  // Auto-scroll to the bottom when messages change, but only on the first load
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (messages.length > 0 && !firstLoad) {
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        setFirstLoad(true); // Set firstLoad to true after the first scroll
+      }, 0); // Ensures scrolling happens after the render cycle
+    }
+  }, [messages, firstLoad]); // Check firstLoad before scrolling
 
   const handleSendMessage = async () => {
     if (newMessage.trim() === "") {
       setWarning("You cannot send an empty message!"); // Set warning if message is empty
       return; // Prevent sending if the message is empty
     }
-
+  
     if (sending) return; // Prevent sending if already in progress
-
+  
     setSending(true); // Set sending to true to indicate that the message is being sent
     setWarning(""); // Clear the warning message if a valid message is being sent
-
+  
     try {
       await sendMessage(senderId, receiverId, newMessage); // Send the message
       const updatedMessages = await fetchMessagesBetweenUsers(senderId, receiverId); // Fetch updated messages
       setMessages(updatedMessages); // Update messages in state
       setNewMessage(""); // Clear the input field
+  
+      // Scroll to the bottom after sending the message
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100); // Timeout ensures scrolling happens after state update
     } catch (error) {
       console.error("Error sending message:", error); // Log error
     } finally {
       setSending(false); // Set sending back to false
     }
   };
-
+  
   // Handle input change for message field
   const handleInputChange = (e) => {
     setNewMessage(e.target.value); // Update state with new message
   };
 
   if (loading) return <div className="text-white">Loading...</div>; // Show loading indicator
+  if (warning) return <div className="text-red-500">{warning}</div>; // Show warning if unauthorized
+
   return (
     <div className="mt-auto flex-grow items-start w-full h-full">
       <div className="bg-white shadow-2xl border-gray-300 border-2 rounded-lg p-8 h-full flex flex-col">
@@ -108,16 +131,18 @@ const Messages = () => {
             messages.map((message) => (
               <div
                 key={message.id} // Unique key for each message
-                className={`mb-4 p-3 w-fit rounded-lg shadow ${
+                className={`mb-4 p-3 w-fit rounded-lg shadow max-w-[75%] break-words ${
                   message.senderId === parseInt(senderId)
                     ? "bg-blue-500 text-white font-normal text-right ml-auto rounded-tl-2xl rounded-br-2xl"
                     : "bg-gray-300 text-black font-normal text-left rounded-tr-2xl rounded-bl-2xl"
                 }`}
               >
-                <p className={`text-lg font-semibold ${
-                  message.senderId === parseInt(senderId) ? "text-white" : "text-black"
-                }`}>
-                  {message.content} {/* Display message content*/}
+                <p
+                  className={`text-lg font-semibold ${
+                    message.senderId === parseInt(senderId) ? "text-white" : "text-black"
+                  }`}
+                >
+                  {message.content} {/* Display message content*/ }
                 </p>
                 <p className="text-xs">
                   {new Date(message.timestamp).toLocaleString()} {/* Display message timestamp */}
@@ -157,4 +182,4 @@ const Messages = () => {
   );
 };
 
-export default Messages; // Export the Messages component
+export default Messages;

@@ -70,6 +70,11 @@ const Comments = ({ postId }) => {
 
   useEffect(() => {
     fetchComments(); // Fetch comments on component mount
+    // Automatically scroll to the bottom of the comments list
+    setTimeout(() => {
+      commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 150);
+
   }, [fetchComments]); // Dependency on fetchComments
 
   // Handle form submission for comments
@@ -181,14 +186,14 @@ const Comments = ({ postId }) => {
     <div className="bg-emerald-200 shadow-lg rounded-lg p-8 h-full flex flex-col">
       {/* Button to navigate back to the feed */}
       <button 
-        className='text-gray-800 hover:text-slate-800 hover:font-extralight' 
+        className='text-black font-extralight font-lexend hover:text-slate-800 hover:font-normal' 
         onClick={() => navigate("/feed")} // Navigate to the feed on click
       >
         Go back to feed
       </button>
 
       {/* Header displaying the post ID */}
-      <h1 className="text-gray-800 text-xl mb-4">Comments for Post {postId}</h1>
+      <h1 className="text-gray-800 font-general font-bold text-xl mb-4">Comments for Post {postId}</h1>
 
       {/* Form for submitting a new comment or updating an existing one */}
       <form onSubmit={handleCommentSubmit} className="mb-6">
@@ -201,14 +206,14 @@ const Comments = ({ postId }) => {
           required // Make this field mandatory
         />
         {/* Submit button that changes based on editing state */}
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded mt-2">
+        <button type="submit" className="bg-blue-500 text-white p-2 font-clash rounded mt-2">
           {editingCommentId ? 'Update Comment' : 'Submit Comment'} {/* Conditional text*/}
         </button>
       </form>
 
       {/* Conditional rendering based on the number of comments */}
       {comments.length === 0 ? (
-        <p className="text-gray-800">No comments yet.</p> // Message if no comments are present
+        <p className="text-gray-800 font-lexend">No comments yet.</p> // Message if no comments are present
       ) : (
         <ul className="h-full overflow-y-auto border border-gray-800 p-2 rounded-lg bg-white">
           {comments
@@ -233,20 +238,20 @@ const Comments = ({ postId }) => {
                     hour12: false,
                   })}
                 </p>
-                {/* Display the comment text */}
-                <p className='text-black font-general'>{comment.text}</p>
+                {/* Display the comment text with word break */}
+                <p className="text-black font-general break-words max-w-full">{comment.text}</p>
                 {/* Conditional buttons for editing or deleting the comment */}
                 {parseInt(comment.userId, 10) === parseInt(JSON.parse(sessionStorage.getItem('user')).id, 10) && (
                   <div className="flex space-x-2 mt-2">
                     <button 
-                      className="bg-yellow-500 text-white p-1 rounded hover:bg-yellow-300"
-                      onClick={() => handleEdit(comment)} //handle edit action
+                      className="bg-yellow-500 text-white p-1 font-clash rounded hover:bg-yellow-300"
+                      onClick={() => handleEdit(comment)} // Handle edit action
                     >
                       Edit
                     </button>
                     <button 
-                      className="bg-red-500 text-white p-1 rounded hover:bg-red-300"
-                      onClick={() => handleDelete(comment.id)} //handle delete action
+                      className="bg-red-500 text-white p-1 font-clash rounded hover:bg-red-300"
+                      onClick={() => handleDelete(comment.id)} // Handle delete action
                     >
                       Delete
                     </button>
@@ -258,6 +263,7 @@ const Comments = ({ postId }) => {
           <div ref={commentsEndRef} /> {/* Ref to allow scrolling to the bottom of the comments list */}
         </ul>
       )}
+
     </div>
   );
 };
