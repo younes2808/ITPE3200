@@ -25,7 +25,6 @@ Although the initial version of RAYS is scoped to handle basic post functionalit
 - **Backend**: .NET (C#) 
 - **Styling**: TailwindCSS 
 - **Database**: SQLite Server 
-- **API Integration**: Axios
 
 ## Features
 
@@ -34,21 +33,26 @@ Although the initial version of RAYS is scoped to handle basic post functionalit
    - Upload and share images.
    - Embed YouTube video links.
 
-2. **View Posts**:
+2. **View and Comment/Liking Posts**:
    - Browse through a feed of posts created by other users.
    - Posts can include a combination of text, images, and videos.
-
-3. **Liking Posts**:
    - Users should be able to like posts.
-
-4. **User Profile (Basic)**:
+   - Users should be able to comment on posts.
+     
+3. **User Profile (Basic)**:
    - View and manage user profiles.
-   - See personal and shared posts.
+   - See personal and liked posts.
+     
+4. **Friends**:
+   - Users should be add/delete friends.
 
-5. **Authentication**:
+5. **Messages**:
+   - Users should be able to send messages to other users.
+     
+6. **Authentication**:
    - Basic user authentication with login and sign-up functionality.
 
-6. **Responsive Design**:
+7. **Responsive Design**:
    - The app is responsive and optimized for both desktop and mobile views using TailwindCSS.
 
 ---
@@ -67,9 +71,7 @@ To run the project locally, you will need to have the following installed:
 ## Future Enhancements
 Although the current scope of the project is focused on basic social media functionalities, future improvements could include:
 
-- **Commenting & Reposting Posts**: Users will be able to comment and repost posts.
-- **Friend Requests**: Users will be able to send and accept friend requests.
-- **Direct Messaging**: Real-time messaging between users.
+- **Reposting Posts**: Users can repost posts.
 - **User Notifications**: Notify users of new posts, messages, and friend requests.
 - **Post Reactions**: Add emojis and other forms of interaction on posts.
 
