@@ -10,18 +10,18 @@ namespace ServerAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FriendController : ControllerBase
+    public class FriendRequestController : ControllerBase
     {
         private readonly ServerAPIContext _context;
 
-        public FriendController(ServerAPIContext context)
+        public FriendRequestController(ServerAPIContext context)
         {
             _context = context;
         }
 
         // POST: api/friend/request
         [HttpPost("request")]
-        public async Task<ActionResult> SendFriendRequest([FromBody] FriendRequest friendRequest)
+        public async Task<ActionResult> SendFriendRequest([FromBody] Friend friendRequest)
         {
             // Validate that sender and receiver are not the same
             if (friendRequest.SenderId == friendRequest.ReceiverId)
@@ -29,7 +29,7 @@ namespace ServerAPI.Controllers
 
             // Check if a request already exists between the sender and receiver
             var existingRequest = await _context.Friends
-                .FirstOrDefaultAsync(f => 
+                .FirstOrDefaultAsync(f =>
                     (f.SenderId == friendRequest.SenderId && f.ReceiverId == friendRequest.ReceiverId) ||
                     (f.SenderId == friendRequest.ReceiverId && f.ReceiverId == friendRequest.SenderId));
 
