@@ -3,14 +3,14 @@ const BASE_URL = 'http://localhost:5249/api';
 
 // Fetch friendship status for a given user
 export const fetchFriendshipStatus = async (currentUserId, targetUserId) => {
-  const requestsResponse = await fetch(`${BASE_URL}/Friend/requests/${currentUserId}`);
+  const requestsResponse = await fetch(`${BASE_URL}/FriendRequest/requests/${currentUserId}`);
   if (!requestsResponse.ok) throw new Error('Failed to fetch friend requests');
 
   const requests = await requestsResponse.json();
   const receivedRequest = requests.find(request => request.senderId === parseInt(targetUserId) && !request.isSender);
   const sentRequest = requests.find(request => request.receiverId === parseInt(targetUserId) && request.isSender);
 
-  const friendsResponse = await fetch(`${BASE_URL}/Friend/${currentUserId}`);
+  const friendsResponse = await fetch(`${BASE_URL}/FriendRequest/${currentUserId}`);
   if (!friendsResponse.ok) throw new Error('Failed to fetch friends');
 
   const friends = await friendsResponse.json();
@@ -25,7 +25,7 @@ export const fetchFriendshipStatus = async (currentUserId, targetUserId) => {
 
 // Send a friend request
 export const sendFriendRequest = async (currentUserId, targetUserId) => {
-  const response = await fetch(`${BASE_URL}/Friend/request`, {
+  const response = await fetch(`${BASE_URL}/FriendRequest/request`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export const sendFriendRequest = async (currentUserId, targetUserId) => {
 
 // Delete a friend
 export const deleteFriend = async (currentUserId, targetUserId) => {
-  const response = await fetch(`${BASE_URL}/Friend/${currentUserId}/${targetUserId}`, {
+  const response = await fetch(`${BASE_URL}/FriendRequest/${currentUserId}/${targetUserId}`, {
     method: 'DELETE',
   });
   if (!response.ok) throw new Error('Failed to delete friend');
@@ -45,7 +45,7 @@ export const deleteFriend = async (currentUserId, targetUserId) => {
 
 // Accept a friend request
 export const acceptFriendRequest = async (currentUserId, userId) => {
-  const requestsResponse = await fetch(`${BASE_URL}/Friend/requests/${currentUserId}`);
+  const requestsResponse = await fetch(`${BASE_URL}/FriendRequest/requests/${currentUserId}`);
   if (!requestsResponse.ok) throw new Error('Failed to fetch friend requests');
 
   const requests = await requestsResponse.json();
@@ -53,7 +53,7 @@ export const acceptFriendRequest = async (currentUserId, userId) => {
 
   if (receivedRequest) {
     const requestId = receivedRequest.id;
-    const response = await fetch(`${BASE_URL}/Friend/accept/${requestId}`, {
+    const response = await fetch(`${BASE_URL}/FriendRequest/accept/${requestId}`, {
       method: 'PUT',
     });
     if (!response.ok) throw new Error('Failed to accept friend request');
