@@ -11,6 +11,7 @@ const Messages = () => {
   const [receiverUsername, setReceiverUsername] = useState(""); // State for receiver's username
   const [sending, setSending] = useState(false); // State to track if a message is being sent
   const [warning, setWarning] = useState(""); // State for warning message
+  const [warningMessage, setWarningMessage] = useState(""); // State for warning message
   const messagesEndRef = useRef(null); // Ref to scroll to the bottom of the message list
   const [firstLoad, setFirstLoad] = useState(false); // State to track first load
   const navigate = useNavigate(); // Hook for navigation
@@ -72,7 +73,7 @@ const Messages = () => {
 
   const handleSendMessage = async () => {
     if (newMessage.trim() === "") {
-      setWarning("You cannot send an empty message!"); // Set warning if message is empty
+      setWarningMessage("You cannot send an empty message!"); // Set warning if message is empty
       return; // Prevent sending if the message is empty
     }
   
@@ -159,22 +160,33 @@ const Messages = () => {
         {warning && <div className="text-red-500 text-center mt-2">{warning}</div>}
 
         {/* Input area for sending new messages */}
+        {/* Input area for sending new messages */}
         <div className="bg-emerald-200 border p-4 mt-4 rounded-md">
-          <div className="flex items-center">
-            <input
-              type="text"
-              className="flex-grow p-2 border-gray-300 border-2 rounded mr-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              placeholder="Type a message..."
-              value={newMessage}
-              onChange={handleInputChange} // Handle input change
-            />
-            <button
-              onClick={handleSendMessage} // Call to send message
-              disabled={sending} // Disable button if sending is in progress
-              className={`bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-200 ${sending ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              Send
-            </button>
+          <div className="flex flex-col">
+            <div className="flex items-center">
+              <input
+                type="text"
+                className={`flex-grow p-2 border-2 rounded mr-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+                  warningMessage ? "border-red-500 placeholder-red-500" : "border-gray-300"
+                }`}
+                placeholder={warningMessage || "Type a message..."} // Show warning or default placeholder
+                value={newMessage}
+                onChange={(e) => {
+                  setWarningMessage(""); // Clear warning when user starts typing
+                  handleInputChange(e); // Call input change handler
+                }}
+                required
+              />
+              <button
+                onClick={handleSendMessage} // Call to send message
+                disabled={sending} // Disable button if sending is in progress
+                className={`bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-200 ${
+                  sending ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                Send
+              </button>
+            </div>
           </div>
         </div>
       </div>
