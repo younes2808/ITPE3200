@@ -42,6 +42,7 @@ const FriendRequests = () => {
   const handleAcceptRequest = async (requestId) => {
     try {
       await acceptFriendRequest(requestId); // Use the service to accept the request
+      console.log("Accepted friend request");
       setFriendRequests(prev => prev.filter(req => req.id !== requestId)); // Remove the accepted request from the state
       window.location.reload(); // Reload the page to update the list (could be optimized)
     } catch (error) {
@@ -53,6 +54,7 @@ const FriendRequests = () => {
   const handleRejectRequest = async (requestId) => {
     try {
       await rejectFriendRequest(requestId); // Use the service to reject the request
+      console.log("Rejected friend request");
       setFriendRequests(prev => prev.filter(req => req.id !== requestId)); // Remove the rejected request from the state
     } catch (error) {
       console.error("Error rejecting request:", error); // Log any errors

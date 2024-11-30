@@ -74,6 +74,7 @@ const Messages = () => {
   const handleSendMessage = async () => {
     if (newMessage.trim() === "") {
       setWarningMessage("You cannot send an empty message!"); // Set warning if message is empty
+      console.error("Tried to send empty message");
       return; // Prevent sending if the message is empty
     }
   
@@ -87,6 +88,7 @@ const Messages = () => {
       const updatedMessages = await fetchMessagesBetweenUsers(senderId, receiverId); // Fetch updated messages
       setMessages(updatedMessages); // Update messages in state
       setNewMessage(""); // Clear the input field
+      console.log("Succesfully sent message");
   
       // Scroll to the bottom after sending the message
       setTimeout(() => {

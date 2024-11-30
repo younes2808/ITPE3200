@@ -89,6 +89,7 @@ const PostFeed = () => {
       // Remove the post from state
       setPosts(posts.filter(post => post.id !== postId)); // Update posts state
       alert('Post deleted successfully'); // Notify user
+      console.log("Post deleted succesfully!");
     } catch (error) {
       console.error('Error deleting post:', error); // Log error
     }
@@ -113,6 +114,7 @@ const PostFeed = () => {
       setPostText(''); // Clear text input
       alert('Post updated successfully'); // Notify user
       loadPosts(); // Reload posts
+      console.log("Post updated succesfully!");
     } catch (error) {
       console.error('Error updating post:', error); // Log error
     }
@@ -125,6 +127,7 @@ const PostFeed = () => {
     try {
       if (alreadyLiked) {
         await unlikePost(userId, postId); // Call service to unlike post
+        console.log("Unliked post!");
         // Update state to remove like
         setLikes((prevLikes) => ({
           ...prevLikes,
@@ -132,6 +135,7 @@ const PostFeed = () => {
         }));
       } else {
         await likePost(userId, postId); // Call service to like post
+        console.log("Liked post!");
         // Update state to add like
         setLikes((prevLikes) => ({
           ...prevLikes,

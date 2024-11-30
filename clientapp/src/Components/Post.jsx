@@ -95,6 +95,7 @@ const PostFunction = () => {
 
         try {
             await createPost(postData);
+            console.log("Succesfully created post!");
             setPostText('');
             setLink('');
             setLocation('');

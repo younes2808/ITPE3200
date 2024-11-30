@@ -66,12 +66,14 @@ const PostList = ({ userId, type }) => {
     try {
       if (alreadyLiked) {
         await unlikePost(loggedInUserId, postId);
+        console.log("Unliked post!");
         setLikes(prevLikes => ({
           ...prevLikes,
           [postId]: prevLikes[postId].filter(like => like.userId !== loggedInUserId)
         }));
       } else {
         await likePost(loggedInUserId, postId);
+        console.log("Liked post!");
         setLikes(prevLikes => ({
           ...prevLikes,
           [postId]: [...(prevLikes[postId] || []), { userId: loggedInUserId, likedAt: new Date() }]
@@ -85,6 +87,7 @@ const PostList = ({ userId, type }) => {
   const deletePost = async (postId) => {
     try {
       await deletePostById(postId);
+      console.log("Deleted post!");
       setPosts(posts.filter(post => post.id !== postId));
     } catch (error) {
       console.error('Error deleting post:', error);
@@ -106,6 +109,7 @@ const PostList = ({ userId, type }) => {
         post.id === editingPostId ? { ...post, content: postText } : post
       );
       setPosts(updatedPosts);
+      console.log("Updated post!");
     } catch (error) {
       console.error('Error updating post:', error);
     }

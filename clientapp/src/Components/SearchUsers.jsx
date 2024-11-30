@@ -32,6 +32,7 @@ const UserSearch = () => {
       setIsEmptyInput(false); // Clear input error if query is valid
     } catch (err) {
       setMessage(err.message); // Set error message
+      console.error("Error");
       setSearchResults([]); // Reset results on error
     }
   };

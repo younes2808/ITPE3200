@@ -99,7 +99,7 @@ const Comments = ({ postId }) => {
 
       try {
         await updateCommentService(commentUpdatePayload); // Update comment via service
-
+        console.log("Comment updated succesfully");
         // Update the comment in the state without affecting order
         setComments((prevComments) =>
           prevComments.map(comment =>
@@ -130,7 +130,7 @@ const Comments = ({ postId }) => {
         // Optionally, add the saved comment to the comments state
         setComments((prevComments) => [...prevComments, savedComment]);
         setNewComment(''); // Reset new comment input
-
+        console.log("Succesfully created comment");
         // Automatically scroll to the bottom of the comments list
         setTimeout(() => {
           commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -159,6 +159,7 @@ const Comments = ({ postId }) => {
       // Remove the deleted comment from the state
       setComments((prevComments) => prevComments.filter(comment => comment.id !== commentId));
       alert("Comment deleted successfully!"); // Alert user of success
+      console.log("Comment deleted successfully!");
     } catch (err) {
       console.error('Error while deleting comment:', err);
       setError('Error while deleting comment: ' + err.message); // Set error message
