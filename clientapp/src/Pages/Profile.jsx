@@ -75,6 +75,7 @@ const Profile = () => {
   const handleAddFriend = async () => {
     try {
       await sendFriendRequest(currentUserId, userId);
+      console.log("Sent friend requests");
       setFriendshipStatus('pending-sent');
     } catch (error) {
       console.error('Error adding friend:', error);
